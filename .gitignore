@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Secrets: real env files are NEVER committed. Only the .env.example templates are.
+.env
+.env.*
+!.env.example
+
+# Generated / local files
+*.tsbuildinfo
+next-env.d.ts
+*.log
+.DS_Store
+*.pem
+.vercel

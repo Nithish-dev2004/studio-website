@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* Dark mode is ready: add class="dark" to <html> to switch. Light is the default. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================================
+   THEME - the ONE place to change the look of the whole site.
+   Components only use these tokens (bg-background, text-accent, rounded-lg ...),
+   never hard-coded colors. Change a value here and everything updates.
+   ========================================================================= */
+
+:root {
+  /* Colors: light mode (black / white / neutral + one gold accent) */
+  --background: #fbfaf8;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --muted: #f1efeb; /* soft panels and section backgrounds */
+  --muted-foreground: #6b6760; /* secondary text */
+  --border: #e4e0d8;
+  --primary: #1a1a1a; /* main buttons */
+  --primary-foreground: #fbfaf8;
+  --accent: #b8923a; /* the gold accent */
+  --accent-foreground: #1a1a1a;
+  --ring: #b8923a; /* keyboard focus outline */
+  --destructive: #b3261e; /* form errors */
+  --success: #2e7d4f; /* form success */
+  --on-image: #ffffff; /* text placed on top of photos */
+  --scrim: rgb(0 0 0 / 0.45); /* dark overlay on photos so text stays readable */
+  --whatsapp: #25d366;
+
+  /* Shape and spacing */
+  --radius: 0.5rem;
+  --section-y: 4rem; /* vertical padding of every page section */
+  --container-max: 72rem;
+
+  /* Fonts (the actual font files are loaded in layout.tsx with next/font) */
+  --font-heading: var(--font-heading-loaded), Georgia, serif;
+  --font-body: var(--font-body-loaded), system-ui, sans-serif;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-y: 6rem;
+  }
+}
+
+.dark {
+  --background: #0e0e0e;
+  --foreground: #f3f1ed;
+  --card: #171716;
+  --card-foreground: #f3f1ed;
+  --muted: #1d1c1a;
+  --muted-foreground: #a39e94;
+  --border: #2a2825;
+  --primary: #f3f1ed;
+  --primary-foreground: #0e0e0e;
+  --accent: #d4af5a;
+  --accent-foreground: #0e0e0e;
+  --ring: #d4af5a;
+  --destructive: #f2877f;
+  --success: #6fcf97;
+}
+
+/* Connects the tokens above to Tailwind, so classes like bg-card or text-muted-foreground work. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-on-image: var(--on-image);
+  --color-scrim: var(--scrim);
+  --color-whatsapp: var(--whatsapp);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --spacing-section: var(--section-y);
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+}
+
+/* ---- Base styles ---- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+  }
+
+  /* Elegant serif for all headings */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Visible keyboard focus for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
