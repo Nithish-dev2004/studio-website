@@ -76,10 +76,6 @@ export type EventConsultationFormData = {
   phone: string;
   email?: string;
   eventType: string;
-  eventDate?: string;
-  guestCount?: string;
-  notes?: string;
-  website?: string;
   eventDate?: string; // YYYY-MM-DD or ""
   guestCount?: string;
   notes?: string;
@@ -104,7 +100,6 @@ export type SignboardBookingFormData = {
   signType?: string;
   dimensions?: string;
   notes?: string;
-  website?: string;
   website?: string; // honeypot
 };
 
