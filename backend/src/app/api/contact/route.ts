@@ -6,6 +6,7 @@
 // Visitors only ever see short, safe messages. Technical details stay in the server log.
 
 import { NextResponse } from "next/server";
+import { encryptPhone, hashPhone, maskPhone } from "@/lib/crypto/phone";
 import { sendOwnerNotification } from "@/lib/email";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { createSupabaseAdmin } from "@/lib/supabase/server";
@@ -63,22 +64,39 @@ export async function POST(request: Request) {
   }
   const data = result.data;
 
-  // 5) Save to Supabase. Column names match supabase/schema.sql.
+  // 5) Encrypt and hash the mobile number if provided. NEVER save the plain number.
+  let phoneEncrypted: string | null = null;
+  let phoneHash: string | null = null;
+  if (data.phone && data.phone.trim() !== "") {
+    try {
+      phoneEncrypted = encryptPhone(data.phone);
+      phoneHash = hashPhone(data.phone);
+    } catch {
+      return NextResponse.json<Reply>(
+        { ok: false, message: "Please enter a valid phone number." },
+        { status: 400 },
+      );
+    }
+  }
+
+  // 6) Save to Supabase. Column names match supabase/schema.sql.
   try {
     const supabase = createSupabaseAdmin();
     const { error } = await supabase.from("contacts").insert({
       name: data.name,
       email: data.email,
-      phone: data.phone || null, // empty text becomes "no value"
+      phone: null, // plain number is never stored
+      phone_encrypted: phoneEncrypted,
+      phone_hash: phoneHash,
       message: data.message,
       // "is_read" is not sent: the database sets it to false by itself.
     });
     if (error) throw error;
   } catch (error) {
-    // Log for you (the developer) but send the visitor a generic message.
+    // Log without exposing customer phone numbers
     console.error(
       "Saving contact message failed:",
-      error instanceof Error ? error.message : error,
+      error instanceof Error ? error.message : "Database insert error",
     );
     return NextResponse.json<Reply>(
       {
@@ -89,7 +107,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // 6) Tell the studio owner by email (does nothing unless Resend is set up).
+  // 7) Tell the studio owner by email (does nothing unless Resend is set up).
   await sendOwnerNotification({
     subject: `New message from ${data.name}`,
     replyTo: data.email,
@@ -98,7 +116,7 @@ export async function POST(request: Request) {
       "",
       `Name: ${data.name}`,
       `Email: ${data.email}`,
-      `Phone: ${data.phone || "-"}`,
+      `Phone: ${data.phone ? maskPhone(data.phone) + " (Full number in Admin Dashboard)" : "-"}`,
       "",
       data.message,
     ],

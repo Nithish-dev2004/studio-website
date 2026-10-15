@@ -32,6 +32,59 @@ export const navItems: NavItem[] = [
   { label: "Contact", href: "/contact" },
 ];
 
+// The businesses within the Sivagangai group. These power the Brands menu and
+// the dedicated Brands page, so their names and descriptions stay consistent.
+export const subBrands = [
+  {
+    id: "captures",
+    slug: "captures",
+    name: "SIVAGANGAI.captures",
+    specialty: "Photography & videography",
+    description: "Photography and videography for the moments that matter.",
+    headline: "Moments, framed forever",
+    accent: "#f5ae18",
+    action: "Book a shoot",
+    secondaryAction: "Watch showreel",
+    services: ["Wedding", "Portrait", "Films"],
+  },
+  {
+    id: "eventz",
+    slug: "eventz",
+    name: "Sivagangai Eventz",
+    specialty: "Event management",
+    description: "Thoughtful planning and management for memorable events.",
+    headline: "Your big day, perfectly run",
+    accent: "#e64343",
+    action: "Plan my event",
+    secondaryAction: "See past events",
+    services: ["Weddings", "Corporate", "Birthdays", "Launches"],
+  },
+  {
+    id: "digital-marketing",
+    slug: "digital-marketing",
+    name: "Sivagangai Digital Marketing",
+    specialty: "Digital marketing",
+    description: "Digital marketing that helps businesses connect and grow.",
+    headline: "Grow where your customers look",
+    accent: "#3182e6",
+    action: "Free audit",
+    secondaryAction: "View case studies",
+    services: ["Social media", "Paid ads", "SEO", "Websites"],
+  },
+  {
+    id: "sign-board",
+    slug: "sign-board",
+    name: "Sivagangai Sign Board",
+    specialty: "Sign boards & displays",
+    description: "Clear, distinctive sign boards and visual displays for your business.",
+    headline: "Be seen from the street",
+    accent: "#16b51e",
+    action: "Get a quote",
+    secondaryAction: "See our work",
+    services: ["LED boards", "Acrylic letters", "Flex banners", "Name plates"],
+  },
+] as const;
+
 // TODO: replace the "#" links with your real profiles.
 export const socialLinks: SocialLink[] = [
   { platform: "instagram", label: "Instagram", href: "https://instagram.com/" },

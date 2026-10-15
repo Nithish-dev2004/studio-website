@@ -4,7 +4,14 @@
 
 import { z } from "zod";
 import { services } from "@/data/services";
-import type { BookingFormData, ContactFormData, FieldErrors } from "@/types";
+import type {
+  BookingFormData,
+  ContactFormData,
+  EventConsultationFormData,
+  DigitalBookingFormData,
+  SignboardBookingFormData,
+  FieldErrors,
+} from "@/types";
 
 const MAX_MESSAGE_LENGTH = 1000;
 
@@ -72,7 +79,7 @@ const serviceField = z
 // The honeypot field. Any text is "valid" here; the API route checks it separately.
 const honeypotField = z.string().max(500).optional().default("");
 
-// ---- The two schemas ----
+// ---- The schemas ----
 
 export const contactSchema = z.object({
   name: nameField,
@@ -112,6 +119,50 @@ export const bookingSchema = z.object({
   website: honeypotField,
 });
 
+export const eventConsultationSchema = z.object({
+  name: nameField,
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  eventType: z
+    .string()
+    .trim()
+    .min(1, "Please choose or specify an event type.")
+    .max(100, "Please keep the event type under 100 characters."),
+  eventDate: z
+    .string()
+    .trim()
+    .refine((value) => {
+      if (!value) return true;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+      const date = new Date(`${value}T00:00:00Z`);
+      if (Number.isNaN(date.getTime())) return false;
+      if (date.toISOString().slice(0, 10) !== value) return false;
+      return date.getTime() >= Date.now() - 24 * 60 * 60 * 1000;
+    }, "Please choose a date that is today or later.")
+    .optional()
+    .default(""),
+  guestCount: z
+    .string()
+    .trim()
+    .max(100, "Please keep estimated guests under 100 characters.")
+    .optional()
+    .default(""),
+  notes: z
+    .string()
+    .trim()
+    .max(2000, "Please keep notes under 2000 characters.")
+    .optional()
+    .default(""),
+  website: honeypotField,
+});
+
 // ---- Helper that turns zod's result into something simple for forms and routes ----
 
 type ValidationResult<T> =
@@ -133,10 +184,139 @@ function parseForm<T>(schema: z.ZodType<T>, input: unknown): ValidationResult<T>
   return { valid: false, errors };
 }
 
+export const digitalBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your company or business name.")
+    .max(150, "Please keep company name under 150 characters."),
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  serviceInterested: z
+    .string()
+    .trim()
+    .max(150, "Please keep service selection under 150 characters.")
+    .optional()
+    .default("Meta & Google Paid Ads"),
+  budget: z
+    .string()
+    .trim()
+    .max(100, "Please keep budget under 100 characters.")
+    .optional()
+    .default("₹15,000 - ₹30,000 / mo"),
+  websiteUrl: z
+    .string()
+    .trim()
+    .max(300, "Please keep URL under 300 characters.")
+    .optional()
+    .default(""),
+  plan: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Free Marketing Audit"),
+  website: honeypotField,
+});
+
 export function validateContact(input: unknown) {
   return parseForm<ContactFormData>(contactSchema, input);
 }
 
 export function validateBooking(input: unknown) {
   return parseForm<BookingFormData>(bookingSchema, input);
+}
+
+export const digitalBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your company or business name.")
+    .max(150, "Please keep company name under 150 characters."),
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  serviceInterested: z
+    .string()
+    .trim()
+    .max(150)
+    .optional()
+    .default("Meta & Google Paid Ads"),
+  budget: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("₹15,000 - ₹30,000 / mo"),
+  websiteUrl: z
+    .string()
+    .trim()
+    .max(300)
+    .optional()
+    .default(""),
+  plan: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Free Marketing Audit"),
+  website: honeypotField,
+});
+export function validateEventConsultation(input: unknown) {
+  return parseForm<EventConsultationFormData>(eventConsultationSchema, input);
+}
+
+export function validateDigitalBooking(input: unknown) {
+  return parseForm<DigitalBookingFormData>(digitalBookingSchema, input);
+}
+
+export const signboardBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your business or store name.")
+    .max(150, "Please keep business name under 150 characters."),
+  phone: requiredPhoneField,
+  city: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Sivagangai"),
+  signType: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("3D LED Acrylic Letters"),
+  dimensions: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("10 ft x 3 ft"),
+  notes: z
+    .string()
+    .trim()
+    .max(2000)
+    .optional()
+    .default(""),
+  website: honeypotField,
+});
+
+export function validateSignboardBooking(input: unknown) {
+  return parseForm<SignboardBookingFormData>(signboardBookingSchema, input);
 }

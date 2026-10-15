@@ -1,7 +1,10 @@
+"use client";
+
 // Site footer: brand, quick links, contact details and social icons.
 // Everything here comes from data/site.ts.
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Camera, Globe, Mail, MapPin, Phone, Video } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -17,6 +20,13 @@ const socialIcons: Record<SocialPlatform, LucideIcon> = {
 };
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Brand pages have their own dedicated editorial dark footer matching their UI
+  if (pathname.startsWith("/brands/")) {
+    return null;
+  }
+
   return (
     <footer className="bg-muted border-border border-t">
       <Container className="grid gap-10 py-12 md:grid-cols-3">
