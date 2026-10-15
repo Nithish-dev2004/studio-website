@@ -20,6 +20,9 @@ type RateLimitOptions = {
 export function checkRateLimit(key: string, { max, windowMs }: RateLimitOptions) {
   const now = Date.now();
 
+  // In local development / non-production, increase limit to 100 so developer testing is never blocked
+  const effectiveMax = process.env.NODE_ENV !== "production" ? Math.max(max, 100) : max;
+
   // Forget expired entries so the Map can't grow forever.
   if (hits.size > 5000) {
     for (const [storedKey, entry] of hits) {
@@ -35,7 +38,7 @@ export function checkRateLimit(key: string, { max, windowMs }: RateLimitOptions)
     return { allowed: true, retryAfterSeconds: 0 };
   }
 
-  if (entry.count >= max) {
+  if (entry.count >= effectiveMax) {
     return { allowed: false, retryAfterSeconds: Math.ceil((entry.resetAt - now) / 1000) };
   }
 

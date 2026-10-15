@@ -65,6 +65,65 @@ create table if not exists public.contacts (
 create index if not exists contacts_created_at_idx on public.contacts (created_at desc);
 
 
+-- ---------------------------------------------------------------------
+-- Table: digital_marketing_bookings (Sivagangai Digital Marketing)
+-- ---------------------------------------------------------------------
+create table if not exists public.digital_marketing_bookings (
+  id                  uuid primary key default gen_random_uuid(),
+  business_name       text not null check (char_length(business_name) between 2 and 150),
+  phone               text,                                                         -- plain numbers removed (null)
+  phone_encrypted     text not null,                                                -- AES-256-GCM ciphertext: iv:authTag:cipher
+  phone_hash          text not null,                                                -- HMAC-SHA256 blind index for fast lookup
+  email               text check (email is null or char_length(email) between 5 and 254),
+  service_interested  text not null default 'Meta & Google Paid Ads',
+  budget              text default '₹15,000 - ₹30,000 / mo',
+  website_url         text check (website_url is null or char_length(website_url) <= 300),
+  plan                text default 'Free Marketing Audit',
+  status              text not null default 'new'
+                      check (status in ('new', 'contacted', 'audit_sent', 'in_progress', 'converted', 'closed')),
+  created_at          timestamptz not null default now(),
+  updated_at          timestamptz not null default now()
+);
+
+create index if not exists digital_marketing_bookings_created_at_idx on public.digital_marketing_bookings (created_at desc);
+create index if not exists digital_marketing_bookings_phone_hash_idx on public.digital_marketing_bookings (phone_hash);
+create index if not exists digital_marketing_bookings_status_idx on public.digital_marketing_bookings (status);
+
+drop trigger if exists digital_marketing_bookings_set_updated_at on public.digital_marketing_bookings;
+create trigger digital_marketing_bookings_set_updated_at
+  before update on public.digital_marketing_bookings
+  for each row execute function public.set_updated_at();
+
+
+-- ---------------------------------------------------------------------
+-- Table: signboard_bookings (Sivagangai Sign Board)
+-- ---------------------------------------------------------------------
+create table if not exists public.signboard_bookings (
+  id                  uuid primary key default gen_random_uuid(),
+  business_name       text not null check (char_length(business_name) between 2 and 150),
+  phone               text,                                                         -- plain numbers removed (kept null)
+  phone_encrypted     text not null,                                                -- AES-256-GCM ciphertext: iv:authTag:cipher
+  phone_hash          text not null,                                                -- HMAC-SHA256 blind index for fast lookup
+  city                text not null default 'Sivagangai',
+  sign_type           text not null default '3D LED Acrylic Letters',
+  dimensions          text default '10 ft x 3 ft',
+  notes               text check (notes is null or char_length(notes) <= 2000),
+  status              text not null default 'new'
+                      check (status in ('new', 'site_visit_scheduled', 'measurement_done', 'render_sent', 'approved', 'installed', 'closed')),
+  created_at          timestamptz not null default now(),
+  updated_at          timestamptz not null default now()
+);
+
+create index if not exists signboard_bookings_created_at_idx on public.signboard_bookings (created_at desc);
+create index if not exists signboard_bookings_phone_hash_idx on public.signboard_bookings (phone_hash);
+create index if not exists signboard_bookings_status_idx on public.signboard_bookings (status);
+
+drop trigger if exists signboard_bookings_set_updated_at on public.signboard_bookings;
+create trigger signboard_bookings_set_updated_at
+  before update on public.signboard_bookings
+  for each row execute function public.set_updated_at();
+
+
 -- =====================================================================
 -- SECURITY: Row Level Security (RLS)
 --
@@ -78,33 +137,34 @@ create index if not exists contacts_created_at_idx on public.contacts (created_a
 -- Turn RLS on. With RLS on and no matching policy, access is denied.
 alter table public.bookings enable row level security;
 alter table public.contacts enable row level security;
+alter table public.digital_marketing_bookings enable row level security;
+alter table public.signboard_bookings enable row level security;
 
--- POLICY 1 (bookings): nobody using the public keys (anon = visitors,
--- authenticated = logged-in users) can read, insert, update or delete.
--- "using (false)" and "with check (false)" mean "never allowed".
--- Only the server (service role) can write, because it bypasses RLS.
+-- POLICY 1 (bookings): nobody using the public keys can read, insert, update or delete.
 drop policy if exists "No public access to bookings" on public.bookings;
 create policy "No public access to bookings"
-  on public.bookings
-  for all
-  to anon, authenticated
-  using (false)
-  with check (false);
+  on public.bookings for all to anon, authenticated using (false) with check (false);
 
--- POLICY 2 (contacts): same rule. Messages contain personal details,
--- so they must never be readable or writable from the browser.
+-- POLICY 2 (contacts): same rule.
 drop policy if exists "No public access to contacts" on public.contacts;
 create policy "No public access to contacts"
-  on public.contacts
-  for all
-  to anon, authenticated
-  using (false)
-  with check (false);
+  on public.contacts for all to anon, authenticated using (false) with check (false);
 
--- Extra safety layer: also remove the table permissions from the public
--- roles, so even a mistake in a future policy cannot expose these tables.
+-- POLICY 3 (digital_marketing_bookings): same rule.
+drop policy if exists "No public access to digital_marketing_bookings" on public.digital_marketing_bookings;
+create policy "No public access to digital_marketing_bookings"
+  on public.digital_marketing_bookings for all to anon, authenticated using (false) with check (false);
+
+-- POLICY 4 (signboard_bookings): same rule.
+drop policy if exists "No public access to signboard_bookings" on public.signboard_bookings;
+create policy "No public access to signboard_bookings"
+  on public.signboard_bookings for all to anon, authenticated using (false) with check (false);
+
+-- Extra safety layer: revoke permissions from public roles
 revoke all on table public.bookings from anon, authenticated;
 revoke all on table public.contacts from anon, authenticated;
+revoke all on table public.digital_marketing_bookings from anon, authenticated;
+revoke all on table public.signboard_bookings from anon, authenticated;
 
 -- TODO (later): when you build an admin dashboard, add a login with Supabase
 -- Auth and a policy that lets ONLY your admin user read and update these

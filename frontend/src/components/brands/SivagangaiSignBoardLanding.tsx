@@ -25,8 +25,13 @@ import {
   Store,
   ChevronRight,
   Sliders,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import BrandDarkFooter from "@/components/layout/BrandDarkFooter";
+import { postJson } from "@/lib/api";
+import { validateSignboardBooking } from "@/lib/validation";
+import type { SignboardBookingFormData, FieldErrors } from "@/types";
 
 // =========================================================================
 // SIVAGANGAI SIGN BOARD - SAMPLE ASSETS & DATA CONFIG
@@ -121,20 +126,74 @@ export default function SivagangaiSignBoardLanding() {
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
 
   // Quote form state
-  const [formData, setFormData] = useState({
+  const initialFormData: SignboardBookingFormData = {
     businessName: "",
     phone: "",
     signType: "3D LED Acrylic Letters",
     dimensions: "10 ft x 3 ft",
     city: "Sivagangai",
     notes: "",
-  });
-  const [formSubmitted, setFormSubmitted] = useState(false);
+    website: "", // honeypot
+  };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState<SignboardBookingFormData>(initialFormData);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<SignboardBookingFormData>>({});
+
+  const maskDisplayPhone = (raw: string) => {
+    const digits = raw.replace(/\D/g, "");
+    if (digits.length >= 7) {
+      return digits.slice(0, 2) + "•••••" + digits.slice(-3);
+    }
+    return raw;
+  };
+
+  const handleCloseModal = () => {
+    setIsQuoteOpen(false);
+    if (formSubmitted) {
+      setFormSubmitted(false);
+      setFormData(initialFormData);
+      setSubmitError("");
+      setFieldErrors({});
+    }
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.businessName || !formData.phone) return;
-    setFormSubmitted(true);
+    setSubmitError("");
+    setFieldErrors({});
+
+    const validation = validateSignboardBooking(formData);
+    if (!validation.valid) {
+      setFieldErrors(validation.errors);
+      setSubmitError("Please fill in the required fields correctly.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await postJson<SignboardBookingFormData>(
+        "/api/signboard-booking",
+        validation.data,
+      );
+
+      if (response.ok) {
+        setFormSubmitted(true);
+        setSubmitError("");
+        setFieldErrors({});
+      } else {
+        if (response.errors) {
+          setFieldErrors(response.errors);
+        }
+        setSubmitError(response.message || "Failed to submit request. Please try again.");
+      }
+    } catch {
+      setSubmitError("Unable to submit request. Please check your internet connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const currentShowcase = showExtended
@@ -904,8 +963,8 @@ export default function SivagangaiSignBoardLanding() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsQuoteOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+              onClick={handleCloseModal}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             />
 
             {/* Modal Dialog */}
@@ -914,11 +973,11 @@ export default function SivagangaiSignBoardLanding() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white dark:bg-[#141b29] p-6 sm:p-8 text-slate-900 dark:text-white shadow-2xl border border-slate-200 dark:border-slate-800 z-10"
+              className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-6 sm:p-8 text-slate-900 dark:text-white shadow-2xl border border-slate-200 dark:border-slate-800 z-10"
             >
               {/* Close Button */}
               <button
-                onClick={() => setIsQuoteOpen(false)}
+                onClick={handleCloseModal}
                 className="absolute top-5 right-5 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-white transition-colors"
                 aria-label="Close modal"
               >
@@ -940,16 +999,13 @@ export default function SivagangaiSignBoardLanding() {
                     </span>
                     . Our signage engineer will call{" "}
                     <span className="font-semibold text-[#0062ff]">
-                      {formData.phone}
+                      {maskDisplayPhone(formData.phone)}
                     </span>{" "}
                     within 2 hours to confirm your free on-site measurement and 3D
                     mockup render.
                   </p>
                   <button
-                    onClick={() => {
-                      setFormSubmitted(false);
-                      setIsQuoteOpen(false);
-                    }}
+                    onClick={handleCloseModal}
                     className="mt-6 inline-flex rounded-full bg-[#0062ff] px-6 py-2.5 text-xs font-medium text-white shadow-md hover:bg-[#0052d9]"
                   >
                     Done
@@ -971,7 +1027,27 @@ export default function SivagangaiSignBoardLanding() {
                     </p>
                   </div>
 
+                  {submitError && (
+                    <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950/30 p-3 text-xs text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/40">
+                      <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+
                   <form onSubmit={handleFormSubmit} className="mt-6 space-y-4 text-left">
+                    {/* Honeypot anti-spam field */}
+                    <input
+                      type="text"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      className="hidden"
+                      value={formData.website || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, website: e.target.value })
+                      }
+                    />
+
                     <div>
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
                         Business / Store Name *
@@ -984,8 +1060,17 @@ export default function SivagangaiSignBoardLanding() {
                           setFormData({ ...formData, businessName: e.target.value })
                         }
                         placeholder="e.g. Saffron Grand Hotel"
-                        className="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]"
+                        className={`mt-1.5 w-full rounded-xl border ${
+                          fieldErrors.businessName
+                            ? "border-red-400 bg-red-50/20"
+                            : "border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+                        } px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]`}
                       />
+                      {fieldErrors.businessName && (
+                        <p className="mt-1 text-[11px] text-red-600 font-medium">
+                          {fieldErrors.businessName}
+                        </p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -1001,8 +1086,17 @@ export default function SivagangaiSignBoardLanding() {
                             setFormData({ ...formData, phone: e.target.value })
                           }
                           placeholder="+91 98765 43210"
-                          className="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]"
+                          className={`mt-1.5 w-full rounded-xl border ${
+                            fieldErrors.phone
+                              ? "border-red-400 bg-red-50/20"
+                              : "border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+                          } px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]`}
                         />
+                        {fieldErrors.phone && (
+                          <p className="mt-1 text-[11px] text-red-600 font-medium">
+                            {fieldErrors.phone}
+                          </p>
+                        )}
                       </div>
 
                       <div>
@@ -1082,13 +1176,23 @@ export default function SivagangaiSignBoardLanding() {
                     <div className="pt-2">
                       <button
                         type="submit"
-                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#0062ff] py-3 text-xs font-medium text-white shadow-md hover:bg-[#0052d9] transition-all cursor-pointer"
+                        disabled={isSubmitting}
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#0062ff] py-3 text-xs font-medium text-white shadow-md hover:bg-[#0052d9] disabled:opacity-60 transition-all cursor-pointer"
                       >
-                        <Send className="h-3.5 w-3.5" />
-                        <span>Submit Free Measurement Request</span>
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            <span>Submitting Request...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-3.5 w-3.5" />
+                            <span>Submit Free Measurement Request</span>
+                          </>
+                        )}
                       </button>
                       <p className="mt-2 text-center text-[10px] text-slate-400">
-                        🔒 No obligation. Direct factory pricing from our Sivagangai unit.
+                        🔒 No obligation. Customer phone numbers encrypted with AES-256-GCM.
                       </p>
                     </div>
                   </form>
