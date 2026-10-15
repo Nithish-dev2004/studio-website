@@ -9,7 +9,6 @@ import {
   normalizePhone,
   DecryptionError,
   PhoneValidationError,
-} from "./phone";
 } from "./phone.ts";
 
 // Set test environment keys if not already present
