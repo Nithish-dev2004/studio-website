@@ -9,6 +9,7 @@ import type {
   ContactFormData,
   EventConsultationFormData,
   DigitalBookingFormData,
+  SignboardBookingFormData,
   FieldErrors,
 } from "@/types";
 
@@ -233,10 +234,89 @@ export function validateBooking(input: unknown) {
   return parseForm<BookingFormData>(bookingSchema, input);
 }
 
+export const digitalBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your company or business name.")
+    .max(150, "Please keep company name under 150 characters."),
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  serviceInterested: z
+    .string()
+    .trim()
+    .max(150)
+    .optional()
+    .default("Meta & Google Paid Ads"),
+  budget: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("₹15,000 - ₹30,000 / mo"),
+  websiteUrl: z
+    .string()
+    .trim()
+    .max(300)
+    .optional()
+    .default(""),
+  plan: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Free Marketing Audit"),
+  website: honeypotField,
+});
 export function validateEventConsultation(input: unknown) {
   return parseForm<EventConsultationFormData>(eventConsultationSchema, input);
 }
 
 export function validateDigitalBooking(input: unknown) {
   return parseForm<DigitalBookingFormData>(digitalBookingSchema, input);
+}
+
+export const signboardBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your business or store name.")
+    .max(150, "Please keep business name under 150 characters."),
+  phone: requiredPhoneField,
+  city: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Sivagangai"),
+  signType: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("3D LED Acrylic Letters"),
+  dimensions: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("10 ft x 3 ft"),
+  notes: z
+    .string()
+    .trim()
+    .max(2000)
+    .optional()
+    .default(""),
+  website: honeypotField,
+});
+
+export function validateSignboardBooking(input: unknown) {
+  return parseForm<SignboardBookingFormData>(signboardBookingSchema, input);
 }

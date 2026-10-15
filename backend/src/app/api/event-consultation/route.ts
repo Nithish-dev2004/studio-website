@@ -6,10 +6,69 @@
 // Status codes: 201 saved · 400 invalid input · 429 too many requests · 500 server problem.
 
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { encryptPhone, hashPhone, maskPhone } from "@/lib/crypto/phone";
 import { sendOwnerNotification } from "@/lib/email";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { createSupabaseAdmin } from "@/lib/supabase/server";
+import type { ApiResponse, EventConsultationFormData, FieldErrors } from "@/types";
+
+type Reply = ApiResponse<EventConsultationFormData>;
+
+const requiredPhoneField = z
+  .string()
+  .trim()
+  .max(30, "Please enter a valid phone number.")
+  .refine(
+    (value) => {
+      const digits = value.replace(/\D/g, "").length;
+      return digits >= 7 && digits <= 15;
+    },
+    "Please enter a valid phone number.",
+  );
+
+export const eventConsultationSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Please enter your name.")
+    .max(100, "Please keep name under 100 characters."),
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  eventType: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Wedding Photography & Video"),
+  eventDate: z.string().trim().max(50).optional().default(""),
+  guestCount: z.string().trim().max(50).optional().default(""),
+  notes: z.string().trim().max(2000).optional().default(""),
+  website: z.string().max(200).optional().default(""),
+});
+
+function parseEventConsultation(input: unknown) {
+  const parsed = eventConsultationSchema.safeParse(input);
+  if (parsed.success) {
+    return { valid: true as const, errors: {} as FieldErrors<EventConsultationFormData>, data: parsed.data };
+  }
+  const errors: FieldErrors<EventConsultationFormData> = {};
+  for (const issue of parsed.error.issues) {
+    const field = issue.path[0];
+    if (typeof field === "string" && !errors[field as keyof EventConsultationFormData]) {
+      errors[field as keyof EventConsultationFormData] = issue.message;
+    }
+  }
+  return { valid: false as const, errors };
+}
+
 import { validateEventConsultation } from "@/lib/validation";
 import type { ApiResponse, EventConsultationFormData } from "@/types";
 
@@ -55,6 +114,7 @@ export async function POST(request: Request) {
   }
 
   // 4) Validate on server side
+  const result = parseEventConsultation(body);
   const result = validateEventConsultation(body);
   if (!result.valid) {
     return NextResponse.json<Reply>(
