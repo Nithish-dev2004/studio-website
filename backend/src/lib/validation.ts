@@ -10,6 +10,7 @@ import type {
   EventConsultationFormData,
   QuoteFormData,
   AuditFormData,
+  DigitalBookingFormData,
   FieldErrors,
 } from "@/types";
 
@@ -195,6 +196,48 @@ export const auditSchema = z.object({
   website: honeypotField,
 });
 
+export const digitalBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your company or business name.")
+    .max(150, "Please keep company name under 150 characters."),
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  serviceInterested: z
+    .string()
+    .trim()
+    .max(150, "Please keep service selection under 150 characters.")
+    .optional()
+    .default("Meta & Google Paid Ads"),
+  budget: z
+    .string()
+    .trim()
+    .max(100, "Please keep budget under 100 characters.")
+    .optional()
+    .default("₹15,000 - ₹30,000 / mo"),
+  websiteUrl: z
+    .string()
+    .trim()
+    .max(300, "Please keep URL under 300 characters.")
+    .optional()
+    .default(""),
+  plan: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Free Marketing Audit"),
+  website: honeypotField,
+});
+
 // ---- Helper that turns zod's result into something simple for forms and routes ----
 
 type ValidationResult<T> =
@@ -234,4 +277,8 @@ export function validateQuote(input: unknown) {
 
 export function validateAudit(input: unknown) {
   return parseForm<AuditFormData>(auditSchema, input);
+}
+
+export function validateDigitalBooking(input: unknown) {
+  return parseForm<DigitalBookingFormData>(digitalBookingSchema, input);
 }

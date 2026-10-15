@@ -52,6 +52,17 @@ export type AuditFormData = {
   website?: string;
 };
 
+export type DigitalBookingFormData = {
+  businessName: string;
+  phone: string;
+  email?: string;
+  serviceInterested?: string;
+  budget?: string;
+  websiteUrl?: string;
+  plan?: string;
+  website?: string; // honeypot
+};
+
 /** One error message per field, e.g. { email: "Please enter a valid email." } */
 export type FieldErrors<T> = Partial<Record<keyof T, string>>;
 
