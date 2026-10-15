@@ -23,8 +23,13 @@ import {
   ShieldCheck,
   Music,
   HeartHandshake,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import BrandDarkFooter from "@/components/layout/BrandDarkFooter";
+import { postJson } from "@/lib/api";
+import { validateEventConsultation } from "@/lib/validation";
+import type { EventConsultationFormData, FieldErrors } from "@/types";
 
 // --- Theme Showcase Data (Images 2 & 3) ---
 interface EventTheme {
@@ -217,17 +222,24 @@ export default function SivagangaiEventsLanding() {
   // State for 2-column feature selector (Image 4)
   const [activeFeatureIndex, setActiveFeatureIndex] = useState<number>(0);
 
+  const initialFormDetails: EventConsultationFormData = {
+    name: "",
+    phone: "",
+    email: "",
+    eventType: "Royal Wedding",
+    eventDate: "",
+    guestCount: "200 - 500 Guests",
+    notes: "",
+    website: "",
+  };
+
   // State for consultation modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [formDetails, setFormDetails] = useState({
-    name: "",
-    phone: "",
-    eventType: "Royal Wedding",
-    eventDate: "",
-    guestCount: "300 - 500 Guests",
-    notes: "",
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<EventConsultationFormData>>({});
+  const [formDetails, setFormDetails] = useState<EventConsultationFormData>(initialFormDetails);
 
   // Filtered themes
   const filteredThemes =
@@ -246,9 +258,51 @@ export default function SivagangaiEventsLanding() {
     setCarouselIndex((prev) => (prev - 1 + totalFiltered) % totalFiltered);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setFormError("");
+    setFieldErrors({});
+
+    // Client-side validation
+    const validation = validateEventConsultation(formDetails);
+    if (!validation.valid) {
+      setFieldErrors(validation.errors);
+      setFormError("Please fill in the required fields correctly.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await postJson<EventConsultationFormData>(
+        "/api/event-consultation",
+        validation.data,
+      );
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormError("");
+        setFieldErrors({});
+      } else {
+        if (response.errors) {
+          setFieldErrors(response.errors);
+        }
+        setFormError(response.message || "Failed to submit request. Please try again.");
+      }
+    } catch {
+      setFormError("Unable to submit request. Please check your internet connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (submitted) {
+      setSubmitted(false);
+      setFormDetails(initialFormDetails);
+      setFormError("");
+      setFieldErrors({});
+    }
   };
 
   // State for newsletter subscription in dark footer
@@ -826,7 +880,7 @@ export default function SivagangaiEventsLanding() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
+              onClick={handleCloseModal}
               className="absolute inset-0 bg-black/60 backdrop-blur-xs"
               aria-hidden="true"
             />
@@ -842,9 +896,10 @@ export default function SivagangaiEventsLanding() {
             >
               <button
                 type="button"
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleCloseModal}
+                disabled={isSubmitting}
                 aria-label="Close modal"
-                className="absolute top-5 right-5 rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="absolute top-5 right-5 rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -857,21 +912,31 @@ export default function SivagangaiEventsLanding() {
                   <h3 className="mt-4 text-2xl font-bold text-gray-900">Consultation Scheduled!</h3>
                   <p className="mt-2 text-sm text-gray-600">
                     Thank you, {formDetails.name || "friend"}! Our Chief Event Director will call you
-                    within 24 hours to discuss your event vision.
+                    {formDetails.phone ? ` at ${formDetails.phone}` : ""} within 24 hours to discuss
+                    your event vision.
                   </p>
                   <button
                     type="button"
-                    onClick={() => {
-                      setSubmitted(false);
-                      setIsModalOpen(false);
-                    }}
-                    className="mt-6 rounded-full bg-[#00ab80] px-6 py-2.5 text-xs font-semibold text-white"
+                    onClick={handleCloseModal}
+                    className="mt-6 rounded-full bg-[#00ab80] px-6 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#00966f] transition-colors"
                   >
                     Done
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleFormSubmit}>
+                <form onSubmit={handleFormSubmit} noValidate>
+                  {/* Honeypot hidden field for anti-spam */}
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formDetails.website || ""}
+                    onChange={(e) => setFormDetails({ ...formDetails, website: e.target.value })}
+                    style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
+                    aria-hidden="true"
+                  />
+
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#00ab80]/15 text-[#00ab80]">
                       <Calendar className="h-5 w-5" />
@@ -886,37 +951,68 @@ export default function SivagangaiEventsLanding() {
                     </div>
                   </div>
 
+                  {formError && (
+                    <div className="mt-4 flex items-start gap-2 rounded-xl bg-red-50 p-3 text-xs text-red-600 border border-red-100">
+                      <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
+
                   <div className="mt-6 space-y-4 text-left text-xs">
                     <div>
-                      <label className="block font-medium text-gray-700 mb-1">Your Full Name</label>
+                      <label className="block font-medium text-gray-700 mb-1">
+                        Your Full Name <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="text"
                         required
                         value={formDetails.name}
-                        onChange={(e) => setFormDetails({ ...formDetails, name: e.target.value })}
+                        onChange={(e) => {
+                          setFormDetails({ ...formDetails, name: e.target.value });
+                          if (fieldErrors.name) setFieldErrors({ ...fieldErrors, name: undefined });
+                        }}
                         placeholder="e.g. Ananya & Karthik"
-                        className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80]"
+                        className={`w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-colors ${
+                          fieldErrors.name
+                            ? "border-red-400 bg-red-50/30 focus:border-red-500"
+                            : "border-gray-200 focus:border-[#00ab80]"
+                        }`}
                       />
+                      {fieldErrors.name && (
+                        <p className="mt-1 text-[11px] text-red-500">{fieldErrors.name}</p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block font-medium text-gray-700 mb-1">Phone Number</label>
+                        <label className="block font-medium text-gray-700 mb-1">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
                         <input
                           type="tel"
                           required
                           value={formDetails.phone}
-                          onChange={(e) => setFormDetails({ ...formDetails, phone: e.target.value })}
+                          onChange={(e) => {
+                            setFormDetails({ ...formDetails, phone: e.target.value });
+                            if (fieldErrors.phone) setFieldErrors({ ...fieldErrors, phone: undefined });
+                          }}
                           placeholder="+91 98765 43210"
-                          className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80]"
+                          className={`w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-colors ${
+                            fieldErrors.phone
+                              ? "border-red-400 bg-red-50/30 focus:border-red-500"
+                              : "border-gray-200 focus:border-[#00ab80]"
+                          }`}
                         />
+                        {fieldErrors.phone && (
+                          <p className="mt-1 text-[11px] text-red-500">{fieldErrors.phone}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block font-medium text-gray-700 mb-1">Event Type</label>
                         <select
                           value={formDetails.eventType}
                           onChange={(e) => setFormDetails({ ...formDetails, eventType: e.target.value })}
-                          className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80] bg-white"
+                          className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80] bg-white cursor-pointer"
                         >
                           <option>Royal Wedding</option>
                           <option>Sangeet & Mehendi</option>
@@ -932,17 +1028,28 @@ export default function SivagangaiEventsLanding() {
                         <label className="block font-medium text-gray-700 mb-1">Target Date</label>
                         <input
                           type="date"
-                          value={formDetails.eventDate}
-                          onChange={(e) => setFormDetails({ ...formDetails, eventDate: e.target.value })}
-                          className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80]"
+                          min={new Date().toLocaleDateString("en-CA")}
+                          value={formDetails.eventDate || ""}
+                          onChange={(e) => {
+                            setFormDetails({ ...formDetails, eventDate: e.target.value });
+                            if (fieldErrors.eventDate) setFieldErrors({ ...fieldErrors, eventDate: undefined });
+                          }}
+                          className={`w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none transition-colors ${
+                            fieldErrors.eventDate
+                              ? "border-red-400 bg-red-50/30 focus:border-red-500"
+                              : "border-gray-200 focus:border-[#00ab80]"
+                          }`}
                         />
+                        {fieldErrors.eventDate && (
+                          <p className="mt-1 text-[11px] text-red-500">{fieldErrors.eventDate}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block font-medium text-gray-700 mb-1">Estimated Guests</label>
                         <select
-                          value={formDetails.guestCount}
+                          value={formDetails.guestCount || "200 - 500 Guests"}
                           onChange={(e) => setFormDetails({ ...formDetails, guestCount: e.target.value })}
-                          className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80] bg-white"
+                          className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80] bg-white cursor-pointer"
                         >
                           <option>Under 200 Guests</option>
                           <option>200 - 500 Guests</option>
@@ -956,7 +1063,7 @@ export default function SivagangaiEventsLanding() {
                       <label className="block font-medium text-gray-700 mb-1">Notes / Preferences</label>
                       <textarea
                         rows={2}
-                        value={formDetails.notes}
+                        value={formDetails.notes || ""}
                         onChange={(e) => setFormDetails({ ...formDetails, notes: e.target.value })}
                         placeholder="Tell us about your preferred venue, theme ideas, or budget..."
                         className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-[#00ab80]"
@@ -967,16 +1074,26 @@ export default function SivagangaiEventsLanding() {
                   <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
                     <button
                       type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-500 hover:bg-gray-100"
+                      onClick={handleCloseModal}
+                      disabled={isSubmitting}
+                      className="rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-500 hover:bg-gray-100 disabled:opacity-50 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#00ab80] px-6 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#00966f]"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#00ab80] px-6 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#00966f] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                     >
-                      <Send className="h-3.5 w-3.5" /> Submit Request
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Submitting...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-3.5 w-3.5" /> Submit Request
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>

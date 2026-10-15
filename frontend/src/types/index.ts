@@ -71,6 +71,17 @@ export type ContactFormData = {
   website: string; // honeypot
 };
 
+export type EventConsultationFormData = {
+  name: string;
+  phone: string;
+  email?: string;
+  eventType: string;
+  eventDate?: string; // YYYY-MM-DD or ""
+  guestCount?: string;
+  notes?: string;
+  website?: string; // honeypot
+};
+
 /** One error message per field, e.g. { email: "Please enter a valid email." } */
 export type FieldErrors<T> = Partial<Record<keyof T, string>>;
 

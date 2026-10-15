@@ -8,7 +8,9 @@
     "start": "next start -p 4000",
     "lint": "eslint",
     "format": "prettier --write src",
-    "format:check": "prettier --check src"
+    "format:check": "prettier --check src",
+    "test": "node --test src/lib/crypto/phone.test.ts",
+    "migrate:phones": "node --env-file=.env.local scripts/migrate-encrypt-existing-phones.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",
