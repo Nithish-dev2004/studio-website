@@ -4,7 +4,13 @@
 
 import { z } from "zod";
 import { services } from "@/data/services";
-import type { BookingFormData, ContactFormData, EventConsultationFormData, FieldErrors } from "@/types";
+import type {
+  BookingFormData,
+  ContactFormData,
+  EventConsultationFormData,
+  DigitalBookingFormData,
+  FieldErrors,
+} from "@/types";
 
 const MAX_MESSAGE_LENGTH = 1000;
 
@@ -177,6 +183,48 @@ function parseForm<T>(schema: z.ZodType<T>, input: unknown): ValidationResult<T>
   return { valid: false, errors };
 }
 
+export const digitalBookingSchema = z.object({
+  businessName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your company or business name.")
+    .max(150, "Please keep company name under 150 characters."),
+  phone: requiredPhoneField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  serviceInterested: z
+    .string()
+    .trim()
+    .max(150, "Please keep service selection under 150 characters.")
+    .optional()
+    .default("Meta & Google Paid Ads"),
+  budget: z
+    .string()
+    .trim()
+    .max(100, "Please keep budget under 100 characters.")
+    .optional()
+    .default("₹15,000 - ₹30,000 / mo"),
+  websiteUrl: z
+    .string()
+    .trim()
+    .max(300, "Please keep URL under 300 characters.")
+    .optional()
+    .default(""),
+  plan: z
+    .string()
+    .trim()
+    .max(100)
+    .optional()
+    .default("Free Marketing Audit"),
+  website: honeypotField,
+});
+
 export function validateContact(input: unknown) {
   return parseForm<ContactFormData>(contactSchema, input);
 }
@@ -187,4 +235,8 @@ export function validateBooking(input: unknown) {
 
 export function validateEventConsultation(input: unknown) {
   return parseForm<EventConsultationFormData>(eventConsultationSchema, input);
+}
+
+export function validateDigitalBooking(input: unknown) {
+  return parseForm<DigitalBookingFormData>(digitalBookingSchema, input);
 }
