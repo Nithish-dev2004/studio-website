@@ -80,6 +80,10 @@ export type EventConsultationFormData = {
   guestCount?: string;
   notes?: string;
   website?: string;
+  eventDate?: string; // YYYY-MM-DD or ""
+  guestCount?: string;
+  notes?: string;
+  website?: string; // honeypot
 };
 
 export type DigitalBookingFormData = {
@@ -101,6 +105,7 @@ export type SignboardBookingFormData = {
   dimensions?: string;
   notes?: string;
   website?: string;
+  website?: string; // honeypot
 };
 
 /** One error message per field, e.g. { email: "Please enter a valid email." } */

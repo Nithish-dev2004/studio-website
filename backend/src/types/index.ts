@@ -53,6 +53,10 @@ export type SignboardBookingFormData = {
   dimensions?: string;
   notes?: string;
   website?: string;
+  eventDate?: string; // YYYY-MM-DD or ""
+  guestCount?: string;
+  notes?: string;
+  website?: string; // honeypot
 };
 
 export type QuoteFormData = {
@@ -71,6 +75,17 @@ export type AuditFormData = {
   websiteUrl?: string;
   notes?: string;
   website?: string;
+};
+
+export type DigitalBookingFormData = {
+  businessName: string;
+  phone: string;
+  email?: string;
+  serviceInterested?: string;
+  budget?: string;
+  websiteUrl?: string;
+  plan?: string;
+  website?: string; // honeypot
 };
 
 /** One error message per field, e.g. { email: "Please enter a valid email." } */

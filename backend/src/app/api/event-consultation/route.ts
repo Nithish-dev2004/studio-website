@@ -69,6 +69,11 @@ function parseEventConsultation(input: unknown) {
   return { valid: false as const, errors };
 }
 
+import { validateEventConsultation } from "@/lib/validation";
+import type { ApiResponse, EventConsultationFormData } from "@/types";
+
+type Reply = ApiResponse<EventConsultationFormData>;
+
 const SUCCESS_MESSAGE =
   "Thank you! We have received your consultation request and will call you within 24 hours.";
 
@@ -110,6 +115,7 @@ export async function POST(request: Request) {
 
   // 4) Validate on server side
   const result = parseEventConsultation(body);
+  const result = validateEventConsultation(body);
   if (!result.valid) {
     return NextResponse.json<Reply>(
       { ok: false, message: "Please check the highlighted fields.", errors: result.errors },
