@@ -47,7 +47,7 @@ export async function GET(
       );
     }
 
-    const b = booking as Record<string, any>;
+    const b = booking as { phone_encrypted?: string | null; phone?: string | null };
     let decryptedPhone: string | null = null;
     let maskedPhone: string | null = null;
 
