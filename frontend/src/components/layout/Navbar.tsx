@@ -49,6 +49,11 @@ export default function Navbar() {
     };
   }, []);
 
+  // Hide the public navbar on all /admin pages
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   // "/" only matches the home page; other links also match their sub-pages.
   const isActive = (href: string) =>
     href === "/"

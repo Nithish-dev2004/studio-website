@@ -109,3 +109,5 @@ export type FieldErrors<T> = Partial<Record<keyof T, string>>;
 /** Every API route answers with this shape. */
 export type ApiResponse<T> =
   { ok: true; message: string } | { ok: false; message: string; errors?: FieldErrors<T> };
+
+export * from "./staff";

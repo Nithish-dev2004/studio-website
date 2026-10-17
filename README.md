@@ -219,3 +219,131 @@ Deploy the two folders as two separate projects (for example both on Vercel).
 
 **Good to know:** the rate limit keeps its counters in memory, so on serverless hosting it only slows
 down simple spam bursts. For strict limits, switch to a shared store such as Upstash Redis.
+
+---
+
+## 11. Admin Portal & Dashboard
+
+A secure, private administration portal built with Next.js App Router, `@supabase/ssr`, and Tailwind CSS theme tokens.
+
+### Admin URLs
+
+| Route              | Description                                                                     |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `/admin/login`     | Secure administrator login with rate-limiting and attacker-safe error messages  |
+| `/admin`           | Dashboard with KPI metrics, 7-day upcoming sessions, and confirmed date alerts |
+| `/admin/users`     | Staff directory: create users, assign roles, view INR payroll, activate/deactivate (Admin only) |
+| `/admin/bookings`  | Filterable, searchable, sortable bookings table with CSV export & quick actions |
+| `/admin/events`    | Event consultation leads from Sivagangai Events                                |
+| `/admin/signboard` | Sign board estimation and order pipeline from Sivagangai Sign Board            |
+| `/admin/digital-marketing` | Digital marketing audit requests and growth conversion tracker          |
+| `/admin/messages`  | Contact inquiry inbox with read/unread markers and quick contact buttons       |
+
+### Setup `ADMIN_EMAILS` (Super Admins)
+
+In `frontend/.env.local`, specify which emails have super administrative rights (comma-separated):
+
+```bash
+ADMIN_EMAILS=admin@sivagangai.com,nithishpantiya@gmail.com
+```
+
+> **Immunity & Lockout Prevention:** Any email listed in `ADMIN_EMAILS` is automatically granted the `admin` role and super admin privileges. They can never be deactivated or locked out of the dashboard.
+
+---
+
+## 12. Staff & Users Module
+
+The **Users** module provides role-based access control (RBAC), employee directory management, and confidential payroll management.
+
+### Database Tables
+
+#### 1. `public.staff_users`
+Stores all staff profiles and their current privileges:
+- `id` (`uuid`, primary key, default `gen_random_uuid()`)
+- `auth_user_id` (`uuid`, unique, references `auth.users(id)` on delete cascade)
+- `employee_id` (`text`, unique, required, e.g. `EMP-0001`)
+- `name` (`text`, required, 2-80 characters)
+- `email` (`text`, unique, required, stored lowercase)
+- `mobile` (`text`, required, normalized Indian 10-digit mobile)
+- `role` (`text`, required: `admin`, `manager`, `photographer`, `editor`, `staff`)
+- `salary` (`numeric(12,2)`, required, must be >= 0, formatted in INR)
+- `status` (`text`, default `'active'`: `'active'` or `'inactive'`)
+- `must_change_password` (`boolean`, default `true`: forces password change on first login)
+- `created_at`, `updated_at` (auto-updates via `staff_users_set_updated_at` trigger)
+
+#### 2. `public.staff_audit_log`
+Tracks sensitive staff management operations without ever logging passwords:
+- `id` (`uuid`, primary key)
+- `performed_by_email` (`text`, required)
+- `target_user_id` (`uuid`, references `staff_users(id)`)
+- `action` (`text`, required: `create`, `edit`, `activate`, `deactivate`, `reset_password`)
+- `details` (`jsonb`, changed fields or metadata)
+- `created_at` (`timestamptz`, default `now()`)
+
+### Roles & Permissions Matrix
+
+| Capability / Module             | `admin` (or Super Admin) | `manager` | `photographer` | `editor` | `staff` |
+| ------------------------------- | :----------------------: | :-------: | :------------: | :------: | :-----: |
+| Access `/admin` Dashboard       | Yes                      | Yes       | Yes            | Yes      | Yes     |
+| View Bookings, Events & Orders  | Yes                      | Yes       | Yes            | Yes      | Yes     |
+| Update Order / Booking Status   | Yes                      | Yes       | Yes            | Yes      | Yes     |
+| Access Messages Inbox           | Yes                      | Yes       | Yes            | Yes      | Yes     |
+| **Access `/admin/users`**       | **Yes**                  | No        | No             | No       | No      |
+| **View Monthly Salaries (INR)** | **Yes**                  | No        | No             | No       | No      |
+| **Create New Staff Users**      | **Yes**                  | No        | No             | No       | No      |
+| **Edit Staff Details & Roles**  | **Yes**                  | No        | No             | No       | No      |
+| **Activate / Deactivate Users** | **Yes**                  | No        | No             | No       | No      |
+| **Reset Password to Mobile**    | **Yes**                  | No        | No             | No       | No      |
+| **Access `/account/profile`**   | **Yes**                  | **Yes**   | **Yes**        | **Yes**  | **Yes** |
+
+### Mobile-First Staff Authentication & Login Flow
+
+1. **Account Creation (No Temporary Passwords):**
+   - When an administrator creates a staff user, there is **no temporary password generated or shared**.
+   - The staff member's registered Indian mobile number (normalized to plain 10 digits, e.g. `9876543210`) serves as their initial password.
+   - The account is automatically marked with `must_change_password = true`.
+   - Creation response shows: `"Account created. Login: <email> / password: the mobile number."` without displaying the raw password value.
+
+2. **Login Page (`/admin/login`):**
+   - Staff use the standard login screen with email and their mobile number.
+   - If a staff member types their mobile number with `+91`, spaces, or dashes, it is normalized to 10 digits before sign-in attempt (without altering custom passwords).
+   - Only active staff members can log in. Inactive accounts receive the neutral message:
+     `"Your account is inactive. Contact the admin."`
+   - Generic attacker-safe error message: `"Invalid email or password."`
+
+3. **Rate Limiting & Lockout:**
+   - Strict brute-force protection: **5 failed attempts per IP** and **5 failed attempts per Email**, enforced independently.
+   - Exceeding 5 failed attempts locks out the attacker for **15 minutes**.
+
+4. **First Login Password Change (`/account/change-password`):**
+   - On first login (`must_change_password === true`), staff are automatically redirected to `/account/change-password`.
+   - All other `/account` and `/admin` routes are blocked (enforced both on the server and in middleware) until the new password is set.
+   - Password requirements:
+     - Minimum 8 characters.
+     - Must differ from registered mobile number.
+     - Confirmed twice.
+   - Upon successful update, `must_change_password` becomes `false` and the user remains securely signed in.
+   - The same Change Password form remains accessible at `/account/profile` for future self-service updates.
+
+5. **Edit vs. Reset Behavior:**
+   - **Editing Mobile Number:** Changing a staff member's mobile number in the admin edit modal does **NOT** alter their login password (preserving any custom password they have set).
+   - **Reset Password Action:** Replaces the user's login password back to their current registered mobile number and sets `must_change_password = true`. Preceded by an admin confirmation dialog. The password is never displayed on screen or logged.
+
+### How to Run the Database Migration in Supabase
+
+1. Log into your [Supabase Dashboard](https://supabase.com/dashboard) and open your project.
+2. In the left-hand navigation, click **SQL Editor**.
+3. Run the following SQL command:
+   ```sql
+   ALTER TABLE public.staff_users 
+   ADD COLUMN IF NOT EXISTS must_change_password boolean NOT NULL DEFAULT true;
+   ```
+4. If setting up for the first time, run the complete migration script:
+   [`backend/supabase/migration_staff_users.sql`](file:///c:/Users/nithish/Documents/studio-website/studio-website/backend/supabase/migration_staff_users.sql).
+
+### Supabase Minimum Password Length Setting
+
+Supabase Auth enforces a minimum password length by default of 6 characters. Since normalized Indian mobile numbers are 10 digits (length 10), they comply with standard default settings.
+- If 10-digit mobile passwords are ever rejected by Supabase, verify your setting under:
+  **Authentication -> Providers -> Email** or **Authentication -> Sign In / Sign Up settings -> Minimum password length** (ensure it is set to 6 or lower).
+
