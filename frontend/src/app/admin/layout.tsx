@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import AdminToastProvider from "@/components/admin/AdminToastContext";
 
 export const metadata: Metadata = {
-  title: "Admin Portal",
+  title: "Studio Portal | Sivagangai Stories",
   robots: {
     index: false,
     follow: false,

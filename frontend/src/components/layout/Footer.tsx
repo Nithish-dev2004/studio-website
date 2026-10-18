@@ -22,8 +22,12 @@ const socialIcons: Record<SocialPlatform, LucideIcon> = {
 export default function Footer() {
   const pathname = usePathname();
 
-  // Brand pages and admin pages have their own layouts
-  if (pathname.startsWith("/brands/") || pathname.startsWith("/admin")) {
+  // Brand pages, admin pages, and staff account pages have their own layouts
+  if (
+    pathname.startsWith("/brands/") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/account")
+  ) {
     return null;
   }
 
@@ -112,12 +116,12 @@ export default function Footer() {
               |
             </span>
             <Link
-              href="/admin"
+              href="/admin/login"
               prefetch={false}
-              aria-label="Admin login"
+              aria-label="Staff and admin login"
               className="text-muted-foreground hover:text-accent py-0.5 transition-colors"
             >
-              Admin
+              Login
             </Link>
           </div>
         </Container>

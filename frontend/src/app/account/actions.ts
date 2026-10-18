@@ -8,10 +8,11 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { logStaffAudit, requireStaffAccount } from "@/lib/admin/auth";
 import { normalizeTo10Digits } from "@/lib/admin/phone";
-import { createSupabaseAdmin } from "@/lib/supabase/server";
+import { createSupabaseAdmin, createSupabaseServerClient } from "@/lib/supabase/server";
 
 const changePasswordSchema = z
   .object({
+    currentPassword: z.string().optional(),
     newPassword: z
       .string()
       .min(8, "New password must be at least 8 characters long.")
@@ -34,11 +35,12 @@ export type ChangePasswordResult = {
 /**
  * Changes the staff user's password.
  * Enforces:
- * 1. Min 8 characters
- * 2. Confirmed twice
- * 3. Must differ from registered mobile number
- * 4. Sets must_change_password = false
- * 5. Passwords NEVER stored in database or logged
+ * 1. Current password verification (for self-service changes)
+ * 2. Min 8 characters
+ * 3. Confirmed twice
+ * 4. Must differ from registered mobile number & current password
+ * 5. Sets must_change_password = false
+ * 6. Passwords NEVER stored in database or logged
  */
 export async function changePasswordAction(
   formData: FormData,
@@ -47,6 +49,7 @@ export async function changePasswordAction(
   const profile = await requireStaffAccount({ allowChangePasswordPage: true });
 
   const rawInput = {
+    currentPassword: (formData.get("currentPassword") as string) || undefined,
     newPassword: formData.get("newPassword"),
     confirmPassword: formData.get("confirmPassword"),
   };
@@ -57,7 +60,49 @@ export async function changePasswordAction(
     return { ok: false, error: firstIssue, statusCode: 400 };
   }
 
-  const { newPassword } = parsed.data;
+  const { newPassword, currentPassword } = parsed.data;
+  const isForced = Boolean(profile.staffUser?.must_change_password);
+
+  // If self-service (not forced first login), verify current password
+  if (!isForced) {
+    if (!currentPassword) {
+      return {
+        ok: false,
+        error: "Please enter your current password.",
+        statusCode: 400,
+      };
+    }
+
+    try {
+      const supabase = await createSupabaseServerClient();
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: profile.user.email || "",
+        password: currentPassword,
+      });
+
+      if (verifyError) {
+        return {
+          ok: false,
+          error: "Current password is incorrect.",
+          statusCode: 400,
+        };
+      }
+    } catch {
+      return {
+        ok: false,
+        error: "Could not verify current password. Please try again.",
+        statusCode: 500,
+      };
+    }
+
+    if (currentPassword === newPassword) {
+      return {
+        ok: false,
+        error: "Your new password must be different from your current password.",
+        statusCode: 400,
+      };
+    }
+  }
 
   // Validation: Must differ from registered mobile number
   if (profile.staffUser?.mobile) {
@@ -126,11 +171,10 @@ export async function changePasswordAction(
     revalidatePath("/account/change-password");
     revalidatePath("/admin");
 
-    // If staff user is admin or manager, they can go to /admin; others can go to /account/profile
-    const destination =
-      profile.role === "admin" || profile.role === "manager"
-        ? "/admin"
-        : "/account/profile";
+    // If first login was completed, send regular staff to /account dashboard
+    const destination = isForced
+      ? (profile.role === "admin" || profile.role === "manager" ? "/admin" : "/account")
+      : "/account/profile";
 
     return {
       ok: true,

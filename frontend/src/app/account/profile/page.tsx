@@ -1,11 +1,12 @@
 // Staff Profile and Settings page (/account/profile).
-// Displays account information and hosts the self-service Change Password form.
+// Displays the staff member's personal credentials and salary in read-only cards,
+// and hosts the Change Password form (current password, new password, confirmation).
 
-import Link from "next/link";
+import React from "react";
 import {
+  BadgeIndianRupee,
   Calendar,
   KeyRound,
-  LayoutDashboard,
   Mail,
   Phone,
   Shield,
@@ -15,45 +16,45 @@ import { requireStaffAccount } from "@/lib/admin/auth";
 import ChangePasswordForm from "@/components/account/ChangePasswordForm";
 
 export const metadata = {
-  title: "My Profile & Settings | Staff Account",
+  title: "My Details & Settings | Staff Portal",
   robots: { index: false, follow: false },
 };
 
 export default async function StaffProfilePage() {
-  // allowChangePasswordPage: false ensures that if must_change_password is true,
-  // the server automatically blocks this page and redirects to /account/change-password.
+  // Enforces server-side active staff verification
   const profile = await requireStaffAccount({ allowChangePasswordPage: false });
   const staff = profile.staffUser;
-  const canAccessAdmin = profile.isSuperAdmin || profile.role === "admin" || profile.role === "manager";
+
+  const formattedSalary =
+    staff?.salary != null
+      ? `₹${Number(staff.salary).toLocaleString("en-IN")}`
+      : "Not configured";
+
+  const joinedDate = staff?.created_at
+    ? new Date(staff.created_at).toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "Studio Inception";
 
   return (
-    <div className="space-y-8">
-      {/* Page Title & Admin Link */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            My Account & Profile
-          </h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-            View your studio credentials and manage your account security settings.
-          </p>
-        </div>
-
-        {canAccessAdmin && (
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-xs transition-colors hover:bg-accent/90"
-          >
-            <LayoutDashboard className="h-4 w-4" />
-            <span>Go to Admin Portal</span>
-          </Link>
-        )}
+    <div className="space-y-6">
+      {/* Page Title */}
+      <div>
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          My Details & Credentials
+        </h1>
+        <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+          Review your verified studio employment details and update your security settings.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Profile Card (Left 2 columns on lg) */}
+        {/* Profile Card (Left 2 columns on desktop) */}
         <div className="lg:col-span-2 space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
+            {/* Header info */}
             <div className="flex items-center gap-4 border-b border-border pb-5 mb-5">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/20 text-accent font-bold text-lg">
                 <User className="h-6 w-6" />
@@ -73,10 +74,34 @@ export default async function StaffProfilePage() {
               </div>
             </div>
 
+            {/* Details Grid */}
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-xs">
+              {/* Employee ID */}
               <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
                 <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
-                  <Mail className="h-3.5 w-3.5" />
+                  <User className="h-3.5 w-3.5 text-accent" />
+                  <span>Employee ID</span>
+                </dt>
+                <dd className="font-semibold text-foreground font-mono select-all">
+                  {staff?.employee_id || "SUPER-ADMIN"}
+                </dd>
+              </div>
+
+              {/* Full Name */}
+              <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
+                <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
+                  <User className="h-3.5 w-3.5 text-accent" />
+                  <span>Full Name</span>
+                </dt>
+                <dd className="font-semibold text-foreground">
+                  {staff?.name || "Administrator"}
+                </dd>
+              </div>
+
+              {/* Email Address */}
+              <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
+                <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
+                  <Mail className="h-3.5 w-3.5 text-accent" />
                   <span>Email Address</span>
                 </dt>
                 <dd className="font-semibold text-foreground break-all select-all">
@@ -84,9 +109,10 @@ export default async function StaffProfilePage() {
                 </dd>
               </div>
 
+              {/* Registered Mobile */}
               <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
                 <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
-                  <Phone className="h-3.5 w-3.5" />
+                  <Phone className="h-3.5 w-3.5 text-accent" />
                   <span>Registered Mobile</span>
                 </dt>
                 <dd className="font-semibold text-foreground font-mono select-all">
@@ -94,37 +120,55 @@ export default async function StaffProfilePage() {
                 </dd>
               </div>
 
+              {/* Assigned Role */}
               <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
                 <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
-                  <Shield className="h-3.5 w-3.5" />
+                  <Shield className="h-3.5 w-3.5 text-accent" />
+                  <span>Assigned Role</span>
+                </dt>
+                <dd className="font-semibold text-foreground uppercase tracking-wide">
+                  {profile.role}
+                </dd>
+              </div>
+
+              {/* Monthly Salary */}
+              <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
+                <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
+                  <BadgeIndianRupee className="h-3.5 w-3.5 text-accent" />
+                  <span>Monthly Salary</span>
+                </dt>
+                <dd className="font-semibold text-foreground font-mono">
+                  {formattedSalary}
+                </dd>
+              </div>
+
+              {/* Account Status */}
+              <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
+                <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
+                  <Shield className="h-3.5 w-3.5 text-accent" />
                   <span>Account Status</span>
                 </dt>
                 <dd className="font-semibold text-success flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-success" />
-                  <span>{staff?.status === "active" ? "Active" : "Super Admin"}</span>
+                  <span>{staff?.status === "active" ? "Active Staff" : "Super Admin"}</span>
                 </dd>
               </div>
 
+              {/* Joined Date */}
               <div className="rounded-xl border border-border bg-muted/30 p-3.5 space-y-1">
                 <dt className="text-muted-foreground flex items-center gap-1.5 font-medium">
-                  <Calendar className="h-3.5 w-3.5" />
-                  <span>Member Since</span>
+                  <Calendar className="h-3.5 w-3.5 text-accent" />
+                  <span>Joined Date</span>
                 </dt>
                 <dd className="font-semibold text-foreground">
-                  {staff?.created_at
-                    ? new Date(staff.created_at).toLocaleDateString("en-IN", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "Studio Inception"}
+                  {joinedDate}
                 </dd>
               </div>
             </dl>
           </div>
         </div>
 
-        {/* Change Password Card (Right 1 column on lg) */}
+        {/* Change Password Card (Right column on desktop) */}
         <div className="space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
             <div className="flex items-center gap-3 border-b border-border pb-4 mb-4">

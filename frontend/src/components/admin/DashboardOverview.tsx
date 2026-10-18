@@ -12,6 +12,7 @@ import {
   Layers,
   Mail,
   MapPin,
+  MessageSquareHeart,
   RotateCcw,
   Sparkles,
   TrendingUp,
@@ -19,6 +20,8 @@ import {
 import StatusBadge from "@/components/admin/StatusBadge";
 import { useAdminToast } from "@/components/admin/AdminToastContext";
 import { services } from "@/data/services";
+import type { AdminFeedbackItem } from "@/types";
+
 
 export type TimeRange = "today" | "7d" | "30d";
 
@@ -85,6 +88,7 @@ interface DashboardOverviewProps {
   eventConsultations: DashboardEventConsultationItem[];
   signboardBookings: DashboardSignboardBookingItem[];
   digitalBookings: DashboardDigitalMarketingBookingItem[];
+  feedback?: AdminFeedbackItem[];
   initialTimestamp?: string;
 }
 
@@ -103,6 +107,7 @@ export default function DashboardOverview({
   eventConsultations,
   signboardBookings,
   digitalBookings,
+  feedback = [],
   initialTimestamp = "",
 }: DashboardOverviewProps) {
   const router = useRouter();
@@ -110,6 +115,7 @@ export default function DashboardOverview({
 
   // Time Range Filter: "today" | "7d" | "30d" (default: "7d" matching reference)
   const [range, setRange] = useState<TimeRange>("7d");
+
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>(
     () => initialTimestamp || formatTime(new Date()),
@@ -177,6 +183,11 @@ export default function DashboardOverview({
     [digitalBookings, rangeThreshold],
   );
 
+  const filteredFeedback = useMemo(
+    () => feedback.filter((f) => new Date(f.created_at).getTime() >= rangeThreshold),
+    [feedback, rangeThreshold],
+  );
+
   // Statistics
   const pendingCount = bookings.filter((b) => b.status === "pending").length;
   const unreadMessagesCount = contacts.filter((c) => !c.is_read).length;
@@ -187,6 +198,9 @@ export default function DashboardOverview({
   const newAuditsCount = digitalBookings.filter(
     (d) => d.status === "new" || d.status === "audit_sent",
   ).length;
+  const pendingFeedbackCount = feedback.filter((f) => f.status === "pending").length;
+  const approvedFeedbackCount = feedback.filter((f) => f.status === "approved").length;
+
 
   // Upcoming studio bookings in the next 7 days
   const now = new Date();
@@ -316,7 +330,7 @@ export default function DashboardOverview({
           <span className="text-[11px]">Click card to open table</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 sm:gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 sm:gap-4">
           {/* Studio Bookings */}
           <Link
             href="/admin/bookings"
@@ -418,7 +432,7 @@ export default function DashboardOverview({
           {/* Unread Inquiries */}
           <Link
             href="/admin/messages"
-            className="col-span-2 sm:col-span-1 rounded-xl border border-border bg-card p-4 shadow-xs transition-colors hover:border-accent/40"
+            className="rounded-xl border border-border bg-card p-4 shadow-xs transition-colors hover:border-accent/40"
           >
             <div className="flex items-center justify-between text-muted-foreground">
               <span className="text-xs font-medium">Messages Inbox</span>
@@ -441,8 +455,38 @@ export default function DashboardOverview({
               )}
             </div>
           </Link>
+
+          {/* Client Feedback Reviews */}
+          <Link
+            href="/admin/feedback"
+            className="rounded-xl border border-border bg-card p-4 shadow-xs transition-colors hover:border-accent/40"
+          >
+            <div className="flex items-center justify-between text-muted-foreground">
+              <span className="text-xs font-medium">Client Reviews</span>
+              <MessageSquareHeart className="h-4 w-4 text-accent" />
+            </div>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl font-bold text-card-foreground">
+                {filteredFeedback.length}
+              </span>
+              <span className="text-[11px] text-muted-foreground">
+                {feedback.length} total
+              </span>
+            </div>
+            <div className="mt-1 flex items-center justify-between text-[11px]">
+              <span className="text-muted-foreground">in {rangeLabel}</span>
+              {pendingFeedbackCount > 0 ? (
+                <span className="rounded-full bg-accent/15 px-1.5 py-0.2 text-[10px] font-semibold text-accent">
+                  {pendingFeedbackCount} pending
+                </span>
+              ) : (
+                <span className="text-muted-foreground">{approvedFeedbackCount} approved</span>
+              )}
+            </div>
+          </Link>
         </div>
       </div>
+
 
       {/* Brand Activity Sections Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

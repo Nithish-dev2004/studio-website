@@ -11,7 +11,7 @@ import { whatsappLink } from "@/lib/utils";
 export default function WhatsAppButton() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith("/admin")) {
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/account")) {
     return null;
   }
   return (

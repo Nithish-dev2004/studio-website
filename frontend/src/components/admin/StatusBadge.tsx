@@ -32,6 +32,12 @@ const statusStyles: Record<string, { bg: string; dot: string; label: string }> =
     dot: "bg-muted-foreground",
     label: "Inactive",
   },
+  hidden: {
+    bg: "bg-muted/80 border-border text-muted-foreground",
+    dot: "bg-muted-foreground",
+    label: "Hidden",
+  },
+
 
   // Studio & Event statuses
   pending: {

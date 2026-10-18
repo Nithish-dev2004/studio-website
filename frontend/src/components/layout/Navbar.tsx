@@ -49,8 +49,8 @@ export default function Navbar() {
     };
   }, []);
 
-  // Hide the public navbar on all /admin pages
-  if (pathname?.startsWith("/admin")) {
+  // Hide the public navbar on all /admin and /account portal pages
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/account")) {
     return null;
   }
 

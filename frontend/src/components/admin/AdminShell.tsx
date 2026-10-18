@@ -12,10 +12,16 @@ import type { StaffRole } from "@/types/staff";
 interface AdminShellProps {
   userEmail?: string | null;
   userRole?: StaffRole | null;
+  pendingFeedbackCount?: number;
   children: React.ReactNode;
 }
 
-export default function AdminShell({ userEmail, userRole, children }: AdminShellProps) {
+export default function AdminShell({
+  userEmail,
+  userRole,
+  pendingFeedbackCount = 0,
+  children,
+}: AdminShellProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { showToast } = useAdminToast();
   const toastLoadedRef = useRef(false);
@@ -41,9 +47,11 @@ export default function AdminShell({ userEmail, userRole, children }: AdminShell
       <AdminSidebar
         userEmail={userEmail}
         userRole={userRole}
+        pendingFeedbackCount={pendingFeedbackCount}
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
       />
+
 
       {/* Main Area */}
       <div className="flex min-w-0 flex-1 flex-col">

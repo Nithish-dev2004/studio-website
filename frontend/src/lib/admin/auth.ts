@@ -182,6 +182,13 @@ export async function requireAdmin(): Promise<AdminProfile> {
     redirect("/admin/login?error=forbidden");
   }
 
+  // Staff cannot open /admin: only super admin, admin, and manager roles are allowed
+  const isAuthorizedAdmin =
+    result.isSuperAdmin || result.role === "admin" || result.role === "manager";
+  if (!isAuthorizedAdmin) {
+    redirect("/account");
+  }
+
   if (result.staffUser?.must_change_password) {
     redirect("/account/change-password");
   }
@@ -204,7 +211,7 @@ export async function requireStaffAccount(options: { allowChangePasswordPage?: b
   const result = await getAdminUser();
 
   if (!result.user || result.error === "unauthenticated") {
-    redirect("/admin/login?next=/account/profile");
+    redirect("/admin/login?next=/account");
   }
 
   if (result.error === "inactive") {

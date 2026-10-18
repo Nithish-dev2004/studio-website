@@ -28,8 +28,10 @@ export default function ChangePasswordForm({
   const { showToast } = useAdminToast();
   const [isPending, startTransition] = useTransition();
 
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -40,6 +42,11 @@ export default function ChangePasswordForm({
     setErrorMsg(null);
     setSuccessMsg(null);
 
+    if (!isForced && !currentPassword) {
+      setErrorMsg("Please enter your current password.");
+      return;
+    }
+
     if (newPassword.length < 8) {
       setErrorMsg("New password must be at least 8 characters long.");
       return;
@@ -47,6 +54,11 @@ export default function ChangePasswordForm({
 
     if (newPassword !== confirmPassword) {
       setErrorMsg("New passwords do not match. Please verify both fields.");
+      return;
+    }
+
+    if (!isForced && currentPassword === newPassword) {
+      setErrorMsg("Your new password must differ from your current password.");
       return;
     }
 
@@ -60,6 +72,9 @@ export default function ChangePasswordForm({
     }
 
     const formData = new FormData();
+    if (!isForced && currentPassword) {
+      formData.set("currentPassword", currentPassword);
+    }
     formData.set("newPassword", newPassword);
     formData.set("confirmPassword", confirmPassword);
 
@@ -72,6 +87,7 @@ export default function ChangePasswordForm({
       } else {
         setSuccessMsg(res.message || "Password updated successfully!");
         showToast(res.message || "Password updated successfully!", "success");
+        setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
 
@@ -111,6 +127,42 @@ export default function ChangePasswordForm({
                 Redirecting you to your workspace...
               </p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Current Password (only shown during regular self-service, not forced first login) */}
+      {!isForced && (
+        <div>
+          <label
+            htmlFor="currentPassword"
+            className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          >
+            Current Password <span className="text-destructive">*</span>
+          </label>
+          <div className="relative mt-1.5">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
+              <KeyRound className="h-4 w-4" />
+            </div>
+            <input
+              id="currentPassword"
+              name="currentPassword"
+              type={showCurrentPassword ? "text" : "password"}
+              required
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="Enter your current password"
+              disabled={isPending}
+              className="block w-full rounded-lg border border-border bg-background py-2 pr-10 pl-9 text-sm text-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden"
+            />
+            <button
+              type="button"
+              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+              aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground cursor-pointer"
+            >
+              {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
           </div>
         </div>
       )}
