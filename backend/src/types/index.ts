@@ -73,9 +73,50 @@ export type AuditFormData = {
   website?: string;
 };
 
+export type FeedbackService =
+  | "wedding"
+  | "portrait"
+  | "product"
+  | "events"
+  | "studio rental"
+  | "other";
+
+export type FeedbackFormData = {
+  name: string;
+  email?: string;
+  rating: number;
+  service?: FeedbackService | "";
+  message: string;
+  website?: string;
+};
+
+export type PublicFeedbackItem = {
+  id: string;
+  name: string;
+  rating: number;
+  service?: string | null;
+  message: string;
+  created_at: string;
+};
+
+export type FeedbackStatus = "pending" | "approved" | "hidden";
+
+export type AdminFeedbackItem = {
+  id: string;
+  name: string;
+  email?: string | null;
+  rating: number;
+  service?: string | null;
+  message: string;
+  status: FeedbackStatus;
+  created_at: string;
+  approved_at?: string | null;
+};
+
 /** One error message per field, e.g. { email: "Please enter a valid email." } */
 export type FieldErrors<T> = Partial<Record<keyof T, string>>;
 
 /** Every API route answers with this shape. */
 export type ApiResponse<T> =
   { ok: true; message: string } | { ok: false; message: string; errors?: FieldErrors<T> };
+

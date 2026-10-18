@@ -52,10 +52,23 @@ export async function GET(request: Request) {
     if (error) throw error;
 
     // Map rows to safe list view with masked phone numbers
-    const sanitizedBookings = (rows || []).map((row: Record<string, any>) => {
-      let phoneMasked = "[No phone recorded]";
+    const sanitizedBookings = (rows || []).map(
+      (row: {
+        id?: string;
+        name?: string;
+        email?: string;
+        phone?: string | null;
+        phone_encrypted?: string | null;
+        service?: string;
+        event_date?: string;
+        location?: string | null;
+        message?: string | null;
+        status?: string;
+        created_at?: string;
+      }) => {
+        let phoneMasked = "[No phone recorded]";
 
-      if (row.phone_encrypted) {
+        if (row.phone_encrypted) {
         const decrypted = tryDecryptPhone(row.phone_encrypted);
         if (decrypted.success) {
           phoneMasked = maskPhone(decrypted.phone);

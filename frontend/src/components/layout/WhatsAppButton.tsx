@@ -1,11 +1,19 @@
-// Floating WhatsApp chat button, shown on every page.
+"use client";
+
+// Floating WhatsApp chat button, shown on public pages.
 // The number and the pre-filled message come from data/site.ts.
 
+import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import { siteConfig } from "@/data/site";
 import { whatsappLink } from "@/lib/utils";
 
 export default function WhatsAppButton() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/account")) {
+    return null;
+  }
   return (
     <a
       href={whatsappLink(siteConfig.whatsappNumber, siteConfig.whatsappMessage)}

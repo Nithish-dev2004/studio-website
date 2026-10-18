@@ -22,8 +22,12 @@ const socialIcons: Record<SocialPlatform, LucideIcon> = {
 export default function Footer() {
   const pathname = usePathname();
 
-  // Brand pages have their own dedicated editorial dark footer matching their UI
-  if (pathname.startsWith("/brands/")) {
+  // Brand pages, admin pages, and staff account pages have their own layouts
+  if (
+    pathname.startsWith("/brands/") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/account")
+  ) {
     return null;
   }
 
@@ -104,9 +108,22 @@ export default function Footer() {
 
       <div className="border-border border-t py-5">
         <Container>
-          <p className="text-muted-foreground text-center text-xs">
-            &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-          </p>
+          <div className="text-muted-foreground flex flex-col items-center justify-center gap-1.5 text-center text-xs sm:flex-row sm:gap-2">
+            <span>
+              &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            </span>
+            <span aria-hidden="true" className="hidden select-none sm:inline">
+              |
+            </span>
+            <Link
+              href="/admin/login"
+              prefetch={false}
+              aria-label="Staff and admin login"
+              className="text-muted-foreground hover:text-accent py-0.5 transition-colors"
+            >
+              Login
+            </Link>
+          </div>
         </Container>
       </div>
     </footer>
