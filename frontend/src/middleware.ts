@@ -115,8 +115,18 @@ export async function middleware(request: NextRequest) {
           }
 
           // Active staff member:
+          const isStaffAdmin =
+            staffUser.role === "admin" || staffUser.role === "manager";
+
           if (pathname === "/admin/login") {
-            return NextResponse.redirect(new URL("/admin", request.url));
+            return NextResponse.redirect(
+              new URL(isStaffAdmin ? "/admin" : "/account", request.url),
+            );
+          }
+
+          // Staff cannot open /admin: only admin and manager roles have access
+          if (pathname.startsWith("/admin") && !isStaffAdmin) {
+            return NextResponse.redirect(new URL("/account", request.url));
           }
 
           // Role-based route guard: only 'admin' can open /admin/users

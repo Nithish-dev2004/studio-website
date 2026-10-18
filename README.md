@@ -347,3 +347,71 @@ Supabase Auth enforces a minimum password length by default of 6 characters. Sin
 - If 10-digit mobile passwords are ever rejected by Supabase, verify your setting under:
   **Authentication -> Providers -> Email** or **Authentication -> Sign In / Sign Up settings -> Minimum password length** (ensure it is set to 6 or lower).
 
+---
+
+## 13. Staff Portal (`/account`)
+
+The Staff Portal provides active studio team members with a dedicated, professional workspace matching the design system and layout of the Admin Console.
+
+### Routes
+
+| Route | Page | Description & Capabilities |
+| --- | --- | --- |
+| `/account` | Staff Dashboard | Welcome card with staff member's name and role; summary cards for confirmed bookings, upcoming bookings (next 7 days), and completed bookings; schedule preview of the next 5 upcoming confirmed shoots with quick call/WhatsApp actions. |
+| `/account/bookings` | My Bookings | Read-only view of confirmed studio bookings (and completed ones in a separate filter). Features search, service dropdown filter, date range filter, event date sorting, pagination, and a detail modal with client notes, call (`tel:`), WhatsApp (`wa.me`), and Google Maps location links. |
+| `/account/profile` | My Details & Security | Displays the staff member's own credentials (employee ID, name, email, registered mobile, role, monthly salary, active status, joined date), plus a self-service Change Password form requiring current password, new password (min 8 chars), and confirmation. |
+| `/account/change-password` | First-Login Security | Forced password change screen when `must_change_password = true`. Prevents navigation to other pages until a permanent password is set. |
+
+### Security Guarantees & Access Boundaries
+
+1. **Strict Portal Separation:** Regular staff roles (`photographer`, `editor`, `staff`) cannot access `/admin`. Any attempt to access `/admin` is intercepted both in middleware and server guards, redirecting the user to `/account`. Super Admins, Admins, and Managers maintain full access to both consoles.
+2. **Read-Only Bookings Access:** Staff cannot create, edit status, reassign, or delete bookings. All booking actions remain strictly in the hands of administrators.
+3. **Status Isolation:** Staff queries on the server strictly filter for `status IN ('confirmed', 'completed')`. Pending inquiries and cancelled bookings never appear in the UI or API payloads.
+4. **Data Privacy:** Staff users can only see their own salary and personal details. No other staff member's details, audit logs, messages inbox, or admin data can be viewed or fetched.
+5. **Active Status Requirement:** Only active staff accounts can log in and access `/account`. Inactive accounts are immediately blocked on every page and server action.
+
+---
+
+## 14. Client Feedback & Moderation System
+
+The feedback system enables clients to leave reviews about their photography sessions and allows administrators to moderate them before publishing.
+
+### Features & Pages
+
+| Route | Purpose | Access | Key Capabilities |
+| --- | --- | --- | --- |
+| `/feedback` | Public Feedback & Reviews | Public | Summary with average rating and star breakdown; interactive submission form with client validation, live character counter, rating picker (keyboard accessible), and privacy notes; list of approved reviews with rating filters and "Load more" pagination. |
+| `/admin/feedback` | Admin Review Moderation | Admin / Manager | Comprehensive review management table with status badges (`Pending`, `Approved`, `Hidden`), rating and text search filters, actions to Approve (sets `approved_at`), Hide, or Delete permanently (with confirmation dialog). |
+| `/api/feedback` | REST API | Public (POST / GET) | `POST` validates input via Zod, checks honeypot, applies IP rate limiting (3/hr), inserts with `pending` status using the service role client.<br>`GET` returns approved reviews with pagination, average statistics, and sanitized text (never exposing emails or non-approved submissions). |
+
+### Database Schema (`feedback` table)
+
+```sql
+create table if not exists public.feedback (
+  id           uuid primary key default gen_random_uuid(),
+  name         text not null check (char_length(trim(name)) between 2 and 100),
+  email        text check (email is null or char_length(email) <= 254),
+  rating       int not null check (rating between 1 and 5),
+  service      text check (service is null or service in ('wedding', 'portrait', 'product', 'events', 'studio rental', 'other')),
+  message      text not null check (char_length(trim(message)) between 10 and 1000),
+  status       text not null default 'pending' check (status in ('pending', 'approved', 'hidden')),
+  created_at   timestamptz not null default now(),
+  approved_at  timestamptz
+);
+```
+
+- **Row Level Security (RLS):** Enabled with no public access (`anon` or `authenticated`). All public submissions and moderation actions run exclusively through server code with the service role key.
+- **Privacy:** Client email addresses are optional and strictly internal (never returned in `GET /api/feedback` or rendered on the public website).
+
+### How to Run the Feedback Database Migration in Supabase
+
+1. Log into your [Supabase Dashboard](https://supabase.com/dashboard) and select your project.
+2. In the left navigation, click **SQL Editor** -> **New query**.
+3. Copy and paste the contents of [`backend/supabase/migration_feedback.sql`](file:///c:/Users/nithish/Documents/studio-website/studio-website/backend/supabase/migration_feedback.sql).
+4. Click **Run** (or press `Ctrl + Enter`).
+
+### Home Page Integration
+
+The home page **Testimonials** section dynamically queries the 3 latest approved reviews with a rating of 4 or 5 stars from the database. If no reviews are in the database yet, it automatically falls back to the default curated studio testimonials without breaking the page.
+
+

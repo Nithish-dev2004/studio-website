@@ -30,6 +30,7 @@ export const navItems: NavItem[] = [
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Feedback", href: "/feedback" },
 ];
 
 // The businesses within the Sivagangai group. These power the Brands menu and

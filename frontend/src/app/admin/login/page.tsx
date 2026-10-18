@@ -84,29 +84,32 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        {/* Return to website link */}
-        <div>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-4 sm:py-6 overflow-x-hidden">
+      <div className="w-full max-w-md my-auto space-y-3.5 sm:space-y-4">
+        {/* Navigation / Back link */}
+        <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to website</span>
           </Link>
+          <span className="rounded-full border border-accent/20 bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+            Admin & Staff
+          </span>
         </div>
 
         {/* Brand and Title Header */}
         <div className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-accent text-accent-foreground shadow-md">
-            <ShieldCheck className="h-8 w-8" />
+          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-accent-foreground shadow-sm">
+            <ShieldCheck className="h-6 w-6" />
           </div>
-          <h1 className="font-heading mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Admin Portal
+          <h1 className="font-heading mt-2.5 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Studio Portal
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Sign in to manage bookings, contact messages, and studio inquiries for{" "}
+          <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
+            Sign in to access your administrative console or staff account for{" "}
             <span className="font-medium text-foreground">{siteConfig.name}</span>.
           </p>
         </div>
@@ -115,25 +118,25 @@ function AdminLoginForm() {
         {errorMessage && (
           <div
             role="alert"
-            className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"
+            className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive"
           >
-            <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0" />
+            <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" />
             <p className="leading-snug">{errorMessage}</p>
           </div>
         )}
 
         {/* Login Card */}
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-xl sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-lg">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div>
               <label
                 htmlFor="email"
                 className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
               >
-                Admin Email
+                Email Address
               </label>
-              <div className="relative mt-2">
+              <div className="relative mt-1.5">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
                   <Mail className="h-4 w-4" />
                 </div>
@@ -145,9 +148,9 @@ function AdminLoginForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@yourstudio.com"
+                  placeholder="name@yourstudio.com"
                   disabled={isPending}
-                  className="block w-full rounded-lg border border-border bg-background py-2.5 pr-4 pl-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden disabled:opacity-60"
+                  className="block w-full rounded-lg border border-border bg-background py-2 pr-4 pl-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden disabled:opacity-60"
                 />
               </div>
             </div>
@@ -160,7 +163,7 @@ function AdminLoginForm() {
               >
                 Password
               </label>
-              <div className="relative mt-2">
+              <div className="relative mt-1.5">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
                   <Lock className="h-4 w-4" />
                 </div>
@@ -174,13 +177,13 @@ function AdminLoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isPending}
-                  className="block w-full rounded-lg border border-border bg-background py-2.5 pr-10 pl-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden disabled:opacity-60"
+                  className="block w-full rounded-lg border border-border bg-background py-2 pr-10 pl-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden disabled:opacity-60"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -191,7 +194,7 @@ function AdminLoginForm() {
             </div>
 
             {/* Submit Button */}
-            <div className="pt-2">
+            <div className="pt-1">
               <Button
                 type="submit"
                 disabled={isPending}
@@ -203,14 +206,14 @@ function AdminLoginForm() {
                     Verifying credentials...
                   </span>
                 ) : (
-                  "Sign In to Admin"
+                  "Sign In"
                 )}
               </Button>
             </div>
           </form>
 
-          <div className="mt-6 border-t border-border pt-4 text-center">
-            <p className="text-xs text-muted-foreground">
+          <div className="mt-4 border-t border-border pt-3 text-center">
+            <p className="text-[11px] text-muted-foreground">
               Secured with Supabase Auth & Multi-Layer Role Verification.
             </p>
           </div>

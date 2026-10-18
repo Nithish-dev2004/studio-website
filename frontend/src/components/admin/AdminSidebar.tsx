@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  MessageSquareHeart,
   ShieldCheck,
   Sparkles,
   TrendingUp,
@@ -26,6 +27,7 @@ import type { StaffRole } from "@/types/staff";
 interface AdminSidebarProps {
   userEmail?: string | null;
   userRole?: StaffRole | null;
+  pendingFeedbackCount?: number;
   isOpen?: boolean;
   onClose?: () => void;
 }
@@ -80,11 +82,21 @@ const navItems = [
     exact: false,
     adminOnly: false,
   },
+  {
+    href: "/admin/feedback",
+    label: "Feedback",
+    icon: MessageSquareHeart,
+    exact: false,
+    adminOnly: false,
+    badgeKey: "pendingFeedback",
+  },
 ];
+
 
 export default function AdminSidebar({
   userEmail,
   userRole,
+  pendingFeedbackCount = 0,
   isOpen = false,
   onClose,
 }: AdminSidebarProps) {
@@ -178,19 +190,34 @@ export default function AdminSidebar({
                   href={item.href}
                   onClick={handleLinkClick}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors",
+                    "flex items-center justify-between rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors",
                     isActive
                       ? "bg-accent text-accent-foreground shadow-xs font-semibold"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
                   )}
                 >
-                  <Icon className="h-4 w-4 shrink-0" />
-                  <span>{item.label}</span>
+                  <span className="flex items-center gap-3">
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span>{item.label}</span>
+                  </span>
+                  {item.badgeKey === "pendingFeedback" && (pendingFeedbackCount || 0) > 0 && (
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider",
+                        isActive
+                          ? "bg-background text-accent"
+                          : "bg-accent/20 text-accent",
+                      )}
+                    >
+                      {pendingFeedbackCount}
+                    </span>
+                  )}
                 </Link>
               );
             })}
         </nav>
       </div>
+
 
       {/* Bottom Actions: View Site & Logout */}
       <div className="space-y-1.5 border-t border-border pt-4">

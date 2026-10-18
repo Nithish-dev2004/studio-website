@@ -153,6 +153,8 @@ export async function loginAction(
     const userEmail = data.user.email?.toLowerCase();
     const isSuperAdmin = isAdminEmail(userEmail);
 
+    let staffRole: string | null = null;
+
     if (!isSuperAdmin) {
       // Check staff_users table
       const adminClient = createSupabaseAdmin();
@@ -178,6 +180,8 @@ export async function loginAction(
         };
       }
 
+      staffRole = staffUser.role;
+
       // If must_change_password is true, redirect immediately to /account/change-password
       if (staffUser.must_change_password) {
         clearLoginRateLimit(ipKey);
@@ -190,11 +194,17 @@ export async function loginAction(
     clearLoginRateLimit(ipKey);
     clearLoginRateLimit(emailKey);
 
-    // Sanitize redirect target to avoid open redirects
-    const target =
-      next.startsWith("/admin") || next.startsWith("/account")
-        ? next
-        : "/admin";
+    // Determine if user has administrator dashboard access
+    const isStaffAdmin =
+      isSuperAdmin || staffRole === "admin" || staffRole === "manager";
+
+    // Sanitize redirect target to avoid open redirects and prevent staff from hitting /admin
+    let target = next;
+    if (!isStaffAdmin && (target.startsWith("/admin") || !target.startsWith("/account"))) {
+      target = "/account";
+    } else if (isStaffAdmin && (!target.startsWith("/admin") && !target.startsWith("/account"))) {
+      target = "/admin";
+    }
     return { success: true, redirectTo: target };
   } catch (err) {
     return {
@@ -530,4 +540,89 @@ export async function deleteDigitalMarketingBookingAction(bookingId: string) {
     };
   }
 }
+
+const feedbackStatusSchema = z.enum(["pending", "approved", "hidden"]);
+
+/**
+ * Updates the moderation status of a feedback item (approve, hide, or pending).
+ * Approving records the approved_at timestamp.
+ */
+export async function updateFeedbackStatusAction(
+  feedbackId: string,
+  newStatus: "pending" | "approved" | "hidden",
+) {
+  await requireAdmin();
+
+  const idCheck = uuidSchema.safeParse(feedbackId);
+  const statusCheck = feedbackStatusSchema.safeParse(newStatus);
+
+  if (!idCheck.success) {
+    return { ok: false, error: "Invalid feedback ID." };
+  }
+  if (!statusCheck.success) {
+    return { ok: false, error: "Invalid feedback status." };
+  }
+
+  try {
+    const supabase = createSupabaseAdmin();
+    const updateData: { status: "pending" | "approved" | "hidden"; approved_at?: string | null } = {
+      status: statusCheck.data,
+    };
+
+    if (statusCheck.data === "approved") {
+      updateData.approved_at = new Date().toISOString();
+    }
+
+    const { error } = await supabase
+      .from("feedback")
+      .update(updateData)
+      .eq("id", idCheck.data);
+
+    if (error) throw error;
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/feedback");
+    revalidatePath("/feedback");
+    revalidatePath("/");
+
+    const label = statusCheck.data === "approved" ? "approved and published" : statusCheck.data;
+    return { ok: true, message: `Feedback marked as ${label}.` };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to update feedback status.",
+    };
+  }
+}
+
+/**
+ * Deletes a feedback submission permanently after confirmation.
+ */
+export async function deleteFeedbackAction(feedbackId: string) {
+  await requireAdmin();
+
+  const idCheck = uuidSchema.safeParse(feedbackId);
+  if (!idCheck.success) {
+    return { ok: false, error: "Invalid feedback ID." };
+  }
+
+  try {
+    const supabase = createSupabaseAdmin();
+    const { error } = await supabase.from("feedback").delete().eq("id", idCheck.data);
+
+    if (error) throw error;
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/feedback");
+    revalidatePath("/feedback");
+    revalidatePath("/");
+    return { ok: true, message: "Feedback has been deleted." };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to delete feedback.",
+    };
+  }
+}
+
 

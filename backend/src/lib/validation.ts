@@ -11,6 +11,7 @@ import type {
   QuoteFormData,
   AuditFormData,
   DigitalBookingFormData,
+  FeedbackFormData,
   FieldErrors,
 } from "@/types";
 
@@ -282,3 +283,73 @@ export function validateAudit(input: unknown) {
 export function validateDigitalBooking(input: unknown) {
   return parseForm<DigitalBookingFormData>(digitalBookingSchema, input);
 }
+
+const feedbackServices = [
+  "wedding",
+  "portrait",
+  "product",
+  "events",
+  "studio rental",
+  "other",
+] as const;
+
+export const feedbackSchema = z.object({
+  name: nameField,
+  email: z
+    .string()
+    .trim()
+    .max(254, "Please enter a valid email address.")
+    .pipe(z.email("Please enter a valid email address."))
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  rating: z.coerce
+    .number({ message: "Please select a rating between 1 and 5 stars." })
+    .int("Rating must be a whole number.")
+    .min(1, "Please select at least 1 star.")
+    .max(5, "Rating cannot exceed 5 stars."),
+  service: z
+    .enum(feedbackServices, {
+      message: "Please select a valid service.",
+    })
+    .or(z.literal(""))
+    .optional()
+    .default(""),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Please write at least 10 characters.")
+    .max(
+      MAX_MESSAGE_LENGTH,
+      `Please keep your message under ${MAX_MESSAGE_LENGTH} characters.`,
+    ),
+  website: honeypotField,
+});
+
+export function validateFeedback(input: unknown) {
+  return parseForm<FeedbackFormData>(feedbackSchema, input);
+}
+
+/**
+ * Normalizes feedback text by stripping redundant outer quotes and decoding any double-escaped entities.
+ */
+export function cleanFeedbackMessage(text: string | null | undefined): string {
+  if (!text) return "";
+  let cleaned = String(text)
+    .replace(/&quot;/gi, '"')
+    .replace(/&#039;/gi, "'")
+    .replace(/&apos;/gi, "'")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&ldquo;/gi, '"')
+    .replace(/&rdquo;/gi, '"')
+    .trim();
+
+  // Strip leading and trailing quotation marks and entity quotes from the start and end
+  cleaned = cleaned.replace(/^(&quot;|["'“”‘’`\s])+/gi, "");
+  cleaned = cleaned.replace(/(&quot;|["'“”‘’`\s])+$/gi, "");
+
+  return cleaned.trim();
+}
+
