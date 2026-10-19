@@ -1,9 +1,9 @@
 "use client";
 
 // StaffBookingsTable: Interactive, read-only table for staff to view confirmed bookings.
-// Provides search, filtering (status, service, date range), sorting, pagination,
-// quick communication actions (tel:, wa.me, google maps), and detail modal.
-// Strictly read-only: no status change, delete, or reassign controls.
+// Redesigned with warm luxury editorial aesthetic matching studio branding.
+// Features search, filtering (status, service, date range), sorting, pagination,
+// quick actions (Call, WA, Google Maps), and detail modal.
 
 import React, { useMemo, useState } from "react";
 import {
@@ -17,7 +17,6 @@ import {
   X,
 } from "lucide-react";
 import StaffBookingDetailModal from "./StaffBookingDetailModal";
-import StatusBadge from "@/components/admin/StatusBadge";
 import TablePagination from "@/components/admin/TablePagination";
 import Button from "@/components/ui/Button";
 import { formatTelLink, formatWhatsAppLink } from "@/lib/admin/links";
@@ -26,11 +25,54 @@ import type { StaffBookingItem } from "@/lib/account/queries";
 interface StaffBookingsTableProps {
   initialBookings: StaffBookingItem[];
   availableServices: { slug: string; title: string }[];
+  roleLabel?: string;
+}
+
+function getInitial(name: string): string {
+  if (!name || !name.trim()) return "?";
+  return name.trim().charAt(0).toUpperCase();
+}
+
+function formatDisplayDate(dateStr: string): string {
+  if (!dateStr) return "TBA";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
+function getRelativeDays(dateStr: string): string {
+  if (!dateStr) return "";
+  try {
+    const target = new Date(dateStr);
+    if (isNaN(target.getTime())) return "";
+    const today = new Date();
+    target.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    const diffTime = target.getTime() - today.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Tomorrow";
+    if (diffDays === -1) return "Yesterday";
+    if (diffDays > 1) return `In ${diffDays} days`;
+    if (diffDays < -1) return `${Math.abs(diffDays)} days ago`;
+    return "";
+  } catch {
+    return "";
+  }
 }
 
 export default function StaffBookingsTable({
   initialBookings,
   availableServices,
+  roleLabel = "PHOTOGRAPHER",
 }: StaffBookingsTableProps) {
   const [bookings] = useState<StaffBookingItem[]>(initialBookings);
 
@@ -115,28 +157,34 @@ export default function StaffBookingsTable({
   return (
     <div className="space-y-6">
       {/* 1. Header & Quick Status Switcher */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#a87f32]">
+            {roleLabel}
+          </p>
+          <h1
+            className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1a1714] mt-0.5"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
             My Bookings
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+          <p className="mt-1 text-xs sm:text-sm text-[#7c756c]">
             Confirmed client shoots and assignments scheduled by studio administration.
           </p>
         </div>
 
-        {/* Status Filter Tabs */}
-        <div className="inline-flex rounded-xl border border-border bg-card p-1 shadow-xs text-xs">
+        {/* Status Filter Tabs (Pill Switcher) */}
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#e8dfcf] bg-[#f4ede2] p-1 text-xs self-start sm:self-auto shadow-2xs">
           <button
             type="button"
             onClick={() => {
               setSelectedStatus("confirmed");
               setCurrentPage(1);
             }}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-semibold transition-colors cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-semibold transition-all cursor-pointer ${
               selectedStatus === "confirmed"
-                ? "bg-accent text-accent-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-[#7a5b28] text-white shadow-xs"
+                : "text-[#7c756c] hover:text-[#1a1714]"
             }`}
           >
             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -149,10 +197,10 @@ export default function StaffBookingsTable({
               setSelectedStatus("completed");
               setCurrentPage(1);
             }}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-semibold transition-colors cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-semibold transition-all cursor-pointer ${
               selectedStatus === "completed"
-                ? "bg-accent text-accent-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-[#7a5b28] text-white shadow-xs"
+                : "text-[#7c756c] hover:text-[#1a1714]"
             }`}
           >
             <span>Completed ({completedCount})</span>
@@ -164,10 +212,10 @@ export default function StaffBookingsTable({
               setSelectedStatus("all");
               setCurrentPage(1);
             }}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-semibold transition-colors cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-semibold transition-all cursor-pointer ${
               selectedStatus === "all"
-                ? "bg-accent text-accent-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-[#7a5b28] text-white shadow-xs"
+                : "text-[#7c756c] hover:text-[#1a1714]"
             }`}
           >
             <span>All ({bookings.length})</span>
@@ -176,11 +224,11 @@ export default function StaffBookingsTable({
       </div>
 
       {/* 2. Search & Filter Bar */}
-      <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs space-y-4">
+      <div className="rounded-2xl border border-[#ede5d8] bg-white p-4 sm:p-5 shadow-xs space-y-3.5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {/* Search Input */}
           <div className="relative sm:col-span-2">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9e968b]" />
             <input
               type="text"
               value={searchQuery}
@@ -189,14 +237,14 @@ export default function StaffBookingsTable({
                 setCurrentPage(1);
               }}
               placeholder="Search by client name, phone, location..."
-              className="w-full rounded-xl border border-border bg-background py-2.5 pl-9 pr-9 text-xs text-foreground placeholder:text-muted-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] py-2.5 pl-10 pr-9 text-xs text-[#1a1714] placeholder:text-[#9e968b] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9e968b] hover:text-[#1a1714]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -211,7 +259,7 @@ export default function StaffBookingsTable({
                 setSelectedService(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-xs text-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="all">All Services</option>
               {availableServices.map((s) => (
@@ -232,7 +280,7 @@ export default function StaffBookingsTable({
                 setCurrentPage(1);
               }}
               aria-label="Start date"
-              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-xs text-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
 
@@ -246,58 +294,50 @@ export default function StaffBookingsTable({
                 setCurrentPage(1);
               }}
               aria-label="End date"
-              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-xs text-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
         </div>
 
-        {/* Sort & Reset Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3 text-xs text-muted-foreground">
+        {/* Sort & Count Row */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#f2ece2] pt-3 text-xs text-[#8c8478]">
           <div className="flex items-center gap-2">
             <span>Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "event_asc" | "event_desc" | "created_desc")}
-              className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-foreground"
+              className="rounded-lg border border-[#e8dfcf] bg-[#fcfaf7] px-2.5 py-1 text-xs font-semibold text-[#2d271f] focus:border-[#a87f32] focus:outline-hidden cursor-pointer"
             >
               <option value="event_asc">Event Date (Upcoming First)</option>
               <option value="event_desc">Event Date (Furthest First)</option>
               <option value="created_desc">Recently Booked</option>
             </select>
+
+            {(searchQuery || selectedService !== "all" || startDate || endDate || selectedStatus !== "confirmed") && (
+              <button
+                type="button"
+                onClick={handleFilterReset}
+                className="ml-2 text-xs font-semibold text-[#a87f32] hover:underline cursor-pointer"
+              >
+                Reset all filters
+              </button>
+            )}
           </div>
 
-          {(searchQuery || selectedService !== "all" || startDate || endDate || selectedStatus !== "confirmed") && (
-            <button
-              type="button"
-              onClick={handleFilterReset}
-              className="text-xs font-semibold text-accent hover:underline cursor-pointer"
-            >
-              Reset all filters
-            </button>
-          )}
+          <div className="text-xs text-[#8c8478] font-medium">
+            Showing <strong className="text-[#1a1714] font-semibold">{filteredBookings.length}</strong> {filteredBookings.length === 1 ? "booking" : "bookings"}
+          </div>
         </div>
       </div>
 
-      {/* 3. Bookings Count Summary */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-        <span>
-          Showing <strong>{filteredBookings.length}</strong> {filteredBookings.length === 1 ? "booking" : "bookings"}
-        </span>
-        {totalPages > 1 && (
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-        )}
-      </div>
-
-      {/* 4. Table / Stacked Cards View */}
+      {/* 3. Table / Bookings List Card */}
       {filteredBookings.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
-          <Calendar className="mx-auto h-10 w-10 text-muted-foreground/40" />
-          <h3 className="mt-3 text-base font-semibold text-foreground">
+        <div className="rounded-2xl border border-dashed border-[#e8dfcf] bg-white p-12 text-center shadow-xs">
+          <Calendar className="mx-auto h-10 w-10 text-[#8c8478]/40" />
+          <h3 className="mt-3 text-base font-semibold text-[#1a1714]">
             No confirmed bookings yet
           </h3>
-          <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
+          <p className="mt-1 text-xs text-[#7c756c] max-w-sm mx-auto">
             {bookings.length === 0
               ? "When the studio administrator sets booking status to 'confirmed', your assignments will appear here."
               : "No records match your active search terms or date filter."}
@@ -307,7 +347,7 @@ export default function StaffBookingsTable({
               type="button"
               variant="outline"
               onClick={handleFilterReset}
-              className="mt-4 text-xs cursor-pointer"
+              className="mt-4 text-xs cursor-pointer border-[#e8dfcf]"
             >
               Clear filters
             </Button>
@@ -315,80 +355,123 @@ export default function StaffBookingsTable({
         </div>
       ) : (
         <>
-          {/* DESKTOP TABLE VIEW (Visible on screens >= 768px) */}
-          <div className="hidden md:block overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
+          {/* DESKTOP TABLE VIEW (Screens >= 768px) */}
+          <div className="hidden md:block overflow-hidden rounded-2xl border border-[#ede5d8] bg-white shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-border bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <thead className="border-b border-[#e8dfcf] bg-[#f5ede0]">
                   <tr>
-                    <th scope="col" className="px-5 py-3.5">Client & Contact</th>
-                    <th scope="col" className="px-5 py-3.5">Service</th>
-                    <th scope="col" className="px-5 py-3.5">Event Date</th>
-                    <th scope="col" className="px-5 py-3.5">Location</th>
-                    <th scope="col" className="px-5 py-3.5">Status</th>
-                    <th scope="col" className="px-5 py-3.5">Quick Actions</th>
-                    <th scope="col" className="px-5 py-3.5 text-right">Details</th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      CLIENT &amp; CONTACT
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      SERVICE
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      EVENT DATE
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      LOCATION
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      STATUS
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      QUICK ACTIONS
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] text-right">
+                      DETAILS
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody className="divide-y divide-[#f2ece2] bg-white">
                   {paginatedBookings.map((b) => {
                     const mapsUrl = b.location
                       ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.location)}`
                       : null;
+                    const relativeText = getRelativeDays(b.event_date);
 
                     return (
                       <tr
                         key={b.id}
-                        className="transition-colors hover:bg-muted/30"
+                        className="transition-colors hover:bg-[#faf7f2]/90"
                       >
-                        {/* Client Name & Phone */}
+                        {/* 1. Client & Contact */}
                         <td className="px-5 py-4">
-                          <div className="font-semibold text-card-foreground">{b.name}</div>
-                          <div className="text-xs text-muted-foreground font-mono mt-0.5">
-                            {b.phone}
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0e8db] text-xs font-bold text-[#6b522d]">
+                              {getInitial(b.name)}
+                            </div>
+                            <div>
+                              <div className="font-bold text-sm text-[#1f1b16] leading-tight">
+                                {b.name}
+                              </div>
+                              <div className="text-xs text-[#8c8478] font-mono mt-0.5">
+                                {b.phone}
+                              </div>
+                            </div>
                           </div>
                         </td>
 
-                        {/* Service Title */}
-                        <td className="px-5 py-4 text-foreground font-medium">
+                        {/* 2. Service */}
+                        <td className="px-5 py-4 font-semibold text-sm text-[#2d271f]">
                           {b.serviceTitle}
                         </td>
 
-                        {/* Event Date */}
+                        {/* 3. Event Date */}
                         <td className="px-5 py-4">
-                          <div className="font-medium text-foreground whitespace-nowrap flex items-center gap-1.5">
-                            <Clock className="h-3.5 w-3.5 text-accent" />
-                            <span>{b.event_date}</span>
+                          <div className="flex items-start gap-2">
+                            <Clock className="h-4 w-4 text-[#a87f32] shrink-0 mt-0.5" />
+                            <div>
+                              <div className="font-bold text-sm text-[#1f1b16] leading-tight whitespace-nowrap">
+                                {formatDisplayDate(b.event_date)}
+                              </div>
+                              {relativeText && (
+                                <div className="text-[11px] text-[#8c8478] mt-0.5">
+                                  {relativeText}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </td>
 
-                        {/* Location */}
-                        <td className="px-5 py-4 text-xs text-muted-foreground">
+                        {/* 4. Location */}
+                        <td className="px-5 py-4 text-xs font-medium text-[#5c5449]">
                           {b.location ? (
                             <span className="truncate max-w-[180px] block" title={b.location}>
                               {b.location}
                             </span>
                           ) : (
-                            <span className="text-muted-foreground/60">Studio / TBA</span>
+                            <span className="text-[#9e968b]">Studio / TBA</span>
                           )}
                         </td>
 
-                        {/* Status (Read-Only Badge) */}
+                        {/* 5. Status Badge */}
                         <td className="px-5 py-4">
-                          <StatusBadge status={b.status} />
+                          {b.status === "confirmed" ? (
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c4e5ce] bg-[#e8f5ec] px-3 py-1 text-xs font-semibold text-[#1e7e45]">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#1e7e45]" />
+                              <span>Confirmed</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ded5f0] bg-[#f0edf7] px-3 py-1 text-xs font-semibold text-[#6b4da8]">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#6b4da8]" />
+                              <span>Completed</span>
+                            </span>
+                          )}
                         </td>
 
-                        {/* Quick Contact Actions */}
+                        {/* 6. Quick Actions */}
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-1.5">
                             {b.phone && b.phone !== "Not provided" && (
                               <>
                                 <a
                                   href={formatTelLink(b.phone)}
-                                  className="rounded-md border border-border p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0] hover:text-[#1a1714] transition-colors shadow-2xs"
                                   title={`Call ${b.phone}`}
                                 >
-                                  <Phone className="h-3.5 w-3.5 text-accent" />
+                                  <Phone className="h-3.5 w-3.5" />
                                 </a>
                                 <a
                                   href={formatWhatsAppLink(
@@ -397,10 +480,10 @@ export default function StaffBookingsTable({
                                   )}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="rounded-md border border-whatsapp/30 bg-whatsapp/10 p-1.5 text-whatsapp hover:bg-whatsapp/20"
+                                  className="inline-flex h-8 px-2.5 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] text-[11px] font-bold text-[#1e7e45] hover:bg-[#d8eedf] transition-colors shadow-2xs"
                                   title="WhatsApp Client"
                                 >
-                                  <span className="text-[11px] font-bold leading-none">WA</span>
+                                  <span>WA</span>
                                 </a>
                               </>
                             )}
@@ -409,23 +492,23 @@ export default function StaffBookingsTable({
                                 href={mapsUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="rounded-md border border-border p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0] hover:text-[#1a1714] transition-colors shadow-2xs"
                                 title="Open Location in Google Maps"
                               >
-                                <MapPin className="h-3.5 w-3.5 text-accent" />
+                                <MapPin className="h-3.5 w-3.5" />
                               </a>
                             )}
                           </div>
                         </td>
 
-                        {/* View Details Button */}
+                        {/* 7. Details Button */}
                         <td className="px-5 py-4 text-right">
                           <button
                             type="button"
                             onClick={() => setSelectedBooking(b)}
-                            className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0] transition-colors shadow-2xs cursor-pointer"
                           >
-                            <Eye className="h-3.5 w-3.5" />
+                            <Eye className="h-3.5 w-3.5 text-[#7c756c]" />
                             <span>View</span>
                           </button>
                         </td>
@@ -437,60 +520,95 @@ export default function StaffBookingsTable({
             </div>
           </div>
 
-          {/* MOBILE STACKED CARDS VIEW (Visible on screens < 768px) */}
+          {/* MOBILE STACKED CARDS VIEW (Screens < 768px) */}
           <div className="grid grid-cols-1 gap-4 md:hidden">
             {paginatedBookings.map((b) => {
               const mapsUrl = b.location
                 ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.location)}`
                 : null;
+              const relativeText = getRelativeDays(b.event_date);
 
               return (
                 <div
                   key={b.id}
-                  className="rounded-2xl border border-border bg-card p-5 shadow-xs space-y-4"
+                  className="rounded-2xl border border-[#ede5d8] bg-white p-5 shadow-xs space-y-4"
                 >
-                  {/* Top: Name, Service & Status */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h3 className="font-semibold text-card-foreground text-base">{b.name}</h3>
-                      <p className="text-xs font-medium text-accent mt-0.5">{b.serviceTitle}</p>
+                  {/* Top: Avatar, Client Name, and Status */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0e8db] text-xs font-bold text-[#6b522d]">
+                        {getInitial(b.name)}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#1f1b16] text-base leading-tight">
+                          {b.name}
+                        </h3>
+                        <p className="text-xs text-[#8c8478] font-mono mt-0.5">
+                          {b.phone}
+                        </p>
+                      </div>
                     </div>
-                    <StatusBadge status={b.status} />
+
+                    {b.status === "confirmed" ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c4e5ce] bg-[#e8f5ec] px-2.5 py-1 text-xs font-semibold text-[#1e7e45]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#1e7e45]" />
+                        <span>Confirmed</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ded5f0] bg-[#f0edf7] px-2.5 py-1 text-xs font-semibold text-[#6b4da8]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#6b4da8]" />
+                        <span>Completed</span>
+                      </span>
+                    )}
                   </div>
 
                   {/* Details Grid */}
-                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground border-y border-border py-3">
+                  <div className="grid grid-cols-2 gap-3 text-xs border-y border-[#f2ece2] py-3">
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-muted-foreground/80">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                        Service
+                      </span>
+                      <span className="font-semibold text-[#1a1714] mt-0.5 block">
+                        {b.serviceTitle}
+                      </span>
+                    </div>
+
+                    <div>
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
                         Event Date
                       </span>
-                      <span className="font-semibold text-foreground">{b.event_date}</span>
+                      <div className="font-semibold text-[#1a1714] mt-0.5 flex items-center gap-1">
+                        <Clock className="h-3 w-3 text-[#a87f32]" />
+                        <span>{formatDisplayDate(b.event_date)}</span>
+                      </div>
+                      {relativeText && (
+                        <span className="text-[10px] text-[#8c8478]">
+                          {relativeText}
+                        </span>
+                      )}
                     </div>
-                    <div>
-                      <span className="block text-[10px] uppercase font-bold text-muted-foreground/80">
+
+                    <div className="col-span-2">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
                         Location
                       </span>
-                      <span className="text-foreground truncate block">{b.location || "Studio"}</span>
-                    </div>
-                    <div className="col-span-2 mt-1">
-                      <span className="block text-[10px] uppercase font-bold text-muted-foreground/80">
-                        Phone
+                      <span className="text-[#5c5449] truncate block mt-0.5">
+                        {b.location || "Studio / TBA"}
                       </span>
-                      <span className="font-mono text-foreground font-semibold">{b.phone}</span>
                     </div>
                   </div>
 
-                  {/* Quick Contact & Details Actions */}
-                  <div className="flex flex-wrap items-center justify-between gap-2">
+                  {/* Actions Row */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
                     <div className="flex items-center gap-2">
                       {b.phone && b.phone !== "Not provided" && (
                         <>
                           <a
                             href={formatTelLink(b.phone)}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground hover:bg-muted"
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0] hover:text-[#1a1714]"
+                            title={`Call ${b.phone}`}
                           >
-                            <Phone className="h-3.5 w-3.5 text-accent" />
-                            <span>Call</span>
+                            <Phone className="h-4 w-4" />
                           </a>
                           <a
                             href={formatWhatsAppLink(
@@ -499,7 +617,7 @@ export default function StaffBookingsTable({
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-whatsapp/30 bg-whatsapp/10 px-3 py-2 text-xs font-semibold text-whatsapp hover:bg-whatsapp/20"
+                            className="inline-flex h-9 px-3 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] text-xs font-bold text-[#1e7e45] hover:bg-[#d8eedf]"
                           >
                             <span>WhatsApp</span>
                           </a>
@@ -510,10 +628,10 @@ export default function StaffBookingsTable({
                           href={mapsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 rounded-lg border border-border bg-background p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0]"
                           title="Open Location in Maps"
                         >
-                          <MapPin className="h-3.5 w-3.5 text-accent" />
+                          <MapPin className="h-4 w-4" />
                         </a>
                       )}
                     </div>
@@ -521,10 +639,10 @@ export default function StaffBookingsTable({
                     <button
                       type="button"
                       onClick={() => setSelectedBooking(b)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted/60 px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-muted cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] bg-white px-4 py-2 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0] shadow-2xs cursor-pointer"
                     >
-                      <Eye className="h-3.5 w-3.5" />
-                      <span>Details</span>
+                      <Eye className="h-3.5 w-3.5 text-[#7c756c]" />
+                      <span>View</span>
                     </button>
                   </div>
                 </div>
@@ -546,6 +664,7 @@ export default function StaffBookingsTable({
                 setPageSize(newSize);
                 setCurrentPage(1);
               }}
+              className="rounded-2xl border border-[#ede5d8] bg-white shadow-xs"
             />
           )}
         </>

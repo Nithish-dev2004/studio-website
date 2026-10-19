@@ -174,11 +174,11 @@ export default function EventConsultationDetailModal({
               <p className="text-sm font-semibold text-card-foreground">
                 {consultation.event_date
                   ? new Date(consultation.event_date).toLocaleDateString("en-IN", {
-                      weekday: "short",
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
+                    weekday: "short",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })
                   : "Not decided yet"}
               </p>
             </div>
