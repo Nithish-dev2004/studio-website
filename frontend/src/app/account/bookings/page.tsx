@@ -17,7 +17,7 @@ export const metadata = {
 
 export default async function StaffBookingsPage() {
   // Enforce server-side active staff verification
-  await requireStaffAccount({ allowChangePasswordPage: false });
+  const profile = await requireStaffAccount({ allowChangePasswordPage: false });
 
   // Query only confirmed and completed bookings on the server
   const bookings = await getStaffBookings();
@@ -27,10 +27,16 @@ export default async function StaffBookingsPage() {
     title: s.title,
   }));
 
+  const roleLabel =
+    profile.staffUser?.role === "photographer"
+      ? "PHOTOGRAPHER"
+      : profile.staffUser?.role?.toUpperCase() || "PHOTOGRAPHER";
+
   return (
     <StaffBookingsTable
       initialBookings={bookings}
       availableServices={availableServices}
+      roleLabel={roleLabel}
     />
   );
 }

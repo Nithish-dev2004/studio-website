@@ -94,39 +94,62 @@ export default function StaffShell({
       {/* Main Area */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile Header (Screens < 768px) */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/90 px-4 backdrop-blur-md md:hidden">
+        <header
+          className="sticky top-0 z-30 flex h-16 items-center justify-between px-4 backdrop-blur-md md:hidden"
+          style={{
+            background: "rgba(30,22,12,0.92)",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
-              className="rounded-lg border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer"
+              className="rounded-lg p-2 cursor-pointer"
+              style={{ border: "1px solid rgba(255,255,255,0.1)", color: "#9a8c78" }}
             >
               <Menu className="h-5 w-5" />
             </button>
 
             <Link href="/account" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-accent-foreground">
-                <ShieldCheck className="h-4 w-4" />
+              <div
+                className="flex h-7 w-7 items-center justify-center rounded-md"
+                style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
+              >
+                <ShieldCheck className="h-4 w-4 text-white" />
               </div>
-              <span className="font-heading text-base font-bold tracking-tight text-card-foreground">
+              <span className="text-sm font-bold tracking-tight text-white">
                 {siteConfig.name}
               </span>
             </Link>
           </div>
 
-          <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent border border-accent/30">
+          <span
+            className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+            style={{
+              background: "rgba(201,168,76,0.15)",
+              color: "#c9a84c",
+              border: "1px solid rgba(201,168,76,0.25)",
+            }}
+          >
             {userRole || "Staff"}
           </span>
         </header>
 
         {/* Desktop Topbar (Screens >= 768px) */}
-        <header className="sticky top-0 z-30 hidden md:flex h-16 items-center justify-between border-b border-border bg-card/90 px-6 lg:px-8 backdrop-blur-md">
+        <header
+          className="sticky top-0 z-30 hidden md:flex h-16 items-center justify-between px-6 lg:px-8 backdrop-blur-md"
+          style={{
+            background: "rgba(26,18,8,0.88)",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
           <div className="min-w-0 flex-1">
-            <h1 className="text-base font-bold text-foreground tracking-tight truncate">
+            <h1 className="text-base font-bold tracking-tight text-white truncate">
               {pageTitle}
             </h1>
-            <p className="text-xs text-muted-foreground truncate">
+            <p className="text-xs truncate" style={{ color: "#7a6e5e" }}>
               {pageSubtitle}
             </p>
           </div>
@@ -136,22 +159,31 @@ export default function StaffShell({
             {canAccessAdmin && (
               <Link
                 href="/admin"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-[#9a8c78] transition-all duration-200 hover:border-[rgba(201,168,76,0.35)] hover:bg-gradient-to-r hover:from-[rgba(201,168,76,0.18)] hover:to-[rgba(168,111,40,0.10)] hover:text-[#f8f1e0]"
               >
-                <ArrowLeft className="h-3.5 w-3.5" />
+                <ArrowLeft className="h-3.5 w-3.5 text-[#c9a84c]" />
                 <span>Admin Console</span>
               </Link>
             )}
 
-            <div className="flex items-center gap-2.5 border-l border-border pl-3 text-xs">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground font-semibold">
-                <User className="h-4 w-4" />
+            <div
+              className="flex items-center gap-2.5 pl-3 text-xs"
+              style={{ borderLeft: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-full font-semibold text-white"
+                style={{ background: "rgba(201,168,76,0.25)", border: "1px solid rgba(201,168,76,0.35)" }}
+              >
+                <User className="h-4 w-4" style={{ color: "#c9a84c" }} />
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-semibold text-foreground truncate max-w-[150px]">
+                <span className="font-semibold text-white truncate max-w-[150px]">
                   {userName || userEmail}
                 </span>
-                <span className="text-[10px] uppercase font-bold text-accent">
+                <span
+                  className="text-[10px] uppercase font-bold"
+                  style={{ color: "#c9a84c" }}
+                >
                   {userRole || "Staff"}
                 </span>
               </div>
@@ -161,9 +193,9 @@ export default function StaffShell({
               type="button"
               onClick={() => setIsLogoutModalOpen(true)}
               title="Sign out"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive cursor-pointer"
+              className="group inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-[#c4b49a] transition-all duration-200 cursor-pointer hover:border-[rgba(201,168,76,0.4)] hover:bg-gradient-to-r hover:from-[rgba(201,168,76,0.22)] hover:to-[rgba(168,111,40,0.12)] hover:text-white hover:shadow-xs active:scale-[0.98]"
             >
-              <LogOut className="h-3.5 w-3.5" />
+              <LogOut className="h-3.5 w-3.5 text-[#c9a84c] transition-transform duration-200 group-hover:translate-x-0.5" />
               <span>Sign Out</span>
             </button>
           </div>
