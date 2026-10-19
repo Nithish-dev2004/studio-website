@@ -92,7 +92,6 @@ const navItems = [
   },
 ];
 
-
 export default function AdminSidebar({
   userEmail,
   userRole,
@@ -120,24 +119,36 @@ export default function AdminSidebar({
   };
 
   const navContent = (
-    <div className="flex h-full flex-col justify-between p-4 sm:p-6">
-      {/* Top Header & Navigation */}
-      <div className="space-y-6">
+    <div
+      className="flex h-full min-h-0 flex-col"
+      style={{ background: "linear-gradient(180deg, #2a2013 0%, #38291a 60%, #3d2e1c 100%)" }}
+    >
+      {/* Top: brand */}
+      <div className="shrink-0 px-5 pt-6 pb-4">
         {/* Brand & Mobile Close */}
         <div className="flex items-center justify-between">
           <Link
             href="/admin"
             onClick={handleLinkClick}
-            className="flex items-center gap-2.5 transition-opacity hover:opacity-90"
+            className="flex items-center gap-3 transition-opacity hover:opacity-90"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground shadow-xs">
-              <ShieldCheck className="h-5 w-5" />
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-lg shadow-sm shrink-0"
+              style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
+            >
+              <ShieldCheck className="h-5 w-5 text-white" />
             </div>
             <div>
-              <span className="font-heading text-lg font-bold tracking-tight text-card-foreground">
+              <span
+                className="block text-sm font-bold tracking-tight text-white"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
                 {siteConfig.name}
               </span>
-              <span className="block text-[11px] font-medium uppercase tracking-wider text-accent">
+              <span
+                className="block text-[10px] font-semibold tracking-widest uppercase"
+                style={{ color: "#c9a84c" }}
+              >
                 Admin Console
               </span>
             </div>
@@ -148,7 +159,8 @@ export default function AdminSidebar({
               type="button"
               onClick={onClose}
               aria-label="Close sidebar"
-              className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
+              className="rounded-md p-1.5 md:hidden"
+              style={{ color: "#9a8c78" }}
             >
               <X className="h-5 w-5" />
             </button>
@@ -157,74 +169,115 @@ export default function AdminSidebar({
 
         {/* User identification */}
         {userEmail && (
-          <div className="rounded-lg border border-border bg-muted/60 p-3">
+          <div
+            className="mt-5 rounded-lg px-3 py-2.5"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.09)",
+            }}
+          >
             <div className="flex items-center justify-between gap-1">
-              <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+              <p
+                className="text-[10px] font-semibold tracking-widest uppercase"
+                style={{ color: "#7a6e5e" }}
+              >
                 Signed in as
               </p>
               {userRole && (
-                <span className="rounded-sm border border-accent/30 bg-accent/15 px-1.5 py-0.2 text-[9px] font-bold uppercase tracking-wider text-accent">
+                <span
+                  className="rounded px-1.5 py-0.5 text-[9px] font-bold tracking-wider uppercase"
+                  style={{
+                    background: "rgba(201,168,76,0.18)",
+                    color: "#c9a84c",
+                    border: "1px solid rgba(201,168,76,0.28)",
+                  }}
+                >
                   {userRole}
                 </span>
               )}
             </div>
-            <p className="mt-0.5 truncate text-xs font-semibold text-card-foreground" title={userEmail}>
+            <p
+              className="mt-0.5 truncate text-xs font-semibold text-white"
+              title={userEmail}
+            >
               {userEmail}
             </p>
           </div>
         )}
+      </div>
 
-        {/* Navigation Links */}
-        <nav className="space-y-1.5" aria-label="Admin Navigation">
-          {navItems
-            .filter((item) => !item.adminOnly || userRole === "admin")
-            .map((item) => {
-              const isActive = item.exact
-                ? pathname === item.href
-                : pathname.startsWith(item.href);
-              const Icon = item.icon;
+      {/* Thin divider */}
+      <div
+        className="mx-5 shrink-0"
+        style={{ height: "1px", background: "rgba(255,255,255,0.07)" }}
+      />
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={handleLinkClick}
-                  className={cn(
-                    "flex items-center justify-between rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-accent text-accent-foreground shadow-xs font-semibold"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  )}
-                >
-                  <span className="flex items-center gap-3">
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span>{item.label}</span>
-                  </span>
-                  {item.badgeKey === "pendingFeedback" && (pendingFeedbackCount || 0) > 0 && (
+      {/* MANAGE section label */}
+      <div className="px-5 pt-4 pb-1 shrink-0">
+        <p
+          className="text-[10px] font-semibold tracking-widest uppercase"
+          style={{ color: "#5c5040" }}
+        >
+          Manage
+        </p>
+      </div>
+
+      {/* Middle: independently scrollable navigation */}
+      <nav
+        className="min-h-0 flex-1 overflow-y-auto px-3 pb-3 space-y-0.5"
+        aria-label="Admin Navigation"
+      >
+        {navItems
+          .filter((item) => !item.adminOnly || userRole === "admin")
+          .map((item) => {
+            const isActive = item.exact
+              ? pathname === item.href
+              : pathname.startsWith(item.href);
+            const Icon = item.icon;
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={handleLinkClick}
+                className={cn(
+                  "group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                  isActive
+                    ? "bg-gradient-to-r from-[#c9a84c] to-[#a86f28] text-[#1a1005] font-semibold shadow-sm"
+                    : "text-[#c4b49a] hover:bg-gradient-to-r hover:from-[rgba(201,168,76,0.20)] hover:to-[rgba(168,111,40,0.10)] hover:text-white"
+                )}
+              >
+                <span className="flex items-center gap-3">
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span>{item.label}</span>
+                </span>
+                {item.badgeKey === "pendingFeedback" &&
+                  (pendingFeedbackCount || 0) > 0 && (
                     <span
-                      className={cn(
-                        "rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider",
+                      className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                      style={
                         isActive
-                          ? "bg-background text-accent"
-                          : "bg-accent/20 text-accent",
-                      )}
+                          ? { background: "rgba(26,16,5,0.25)", color: "#1a1005" }
+                          : { background: "rgba(201,168,76,0.22)", color: "#c9a84c" }
+                      }
                     >
                       {pendingFeedbackCount}
                     </span>
                   )}
-                </Link>
-              );
-            })}
-        </nav>
-      </div>
-
+              </Link>
+            );
+          })}
+      </nav>
 
       {/* Bottom Actions: View Site & Logout */}
-      <div className="space-y-1.5 border-t border-border pt-4">
+      <div
+        className="shrink-0 px-3 py-3 space-y-0.5"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+      >
         <Link
           href="/account/profile"
           onClick={handleLinkClick}
-          className="flex items-center gap-3 rounded-lg px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-[#9a8c78] transition-all duration-200 hover:bg-gradient-to-r hover:from-[rgba(201,168,76,0.15)] hover:to-[rgba(168,111,40,0.08)] hover:text-white"
         >
           <User className="h-4 w-4" />
           <span>My Account</span>
@@ -234,19 +287,20 @@ export default function AdminSidebar({
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between rounded-lg px-3.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-[#9a8c78] transition-all duration-200 hover:bg-gradient-to-r hover:from-[rgba(201,168,76,0.15)] hover:to-[rgba(168,111,40,0.08)] hover:text-white"
         >
           <span className="flex items-center gap-3">
             <ExternalLink className="h-4 w-4" />
             <span>View Website</span>
           </span>
-          <span className="text-xs text-muted-foreground/60">↗</span>
+          <span className="text-xs" style={{ color: "#5c5040" }}>↗</span>
         </Link>
 
         <button
           type="button"
           onClick={handleOpenLogoutModal}
-          className="flex w-full items-center gap-3 rounded-lg px-3.5 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 cursor-pointer"
+          className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
+          style={{ color: "#d97070" }}
         >
           <LogOut className="h-4 w-4" />
           <span>Sign Out</span>
@@ -258,7 +312,7 @@ export default function AdminSidebar({
   return (
     <>
       {/* Desktop Sidebar (persistent) */}
-      <aside className="hidden h-screen w-64 shrink-0 border-r border-border bg-card md:sticky md:top-0 md:flex md:flex-col">
+      <aside className="hidden h-dvh w-64 shrink-0 md:sticky md:top-0 md:flex md:flex-col overflow-hidden">
         {navContent}
       </aside>
 
@@ -269,7 +323,7 @@ export default function AdminSidebar({
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={onClose}
           />
-          <div className="fixed inset-y-0 left-0 z-10 w-72 max-w-[85vw] border-r border-border bg-card shadow-2xl">
+          <div className="fixed inset-y-0 left-0 z-10 w-72 max-w-[85vw] shadow-2xl overflow-hidden">
             {navContent}
           </div>
         </div>

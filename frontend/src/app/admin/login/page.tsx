@@ -10,7 +10,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, Lock, Mail, ShieldAlert, ShieldCheck } from "lucide-react";
 import { loginAction } from "@/app/admin/actions";
 import { useAdminToast } from "@/components/admin/AdminToastContext";
-import Button from "@/components/ui/Button";
 import { siteConfig } from "@/data/site";
 
 function AdminLoginForm() {
@@ -84,33 +83,50 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-4 sm:py-6 overflow-x-hidden">
-      <div className="w-full max-w-md my-auto space-y-3.5 sm:space-y-4">
+    <div
+      className="flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:py-8 overflow-x-hidden"
+      style={{ background: "linear-gradient(160deg, #1a1005 0%, #2a1e0c 50%, #1a1005 100%)" }}
+    >
+      <div className="w-full max-w-md my-auto space-y-4">
         {/* Navigation / Back link */}
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
+            style={{ color: "#7a6e5e" }}
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to website</span>
           </Link>
-          <span className="rounded-full border border-accent/20 bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
-            Admin & Staff
+          <span
+            className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+            style={{
+              background: "rgba(201,168,76,0.12)",
+              border: "1px solid rgba(201,168,76,0.22)",
+              color: "#c9a84c",
+            }}
+          >
+            Admin &amp; Staff
           </span>
         </div>
 
         {/* Brand and Title Header */}
         <div className="text-center">
-          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-accent-foreground shadow-sm">
-            <ShieldCheck className="h-6 w-6" />
+          <div
+            className="mx-auto flex h-13 w-13 items-center justify-center rounded-2xl shadow-lg"
+            style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
+          >
+            <ShieldCheck className="h-7 w-7 text-white" />
           </div>
-          <h1 className="font-heading mt-2.5 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <h1
+            className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
             Studio Portal
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
+          <p className="mt-1 text-xs max-w-sm mx-auto" style={{ color: "#7a6e5e" }}>
             Sign in to access your administrative console or staff account for{" "}
-            <span className="font-medium text-foreground">{siteConfig.name}</span>.
+            <span className="font-medium text-white">{siteConfig.name}</span>.
           </p>
         </div>
 
@@ -118,7 +134,12 @@ function AdminLoginForm() {
         {errorMessage && (
           <div
             role="alert"
-            className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive"
+            className="flex items-start gap-2.5 rounded-lg p-3 text-xs"
+            style={{
+              background: "rgba(220,38,38,0.1)",
+              border: "1px solid rgba(220,38,38,0.25)",
+              color: "#f87171",
+            }}
           >
             <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" />
             <p className="leading-snug">{errorMessage}</p>
@@ -126,18 +147,28 @@ function AdminLoginForm() {
         )}
 
         {/* Login Card */}
-        <div className="rounded-xl border border-border bg-card p-5 sm:p-6 shadow-lg">
+        <div
+          className="rounded-2xl p-5 sm:p-6 shadow-2xl"
+          style={{
+            background: "linear-gradient(135deg, #2a2013 0%, #38291a 100%)",
+            border: "1px solid rgba(201,168,76,0.15)",
+          }}
+        >
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div>
               <label
                 htmlFor="email"
-                className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                className="block text-[11px] font-semibold uppercase tracking-wider"
+                style={{ color: "#7a6e5e" }}
               >
                 Email Address
               </label>
               <div className="relative mt-1.5">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
+                <div
+                  className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                  style={{ color: "#7a6e5e" }}
+                >
                   <Mail className="h-4 w-4" />
                 </div>
                 <input
@@ -150,7 +181,12 @@ function AdminLoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@yourstudio.com"
                   disabled={isPending}
-                  className="block w-full rounded-lg border border-border bg-background py-2 pr-4 pl-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden disabled:opacity-60"
+                  className="block w-full rounded-lg py-2.5 pr-4 pl-10 text-sm transition-colors focus:outline-hidden disabled:opacity-60"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "#f0e6d3",
+                  }}
                 />
               </div>
             </div>
@@ -159,12 +195,16 @@ function AdminLoginForm() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                className="block text-[11px] font-semibold uppercase tracking-wider"
+                style={{ color: "#7a6e5e" }}
               >
                 Password
               </label>
               <div className="relative mt-1.5">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
+                <div
+                  className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                  style={{ color: "#7a6e5e" }}
+                >
                   <Lock className="h-4 w-4" />
                 </div>
                 <input
@@ -177,44 +217,62 @@ function AdminLoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isPending}
-                  className="block w-full rounded-lg border border-border bg-background py-2 pr-10 pl-10 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden disabled:opacity-60"
+                  className="block w-full rounded-lg py-2.5 pr-10 pl-10 text-sm transition-colors focus:outline-hidden disabled:opacity-60"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "#f0e6d3",
+                  }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground cursor-pointer"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                  style={{ color: "#7a6e5e" }}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              <p className="mt-1.5 text-[11px] text-muted-foreground">
+              <p className="mt-1.5 text-[11px]" style={{ color: "#5c5040" }}>
                 Staff: your first password is your registered mobile number.
               </p>
             </div>
 
             {/* Submit Button */}
             <div className="pt-1">
-              <Button
+              <button
                 type="submit"
                 disabled={isPending}
-                className="w-full justify-center bg-primary text-primary-foreground hover:bg-primary/90"
+                className="w-full flex items-center justify-center rounded-lg py-2.5 text-sm font-semibold transition-all cursor-pointer disabled:opacity-60"
+                style={{
+                  background: isPending
+                    ? "rgba(201,168,76,0.5)"
+                    : "linear-gradient(90deg, #d4a843 0%, #a8722a 100%)",
+                  color: "#1a1005",
+                }}
               >
                 {isPending ? (
                   <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                    <span
+                      className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"
+                      style={{ borderColor: "#1a1005", borderTopColor: "transparent" }}
+                    />
                     Verifying credentials...
                   </span>
                 ) : (
                   "Sign In"
                 )}
-              </Button>
+              </button>
             </div>
           </form>
 
-          <div className="mt-4 border-t border-border pt-3 text-center">
-            <p className="text-[11px] text-muted-foreground">
-              Secured with Supabase Auth & Multi-Layer Role Verification.
+          <div
+            className="mt-4 pt-3 text-center"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <p className="text-[11px]" style={{ color: "#5c5040" }}>
+              Secured with Supabase Auth &amp; Multi-Layer Role Verification.
             </p>
           </div>
         </div>

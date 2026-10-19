@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import {
   AlertCircle,
   Calendar,
+  ChevronDown,
   Download,
   Eye,
   Mail,
@@ -14,7 +15,6 @@ import {
 } from "lucide-react";
 import BookingDetailModal, { AdminBookingItem } from "./BookingDetailModal";
 import ConfirmationModal from "./ConfirmationModal";
-import StatusBadge from "./StatusBadge";
 import TablePagination from "./TablePagination";
 import { useAdminToast } from "./AdminToastContext";
 import { deleteBookingAction, updateBookingStatusAction } from "@/app/admin/actions";
@@ -24,6 +24,47 @@ import { formatTelLink, formatWhatsAppLink } from "@/lib/admin/links";
 interface BookingsTableProps {
   initialBookings: AdminBookingItem[];
   availableServices: { slug: string; title: string }[];
+}
+
+function getInitial(name: string): string {
+  if (!name || !name.trim()) return "?";
+  return name.trim().charAt(0).toUpperCase();
+}
+
+function formatDisplayDate(dateStr: string): string {
+  if (!dateStr) return "TBA";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
+function getRelativeDays(dateStr: string): string {
+  if (!dateStr) return "";
+  try {
+    const target = new Date(dateStr);
+    if (isNaN(target.getTime())) return "";
+    const today = new Date();
+    target.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    const diffTime = target.getTime() - today.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Tomorrow";
+    if (diffDays === -1) return "Yesterday";
+    if (diffDays > 1) return `In ${diffDays} days`;
+    if (diffDays < -1) return `${Math.abs(diffDays)} days ago`;
+    return "";
+  } catch {
+    return "";
+  }
 }
 
 export default function BookingsTable({
@@ -53,6 +94,19 @@ export default function BookingsTable({
   const [deleteTarget, setDeleteTarget] = useState<AdminBookingItem | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const { showToast } = useAdminToast();
+
+  // Status counts for top summary pill badges
+  const statusCounts = useMemo(() => {
+    let pending = 0;
+    let confirmed = 0;
+    let completed = 0;
+    bookings.forEach((b) => {
+      if (b.status === "pending") pending++;
+      else if (b.status === "confirmed") confirmed++;
+      else if (b.status === "completed") completed++;
+    });
+    return { pending, confirmed, completed };
+  }, [bookings]);
 
   // 1) Find confirmed date collisions across the entire booking dataset
   const confirmedDateMap = useMemo(() => {
@@ -242,10 +296,13 @@ export default function BookingsTable({
       {/* Page Header and Controls */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Bookings Management
+          <h1
+            className="text-2xl font-bold tracking-tight text-[#1a1714] sm:text-3xl"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
+            Studio Bookings
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-xs sm:text-sm text-[#7c756c]">
             View, schedule, contact, and manage client bookings across all photography services.
           </p>
         </div>
@@ -255,20 +312,20 @@ export default function BookingsTable({
             type="button"
             variant="outline"
             onClick={handleExportCSV}
-            className="flex items-center gap-2 text-xs"
+            className="flex items-center gap-2 text-xs border-[#e8dfcf] bg-white text-[#2d271f] hover:bg-[#f5ede0] hover:border-[#dbcbb4] transition-all cursor-pointer shadow-2xs"
           >
-            <Download className="h-3.5 w-3.5 text-accent" />
+            <Download className="h-3.5 w-3.5 text-[#a87f32]" />
             <span>Export CSV</span>
           </Button>
         </div>
       </div>
 
       {/* Filter and Search Bar Card */}
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-xs sm:p-5 space-y-4">
+      <div className="rounded-2xl border border-[#ede5d8] bg-white p-4 shadow-xs sm:p-5 space-y-4">
         {/* Top row: search & reset */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8c8478]" />
             <input
               type="text"
               placeholder="Search by client name, email, phone, location..."
@@ -277,8 +334,18 @@ export default function BookingsTable({
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-lg border border-border bg-background py-2 pr-4 pl-9 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] py-2.5 pl-10 pr-9 text-xs text-[#1a1714] placeholder:text-[#9e968b] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9e968b] hover:text-[#1a1714] cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           {(searchQuery ||
@@ -289,7 +356,7 @@ export default function BookingsTable({
             <button
               type="button"
               onClick={handleFilterReset}
-              className="flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline px-2 py-1"
+              className="flex items-center gap-1.5 text-xs font-semibold text-[#a87f32] hover:underline px-2 py-1 cursor-pointer"
             >
               <X className="h-3.5 w-3.5" />
               <span>Reset filters</span>
@@ -301,7 +368,7 @@ export default function BookingsTable({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 text-xs">
           {/* Status Filter */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
               Status
             </label>
             <select
@@ -310,7 +377,7 @@ export default function BookingsTable({
                 setSelectedStatus(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground focus:border-accent focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -322,7 +389,7 @@ export default function BookingsTable({
 
           {/* Service Filter */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
               Service
             </label>
             <select
@@ -331,7 +398,7 @@ export default function BookingsTable({
                 setSelectedService(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground focus:border-accent focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="all">All Services</option>
               {availableServices.map((s) => (
@@ -344,7 +411,7 @@ export default function BookingsTable({
 
           {/* Start Date */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
               From Event Date
             </label>
             <input
@@ -354,13 +421,13 @@ export default function BookingsTable({
                 setStartDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-foreground focus:border-accent focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
 
           {/* End Date */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
               To Event Date
             </label>
             <input
@@ -370,13 +437,13 @@ export default function BookingsTable({
                 setEndDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-foreground focus:border-accent focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
 
           {/* Sort By */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
               Sort By
             </label>
             <select
@@ -387,7 +454,7 @@ export default function BookingsTable({
                 );
                 setCurrentPage(1);
               }}
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground focus:border-accent focus:outline-hidden"
+              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="event_asc">Event Date (Earliest first)</option>
               <option value="event_desc">Event Date (Latest first)</option>
@@ -398,167 +465,301 @@ export default function BookingsTable({
         </div>
       </div>
 
-      {/* Bookings Count Summary */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-        <span>
-          Showing <strong>{filteredBookings.length}</strong> {filteredBookings.length === 1 ? "booking" : "bookings"}
-        </span>
-        {totalPages > 1 && (
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-        )}
+      {/* Bookings Count Summary & Status Filter Badges (Matching Screenshot Top Right) */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-1">
+        <div className="text-xs text-[#8c8478]">
+          Showing <strong className="text-[#1a1714] font-semibold">{filteredBookings.length}</strong> {filteredBookings.length === 1 ? "booking" : "bookings"}
+          {selectedStatus !== "all" && (
+            <span className="ml-1 text-[#a87f32]">
+              (filtered by <span className="font-semibold capitalize">{selectedStatus}</span>)
+            </span>
+          )}
+        </div>
+
+        {/* Top Right Status Badges from Screenshot */}
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedStatus((prev) => (prev === "pending" ? "all" : "pending"));
+              setCurrentPage(1);
+            }}
+            title="Filter by Pending"
+            className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
+              selectedStatus === "pending"
+                ? "bg-[#faeed6] text-[#b45309] border-2 border-[#b45309] shadow-xs"
+                : "bg-[#faeed6] text-[#b45309] border border-[#f5d9a8] hover:border-[#b45309]/60"
+            }`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#b45309]" />
+            <span>{statusCounts.pending} pending</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedStatus((prev) => (prev === "confirmed" ? "all" : "confirmed"));
+              setCurrentPage(1);
+            }}
+            title="Filter by Confirmed"
+            className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
+              selectedStatus === "confirmed"
+                ? "bg-[#e6f4ea] text-[#137333] border-2 border-[#137333] shadow-xs"
+                : "bg-[#e6f4ea] text-[#137333] border border-[#ceead6] hover:border-[#137333]/60"
+            }`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#137333]" />
+            <span>{statusCounts.confirmed} confirmed</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedStatus((prev) => (prev === "completed" ? "all" : "completed"));
+              setCurrentPage(1);
+            }}
+            title="Filter by Completed"
+            className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
+              selectedStatus === "completed"
+                ? "bg-[#e8f0fe] text-[#1a73e8] border-2 border-[#1a73e8] shadow-xs"
+                : "bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] hover:border-[#1a73e8]/60"
+            }`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#1a73e8]" />
+            <span>{statusCounts.completed} completed</span>
+          </button>
+        </div>
       </div>
 
       {/* Empty State */}
       {filteredBookings.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
-          <Calendar className="mx-auto h-10 w-10 text-muted-foreground/40" />
-          <h3 className="mt-3 text-base font-semibold text-foreground">No bookings found</h3>
-          <p className="mt-1 text-xs text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-[#e8dfcf] bg-white p-12 text-center shadow-xs">
+          <Calendar className="mx-auto h-10 w-10 text-[#8c8478]/40" />
+          <h3 className="mt-3 text-base font-semibold text-[#1a1714]">No bookings found</h3>
+          <p className="mt-1 text-xs text-[#7c756c]">
             No records matched your search terms or filter selection.
           </p>
           <Button
             type="button"
             variant="outline"
             onClick={handleFilterReset}
-            className="mt-4 text-xs"
+            className="mt-4 text-xs cursor-pointer border-[#e8dfcf]"
           >
             Clear all filters
           </Button>
         </div>
       ) : (
         <>
-          {/* DESKTOP TABLE VIEW (hidden on mobile, visible on sm and up) */}
-          <div className="hidden md:block overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
+          {/* DESKTOP TABLE VIEW (matching uploaded screenshot) */}
+          <div className="hidden md:block overflow-hidden rounded-2xl border border-[#ede5d8] bg-white shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-border bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <thead className="border-b border-[#e8dfcf] bg-[#f5ede0]">
                   <tr>
-                    <th scope="col" className="px-5 py-3.5">Client</th>
-                    <th scope="col" className="px-5 py-3.5">Service</th>
-                    <th scope="col" className="px-5 py-3.5">Event Date</th>
-                    <th scope="col" className="px-5 py-3.5">Location</th>
-                    <th scope="col" className="px-5 py-3.5">Status</th>
-                    <th scope="col" className="px-5 py-3.5">Quick Actions</th>
-                    <th scope="col" className="px-5 py-3.5 text-right">Details</th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      CLIENT &amp; CONTACT
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      SERVICE
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      EVENT DATE
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      LOCATION
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      STATUS
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                      QUICK ACTIONS
+                    </th>
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] text-right">
+                      DETAILS
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody className="divide-y divide-[#f2ece2] bg-white">
                   {paginatedBookings.map((b) => {
                     const conflictingList = b.event_date ? confirmedDateMap.get(b.event_date) || [] : [];
                     const hasConflict = b.status === "confirmed" && conflictingList.length > 1;
+                    const relativeText = getRelativeDays(b.event_date);
 
                     return (
                       <tr
                         key={b.id}
-                        className={`transition-colors hover:bg-muted/30 ${
-                          hasConflict ? "bg-destructive/5" : ""
+                        className={`transition-colors hover:bg-[#faf7f2]/90 ${
+                          hasConflict ? "bg-red-50/50" : ""
                         }`}
                       >
-                        {/* Client Name & Contacts */}
+                        {/* 1. Client & Contact */}
                         <td className="px-5 py-4">
-                          <div className="font-semibold text-card-foreground">{b.name}</div>
-                          <div className="text-xs text-muted-foreground flex flex-col gap-0.5 mt-0.5">
-                            <span className="truncate max-w-[180px]">{b.email}</span>
-                            <span>{b.phone}</span>
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0e8db] text-xs font-bold text-[#6b522d]">
+                              {getInitial(b.name)}
+                            </div>
+                            <div>
+                              <div className="font-bold text-sm text-[#1f1b16] leading-tight">
+                                {b.name}
+                              </div>
+                              <div className="text-xs text-[#8c8478] flex flex-col gap-0.5 mt-0.5">
+                                <span className="truncate max-w-[180px]">{b.email}</span>
+                                <span>{b.phone}</span>
+                              </div>
+                            </div>
                           </div>
                         </td>
 
-                        {/* Service Title */}
-                        <td className="px-5 py-4 text-foreground font-medium">
+                        {/* 2. Service */}
+                        <td className="px-5 py-4 font-semibold text-sm text-[#2d271f]">
                           {b.serviceTitle}
                         </td>
 
-                        {/* Event Date with Conflict Indicator */}
+                        {/* 3. Event Date with Relative Label and Conflict Indicator */}
                         <td className="px-5 py-4">
-                          <div className="font-medium text-foreground whitespace-nowrap">
-                            {b.event_date}
+                          <div className="font-semibold text-sm text-[#1f1b16] leading-tight whitespace-nowrap">
+                            {formatDisplayDate(b.event_date)}
                           </div>
+                          {relativeText && (
+                            <div className="text-xs font-semibold text-[#b45309] mt-0.5">
+                              {relativeText}
+                            </div>
+                          )}
                           {hasConflict && (
-                            <div className="mt-1 flex items-center gap-1 text-[11px] font-bold text-destructive">
+                            <div className="mt-1 flex items-center gap-1 text-[11px] font-bold text-red-600">
                               <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                               <span>Double confirmed!</span>
                             </div>
                           )}
                         </td>
 
-                        {/* Location */}
-                        <td className="px-5 py-4 text-xs text-muted-foreground">
-                          {b.location || "Studio / TBA"}
+                        {/* 4. Location */}
+                        <td className="px-5 py-4 text-xs font-medium text-[#5c5449]">
+                          {b.location ? (
+                            <span className="truncate max-w-[160px] block" title={b.location}>
+                              {b.location}
+                            </span>
+                          ) : (
+                            <span className="text-[#9e968b]">Studio / TBA</span>
+                          )}
                         </td>
 
-                        {/* Status Dropdown */}
+                        {/* 5. Status Dropdown (Custom pill with Chevron matching screenshot) */}
                         <td className="px-5 py-4">
-                          <select
-                            value={b.status}
-                            onChange={(e) => {
-                              const newStatus = e.target.value;
-                              if (newStatus !== b.status) {
-                                setStatusChangeTarget({ booking: b, newStatus });
-                              }
-                            }}
-                            className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold capitalize text-foreground focus:border-accent focus:outline-hidden"
-                          >
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                          </select>
+                          <div className="relative inline-flex items-center">
+                            <select
+                              value={b.status}
+                              onChange={(e) => {
+                                const newStatus = e.target.value;
+                                if (newStatus !== b.status) {
+                                  setStatusChangeTarget({ booking: b, newStatus });
+                                }
+                              }}
+                              className={`appearance-none rounded-xl border px-3.5 py-1.5 pr-8 text-xs font-semibold capitalize cursor-pointer focus:outline-hidden transition-all shadow-2xs ${
+                                b.status === "confirmed"
+                                  ? "bg-[#e8f5ec] border-[#c4e5ce] text-[#1e7e45] hover:bg-[#d8eedf]"
+                                  : b.status === "completed"
+                                  ? "bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8] hover:bg-[#dbe7fd]"
+                                  : b.status === "cancelled"
+                                  ? "bg-[#fdeeee] border-[#f0c8c8] text-[#c53030] hover:bg-[#fadcdc]"
+                                  : "bg-[#fdeedc] border-[#f5d3b3] text-[#a0521e] hover:bg-[#fae2c6]"
+                              }`}
+                            >
+                              <option value="pending" className="bg-white text-[#a0521e]">
+                                Pending
+                              </option>
+                              <option value="confirmed" className="bg-white text-[#1e7e45]">
+                                Confirmed
+                              </option>
+                              <option value="completed" className="bg-white text-[#1a73e8]">
+                                Completed
+                              </option>
+                              <option value="cancelled" className="bg-white text-[#c53030]">
+                                Cancelled
+                              </option>
+                            </select>
+                            <ChevronDown
+                              className={`pointer-events-none absolute right-2.5 h-3.5 w-3.5 shrink-0 ${
+                                b.status === "confirmed"
+                                  ? "text-[#1e7e45]"
+                                  : b.status === "completed"
+                                  ? "text-[#1a73e8]"
+                                  : b.status === "cancelled"
+                                  ? "text-[#c53030]"
+                                  : "text-[#a0521e]"
+                              }`}
+                            />
+                          </div>
                         </td>
 
-                        {/* Quick Contact Actions */}
+                        {/* 6. Quick Contact Actions (Phone, WA, Email, Delete matching screenshot) */}
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-1.5">
-                            {b.phone !== "Not provided" && (
-                              <>
-                                <a
-                                  href={formatTelLink(b.phone)}
-                                  className="rounded-md border border-border p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-                                  title={`Call ${b.phone}`}
-                                >
-                                  <Phone className="h-3.5 w-3.5 text-accent" />
-                                </a>
-                                <a
-                                  href={formatWhatsAppLink(
-                                    b.phone,
-                                    `Hi ${b.name}, Sivagangai Stories reaching out about your ${b.serviceTitle} session on ${b.event_date}.`,
-                                  )}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="rounded-md border border-whatsapp/30 bg-whatsapp/10 p-1.5 text-whatsapp hover:bg-whatsapp/20"
-                                  title="WhatsApp Client"
-                                >
-                                  <span className="text-[11px] font-bold leading-none">WA</span>
-                                </a>
-                              </>
+                            {/* Phone Call Button */}
+                            <a
+                              href={b.phone !== "Not provided" ? formatTelLink(b.phone) : undefined}
+                              className={`flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white transition-colors ${
+                                b.phone !== "Not provided"
+                                  ? "text-[#735b38] hover:bg-[#f5ede0] hover:border-[#dbcbb4] cursor-pointer"
+                                  : "opacity-40 pointer-events-none"
+                              }`}
+                              title={b.phone !== "Not provided" ? `Call ${b.phone}` : "No phone provided"}
+                            >
+                              <Phone className="h-3.5 w-3.5 text-[#8c734b]" />
+                            </a>
+
+                            {/* WhatsApp Button */}
+                            {b.phone !== "Not provided" ? (
+                              <a
+                                href={formatWhatsAppLink(
+                                  b.phone,
+                                  `Hi ${b.name}, Sivagangai Stories reaching out about your ${b.serviceTitle} session on ${b.event_date}.`,
+                                )}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-8 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] px-2.5 text-xs font-bold text-[#1e7e45] hover:bg-[#d8eedf] transition-colors cursor-pointer"
+                                title="WhatsApp Client"
+                              >
+                                WA
+                              </a>
+                            ) : (
+                              <span
+                                className="flex h-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-[#fcfaf7] px-2.5 text-xs font-bold text-[#9e968b] opacity-40 cursor-not-allowed"
+                                title="No phone"
+                              >
+                                WA
+                              </span>
                             )}
+
+                            {/* Email Button */}
                             <a
                               href={`mailto:${b.email}`}
-                              className="rounded-md border border-border p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#735b38] hover:bg-[#f5ede0] hover:border-[#dbcbb4] transition-colors cursor-pointer"
                               title={`Email ${b.email}`}
                             >
-                              <Mail className="h-3.5 w-3.5 text-accent" />
+                              <Mail className="h-3.5 w-3.5 text-[#8c734b]" />
                             </a>
+
+                            {/* Delete Button */}
                             <button
                               type="button"
                               onClick={() => setDeleteTarget(b)}
-                              className="rounded-md border border-border p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#fcd8d8] bg-white text-[#dc2626] hover:bg-[#fdeeee] hover:border-[#fca5a5] transition-colors cursor-pointer"
                               title="Delete Booking"
                             >
-                              <Trash2 className="h-3.5 w-3.5" />
+                              <Trash2 className="h-3.5 w-3.5 text-[#dc2626]" />
                             </button>
                           </div>
                         </td>
 
-                        {/* View Details Button */}
+                        {/* 7. View Details Button (Pill with Eye icon) */}
                         <td className="px-5 py-4 text-right">
                           <button
                             type="button"
                             onClick={() => setSelectedBooking(b)}
-                            className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-medium text-foreground hover:bg-muted"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0] hover:border-[#c5b9a5] transition-colors shadow-2xs cursor-pointer"
                           >
-                            <Eye className="h-3.5 w-3.5" />
+                            <Eye className="h-3.5 w-3.5 text-[#4a3f35]" />
                             <span>View</span>
                           </button>
                         </td>
@@ -575,79 +776,108 @@ export default function BookingsTable({
             {paginatedBookings.map((b) => {
               const conflictingList = b.event_date ? confirmedDateMap.get(b.event_date) || [] : [];
               const hasConflict = b.status === "confirmed" && conflictingList.length > 1;
+              const relativeText = getRelativeDays(b.event_date);
 
               return (
                 <div
                   key={b.id}
-                  className={`rounded-2xl border border-border bg-card p-5 shadow-xs space-y-4 ${
-                    hasConflict ? "border-destructive/40 bg-destructive/5" : ""
+                  className={`rounded-2xl border border-[#ede5d8] bg-white p-5 shadow-xs space-y-4 ${
+                    hasConflict ? "border-red-300 bg-red-50/30" : ""
                   }`}
                 >
-                  {/* Top: Name, Status, Conflict Warning */}
+                  {/* Top: Name, Avatar, Service */}
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h3 className="font-semibold text-card-foreground text-base">{b.name}</h3>
-                      <p className="text-xs font-medium text-accent mt-0.5">{b.serviceTitle}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0e8db] text-xs font-bold text-[#6b522d]">
+                        {getInitial(b.name)}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#1f1b16] text-base leading-tight">{b.name}</h3>
+                        <p className="text-xs font-semibold text-[#a87f32] mt-0.5">{b.serviceTitle}</p>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <StatusBadge status={b.status} />
-                      {hasConflict && (
-                        <span className="rounded-full bg-destructive/15 px-2 py-0.5 text-[10px] font-bold uppercase text-destructive">
-                          Double Booked
-                        </span>
-                      )}
-                    </div>
+                    {hasConflict && (
+                      <span className="rounded-full bg-red-100 border border-red-200 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700">
+                        Double Booked
+                      </span>
+                    )}
                   </div>
 
                   {/* Details grid */}
-                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground border-y border-border py-3">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-[#5c5449] border-y border-[#f2ece2] py-3">
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-muted-foreground/80">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
                         Event Date
                       </span>
-                      <span className="font-semibold text-foreground">{b.event_date}</span>
+                      <span className="font-semibold text-[#1f1b16]">{formatDisplayDate(b.event_date)}</span>
+                      {relativeText && (
+                        <span className="block text-[11px] font-semibold text-[#b45309]">
+                          {relativeText}
+                        </span>
+                      )}
                     </div>
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-muted-foreground/80">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
                         Location
                       </span>
-                      <span className="text-foreground truncate block">{b.location || "Studio"}</span>
+                      <span className="text-[#1f1b16] truncate block">{b.location || "Studio / TBA"}</span>
                     </div>
                     <div className="col-span-2 mt-1">
-                      <span className="block text-[10px] uppercase font-bold text-muted-foreground/80">
-                        Phone & Email
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                        Phone &amp; Email
                       </span>
-                      <span className="text-foreground">{b.phone} · {b.email}</span>
+                      <span className="text-[#1f1b16]">{b.phone} &bull; {b.email}</span>
                     </div>
                   </div>
 
                   {/* Actions & Status Dropdown */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <select
-                      value={b.status}
-                      onChange={(e) => {
-                        const newStatus = e.target.value;
-                        if (newStatus !== b.status) {
-                          setStatusChangeTarget({ booking: b, newStatus });
-                        }
-                      }}
-                      className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold capitalize text-foreground"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="confirmed">Confirmed</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
+                    <div className="relative inline-flex items-center">
+                      <select
+                        value={b.status}
+                        onChange={(e) => {
+                          const newStatus = e.target.value;
+                          if (newStatus !== b.status) {
+                            setStatusChangeTarget({ booking: b, newStatus });
+                          }
+                        }}
+                        className={`appearance-none rounded-xl border px-3 py-1.5 pr-7 text-xs font-semibold capitalize cursor-pointer focus:outline-hidden ${
+                          b.status === "confirmed"
+                            ? "bg-[#e8f5ec] border-[#c4e5ce] text-[#1e7e45]"
+                            : b.status === "completed"
+                            ? "bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8]"
+                            : b.status === "cancelled"
+                            ? "bg-[#fdeeee] border-[#f0c8c8] text-[#c53030]"
+                            : "bg-[#fdeedc] border-[#f5d3b3] text-[#a0521e]"
+                        }`}
+                      >
+                        <option value="pending" className="bg-white text-[#a0521e]">Pending</option>
+                        <option value="confirmed" className="bg-white text-[#1e7e45]">Confirmed</option>
+                        <option value="completed" className="bg-white text-[#1a73e8]">Completed</option>
+                        <option value="cancelled" className="bg-white text-[#c53030]">Cancelled</option>
+                      </select>
+                      <ChevronDown
+                        className={`pointer-events-none absolute right-2 h-3.5 w-3.5 shrink-0 ${
+                          b.status === "confirmed"
+                            ? "text-[#1e7e45]"
+                            : b.status === "completed"
+                            ? "text-[#1a73e8]"
+                            : b.status === "cancelled"
+                            ? "text-[#c53030]"
+                            : "text-[#a0521e]"
+                        }`}
+                      />
+                    </div>
 
                     <div className="flex items-center gap-1.5">
                       {b.phone !== "Not provided" && (
                         <>
                           <a
                             href={formatTelLink(b.phone)}
-                            className="rounded-lg border border-border p-2 text-foreground hover:bg-muted"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#735b38] hover:bg-[#f5ede0]"
                             title="Call"
                           >
-                            <Phone className="h-4 w-4 text-accent" />
+                            <Phone className="h-3.5 w-3.5 text-[#8c734b]" />
                           </a>
                           <a
                             href={formatWhatsAppLink(
@@ -656,7 +886,7 @@ export default function BookingsTable({
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-lg border border-whatsapp/30 bg-whatsapp/10 px-2.5 py-1.5 text-xs font-bold text-whatsapp hover:bg-whatsapp/20"
+                            className="flex h-8 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] px-2.5 text-xs font-bold text-[#1e7e45] hover:bg-[#d8eedf]"
                           >
                             WA
                           </a>
@@ -664,17 +894,26 @@ export default function BookingsTable({
                       )}
                       <a
                         href={`mailto:${b.email}`}
-                        className="rounded-lg border border-border p-2 text-foreground hover:bg-muted"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#735b38] hover:bg-[#f5ede0]"
                         title="Email"
                       >
-                        <Mail className="h-4 w-4 text-accent" />
+                        <Mail className="h-3.5 w-3.5 text-[#8c734b]" />
                       </a>
                       <button
                         type="button"
-                        onClick={() => setSelectedBooking(b)}
-                        className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground"
+                        onClick={() => setDeleteTarget(b)}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#fcd8d8] bg-white text-[#dc2626] hover:bg-[#fdeeee]"
+                        title="Delete"
                       >
-                        Details
+                        <Trash2 className="h-3.5 w-3.5 text-[#dc2626]" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedBooking(b)}
+                        className="inline-flex items-center gap-1 rounded-full border border-[#dcd3c4] bg-white px-3 py-1.5 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0]"
+                      >
+                        <Eye className="h-3.5 w-3.5 text-[#4a3f35]" />
+                        <span>View</span>
                       </button>
                     </div>
                   </div>
@@ -685,7 +924,7 @@ export default function BookingsTable({
 
           {/* Pagination Controls */}
           {filteredBookings.length > 0 && (
-            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
+            <div className="overflow-hidden rounded-2xl border border-[#ede5d8] bg-white shadow-xs">
               <TablePagination
                 currentPage={currentPage}
                 totalPages={totalPages}

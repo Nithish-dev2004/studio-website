@@ -187,7 +187,8 @@ const pricingPlans: PricingPlan[] = [
     name: "Starter",
     monthlyPrice: "₹14,999",
     yearlyPrice: "₹11,999",
-    description: "For emerging businesses seeking consistent organic reach and active social channels.",
+    description:
+      "For emerging businesses seeking consistent organic reach and active social channels.",
     features: [
       "Competitive Local Pricing",
       "Customizable Solutions",
@@ -203,7 +204,8 @@ const pricingPlans: PricingPlan[] = [
     name: "Intermediate",
     monthlyPrice: "₹29,999",
     yearlyPrice: "₹23,999",
-    description: "For growing brands looking to scale qualified customer inquiries with Meta & Google ads.",
+    description:
+      "For growing brands looking to scale qualified customer inquiries with Meta & Google ads.",
     features: [
       "Competitive Local Pricing",
       "Customizable Solutions",
@@ -219,7 +221,8 @@ const pricingPlans: PricingPlan[] = [
     name: "Advanced",
     monthlyPrice: "₹59,999",
     yearlyPrice: "₹47,999",
-    description: "Full-funnel domination: Multi-platform paid ads, 8 reels, Google SEO & dedicated manager.",
+    description:
+      "Full-funnel domination: Multi-platform paid ads, 8 reels, Google SEO & dedicated manager.",
     features: [
       "Competitive Local Pricing",
       "Customizable Solutions",
@@ -236,7 +239,8 @@ const pricingPlans: PricingPlan[] = [
     name: "Custom",
     monthlyPrice: "Custom",
     yearlyPrice: "Custom",
-    description: "For enterprise brands, multi-location hospital chains, and retail franchises.",
+    description:
+      "For enterprise brands, multi-location hospital chains, and retail franchises.",
     features: [
       "Competitive Local Pricing",
       "Customizable Solutions",
@@ -295,11 +299,35 @@ const testimonials: Testimonial[] = [
 
 // --- Regional Dotted Map Client Pins (Image 3) ---
 const regionalPins = [
-  { city: "Sivagangai", x: "42%", y: "60%", clients: "48+ Brands", label: "HQ & Production Lab" },
+  {
+    city: "Sivagangai",
+    x: "42%",
+    y: "60%",
+    clients: "48+ Brands",
+    label: "HQ & Production Lab",
+  },
   { city: "Madurai", x: "32%", y: "55%", clients: "65+ Brands", label: "Commercial Hub" },
-  { city: "Karaikudi", x: "55%", y: "48%", clients: "34+ Brands", label: "Heritage & Retail" },
-  { city: "Chennai", x: "72%", y: "22%", clients: "28+ Brands", label: "Corporate Expansion" },
-  { city: "Coimbatore", x: "20%", y: "42%", clients: "19+ Brands", label: "Manufacturing & B2B" },
+  {
+    city: "Karaikudi",
+    x: "55%",
+    y: "48%",
+    clients: "34+ Brands",
+    label: "Heritage & Retail",
+  },
+  {
+    city: "Chennai",
+    x: "72%",
+    y: "22%",
+    clients: "28+ Brands",
+    label: "Corporate Expansion",
+  },
+  {
+    city: "Coimbatore",
+    x: "20%",
+    y: "42%",
+    clients: "19+ Brands",
+    label: "Manufacturing & B2B",
+  },
 ];
 
 export default function SivagangaiDigitalMarketingLanding() {
@@ -427,7 +455,9 @@ export default function SivagangaiDigitalMarketingLanding() {
         setSubmitError(response.message || "Failed to submit request. Please try again.");
       }
     } catch {
-      setSubmitError("Unable to submit request. Please check your internet connection and try again.");
+      setSubmitError(
+        "Unable to submit request. Please check your internet connection and try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -447,18 +477,18 @@ export default function SivagangaiDigitalMarketingLanding() {
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-slate-900"
             >
               <span>←</span>
               <span>All Brands</span>
             </Link>
             <span className="h-4 w-px bg-slate-200" />
             <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-[#8525e3] animate-pulse" />
-              <span className="font-heading text-sm sm:text-base font-semibold tracking-tight text-slate-900">
+              <span className="flex h-2 w-2 animate-pulse rounded-full bg-[#8525e3]" />
+              <span className="font-heading text-sm font-semibold tracking-tight text-slate-900 sm:text-base">
                 Sivagangai Digital Marketing
               </span>
-              <span className="hidden sm:inline-block rounded-full bg-[#8525e3]/10 px-2.5 py-0.5 text-[10px] font-semibold text-[#8525e3]">
+              <span className="hidden rounded-full bg-[#8525e3]/10 px-2.5 py-0.5 text-[10px] font-semibold text-[#8525e3] sm:inline-block">
                 Growth &amp; Creative Agency
               </span>
             </div>
@@ -467,14 +497,14 @@ export default function SivagangaiDigitalMarketingLanding() {
           <div className="flex items-center gap-3">
             <a
               href="tel:+919489246890"
-              className="hidden md:inline-flex items-center gap-1 text-xs text-slate-600 hover:text-[#8525e3] transition-colors"
+              className="hidden items-center gap-1 text-xs text-slate-600 transition-colors hover:text-[#8525e3] md:inline-flex"
             >
               <span>Hotline:</span>
               <span className="font-semibold text-slate-900">+91 94892 46890</span>
             </a>
             <button
               onClick={() => handleOpenModal("Free Marketing Audit")}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#8525e3] px-4 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#731ec4] transition-all cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-[#8525e3] px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#731ec4]"
             >
               <Zap className="h-3.5 w-3.5" />
               <span>Get Free Audit</span>
@@ -488,7 +518,7 @@ export default function SivagangaiDigitalMarketingLanding() {
           "Captivate Your Audience With Exceptional Voiceovers"
           Split/Hero background image with bold white typography & purple CTA
           ------------------------------------------------------------- */}
-      <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center overflow-hidden bg-slate-950 text-white">
+      <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-slate-950 text-white sm:min-h-[90vh]">
         {/* Background Hero Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -504,22 +534,22 @@ export default function SivagangaiDigitalMarketingLanding() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12 w-full">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
           <div className="max-w-2xl lg:max-w-3xl">
             {/* Main Headline matching Image 1 format */}
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1]"
+              className="font-heading text-4xl leading-[1.1] font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
             >
               Captivate Your <br />
               Audience With <br />
               Exceptional <br />
               <span className="inline-flex items-center gap-3">
                 <span>Marketing</span>
-                <span className="inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-lg">
-                  <Radio className="h-5 w-5 sm:h-6 sm:w-6 text-white animate-pulse" />
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/30 bg-white/20 text-white shadow-lg backdrop-blur-md sm:h-12 sm:w-12">
+                  <Radio className="h-5 w-5 animate-pulse text-white sm:h-6 sm:w-6" />
                 </span>
               </span>
             </motion.h1>
@@ -529,14 +559,12 @@ export default function SivagangaiDigitalMarketingLanding() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="mt-6 text-sm sm:text-base md:text-lg text-white/90 leading-relaxed font-normal max-w-xl"
+              className="mt-6 max-w-xl text-sm leading-relaxed font-normal text-white/90 sm:text-base md:text-lg"
             >
               We Are A Full-Service Growth Agency Providing Proven Results To{" "}
-              <strong className="text-white font-semibold">
-                Fast-Growing Companies
-              </strong>
-              . We Specialize In Meta Ads, High-Converting Video Reels, Regional
-              Tamil Nadu SEO, And End-To-End Sales Funnels.
+              <strong className="font-semibold text-white">Fast-Growing Companies</strong>
+              . We Specialize In Meta Ads, High-Converting Video Reels, Regional Tamil
+              Nadu SEO, And End-To-End Sales Funnels.
             </motion.p>
 
             {/* Two Action Buttons matching Image 1 */}
@@ -549,7 +577,7 @@ export default function SivagangaiDigitalMarketingLanding() {
               {/* Primary Purple Button */}
               <button
                 onClick={() => handleOpenModal("Hero - Get Started Now")}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#8525e3] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-purple-900/40 hover:bg-[#731ec4] hover:scale-[1.02] transition-all duration-200 cursor-pointer"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#8525e3] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-purple-900/40 transition-all duration-200 hover:scale-[1.02] hover:bg-[#731ec4]"
               >
                 <span>Get Started Now</span>
                 <span className="font-sans text-base">›</span>
@@ -558,7 +586,7 @@ export default function SivagangaiDigitalMarketingLanding() {
               {/* Glass Outlined Button */}
               <a
                 href="#services"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/50 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-md hover:bg-white/20 transition-all duration-200 hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/50 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition-all duration-200 hover:scale-[1.02] hover:bg-white/20"
               >
                 <span>Explore Demo</span>
               </a>
@@ -571,7 +599,7 @@ export default function SivagangaiDigitalMarketingLanding() {
           IMAGE 1: "Who Is Mohammad Jabel?" (About & Director Section)
           2-Column: Left Purple Heading + Long Copy | Right Photo with Thick Purple Border
           ------------------------------------------------------------- */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Left Column: Heading in Purple + Editorial Story */}
@@ -583,43 +611,41 @@ export default function SivagangaiDigitalMarketingLanding() {
               className="lg:col-span-7"
             >
               {/* Purple Title matching Image 1 */}
-              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#8525e3]">
+              <h2 className="font-heading text-3xl font-bold tracking-tight text-[#8525e3] sm:text-4xl md:text-5xl">
                 Who We Are &amp; What Drives Us?
               </h2>
 
-              <div className="mt-6 space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
+              <div className="mt-6 space-y-4 text-justify text-xs leading-relaxed text-slate-600 sm:text-sm">
                 <p>
-                  At Sivagangai Digital Marketing, we are passionate about the
-                  power of creative storytelling combined with razor-sharp data.
-                  We are a dedicated growth marketing and ad production studio
-                  crafting high-converting paid advertising, cinematic video
-                  commercials, and organic search strategies for ambitious regional
-                  and national enterprises.
+                  At Sivagangai Digital Marketing, we are passionate about the power of
+                  creative storytelling combined with razor-sharp data. We are a dedicated
+                  growth marketing and ad production studio crafting high-converting paid
+                  advertising, cinematic video commercials, and organic search strategies
+                  for ambitious regional and national enterprises.
                 </p>
                 <p>
-                  With an experienced roster of media buyers, scriptwriters, and
-                  creative video directors, we bring your brand vision to life,
-                  captivating your target audience and adding a measurable revenue
-                  dimension to your business. Our mission is simple: to deliver
-                  exceptional customer acquisition metrics that consistently
-                  exceed your quarterly expectations.
+                  With an experienced roster of media buyers, scriptwriters, and creative
+                  video directors, we bring your brand vision to life, captivating your
+                  target audience and adding a measurable revenue dimension to your
+                  business. Our mission is simple: to deliver exceptional customer
+                  acquisition metrics that consistently exceed your quarterly
+                  expectations.
                 </p>
                 <p>
                   Whether you need performance ads for retail showrooms, e-commerce
-                  launches, corporate explainers, high-end hospitality promos, or
-                  local healthcare awareness, we have the specialized talent to
-                  engineer your success. What sets us apart is our relentless
-                  attention to detail, transparent ROAS reporting, and deep regional
-                  market intuition. We understand that each client is unique, and
-                  we take the time to craft tailored strategies where every single
-                  campaign dollar is accounted for.
+                  launches, corporate explainers, high-end hospitality promos, or local
+                  healthcare awareness, we have the specialized talent to engineer your
+                  success. What sets us apart is our relentless attention to detail,
+                  transparent ROAS reporting, and deep regional market intuition. We
+                  understand that each client is unique, and we take the time to craft
+                  tailored strategies where every single campaign dollar is accounted for.
                 </p>
               </div>
 
               <div className="mt-6">
                 <button
                   onClick={() => handleOpenModal("Who We Are - Learn More")}
-                  className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[#8525e3] hover:text-[#731ec4] hover:underline cursor-pointer"
+                  className="inline-flex cursor-pointer items-center gap-1 text-xs font-bold text-[#8525e3] hover:text-[#731ec4] hover:underline sm:text-sm"
                 >
                   <span>Learn More</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -633,7 +659,7 @@ export default function SivagangaiDigitalMarketingLanding() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="lg:col-span-5 flex justify-center"
+              className="flex justify-center lg:col-span-5"
             >
               <div className="relative w-full max-w-sm sm:max-w-md">
                 {/* The Signature Thick Purple Border exactly matching Image 1 */}
@@ -642,13 +668,13 @@ export default function SivagangaiDigitalMarketingLanding() {
                     src={DIGITAL_MARKETING_ASSETS.directorPortrait}
                     alt="Sivagangai Digital Marketing - Growth Director"
                     fill
-                    className="object-cover object-top hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-top transition-transform duration-500 hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 40vw"
                   />
                   {/* Subtle inner gradient shadow */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
-                    <p className="text-xs uppercase tracking-widest text-purple-200 font-semibold">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  <div className="absolute right-5 bottom-5 left-5 text-white">
+                    <p className="text-xs font-semibold tracking-widest text-purple-200 uppercase">
                       Growth Director
                     </p>
                     <p className="font-heading text-lg font-bold">
@@ -666,14 +692,17 @@ export default function SivagangaiDigitalMarketingLanding() {
           IMAGE 2: "Our Voiceover Services" / Digital Marketing Services
           3 Cards with colorful 3D-style icons
           ------------------------------------------------------------- */}
-      <section id="services" className="py-24 sm:py-32 bg-[#faf9fc] border-t border-slate-100">
+      <section
+        id="services"
+        className="border-t border-slate-100 bg-[#faf9fc] py-24 sm:py-32"
+      >
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           {/* Section Header matching Image 2 */}
           <div className="text-left">
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
               Our Digital Marketing Services
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-500 font-medium">
+            <p className="mt-2 text-xs font-medium text-slate-500 sm:text-sm">
               Versatile and High-Quality
             </p>
           </div>
@@ -687,7 +716,7 @@ export default function SivagangaiDigitalMarketingLanding() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={{ y: -6 }}
-              className="flex flex-col rounded-2xl bg-white p-8 sm:p-10 shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:border-purple-100"
+              className="flex flex-col rounded-2xl border border-slate-100 bg-white p-8 shadow-sm transition-all duration-300 hover:border-purple-100 hover:shadow-xl sm:p-10"
             >
               {/* Colorful Flat 3D-style Icon matching Image 2 */}
               <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 p-3 shadow-inner">
@@ -695,20 +724,20 @@ export default function SivagangaiDigitalMarketingLanding() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#8525e3] text-white shadow-md">
                     <Headphones className="h-6 w-6" />
                   </div>
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[9px] text-white font-bold">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[9px] font-bold text-white">
                     ✓
                   </span>
                 </div>
               </div>
 
-              <h3 className="mt-8 font-heading text-lg font-bold text-slate-900 tracking-tight">
+              <h3 className="font-heading mt-8 text-lg font-bold tracking-tight text-slate-900">
                 Male / Female Voice &amp; Ads
               </h3>
-              <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                We offer a comprehensive voiceover and ad management service that
-                covers both male and female voices. We understand the importance of
-                having the right voice to effectively convey your message and capture
-                your target audience&apos;s attention.
+              <p className="mt-3 text-xs leading-relaxed text-slate-600 sm:text-sm">
+                We offer a comprehensive voiceover and ad management service that covers
+                both male and female voices. We understand the importance of having the
+                right voice to effectively convey your message and capture your target
+                audience&apos;s attention.
               </p>
             </motion.div>
 
@@ -719,27 +748,27 @@ export default function SivagangaiDigitalMarketingLanding() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               whileHover={{ y: -6 }}
-              className="flex flex-col rounded-2xl bg-white p-8 sm:p-10 shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:border-purple-100"
+              className="flex flex-col rounded-2xl border border-slate-100 bg-white p-8 shadow-sm transition-all duration-300 hover:border-purple-100 hover:shadow-xl sm:p-10"
             >
               <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 p-3 shadow-inner">
                 <div className="relative flex items-center justify-center">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-md">
                     <FileText className="h-6 w-6" />
                   </div>
-                  <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[9px] text-white font-bold">
+                  <span className="absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[9px] font-bold text-white">
                     ✎
                   </span>
                 </div>
               </div>
 
-              <h3 className="mt-8 font-heading text-lg font-bold text-slate-900 tracking-tight">
+              <h3 className="font-heading mt-8 text-lg font-bold tracking-tight text-slate-900">
                 Professional Script Writing
               </h3>
-              <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                We specialize in professional commercial script writing services
-                that bring your ideas to life. Our team of experienced
-                scriptwriters understands the power of effective storytelling,
-                hook structures, and psychology-driven conversions.
+              <p className="mt-3 text-xs leading-relaxed text-slate-600 sm:text-sm">
+                We specialize in professional commercial script writing services that
+                bring your ideas to life. Our team of experienced scriptwriters
+                understands the power of effective storytelling, hook structures, and
+                psychology-driven conversions.
               </p>
             </motion.div>
 
@@ -750,27 +779,27 @@ export default function SivagangaiDigitalMarketingLanding() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
               whileHover={{ y: -6 }}
-              className="flex flex-col rounded-2xl bg-white p-8 sm:p-10 shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-xl hover:border-purple-100"
+              className="flex flex-col rounded-2xl border border-slate-100 bg-white p-8 shadow-sm transition-all duration-300 hover:border-purple-100 hover:shadow-xl sm:p-10"
             >
               <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 p-3 shadow-inner">
                 <div className="relative flex items-center justify-center">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 text-white shadow-md">
                     <Music className="h-6 w-6" />
                   </div>
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[9px] text-white font-bold">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white">
                     ♫
                   </span>
                 </div>
               </div>
 
-              <h3 className="mt-8 font-heading text-lg font-bold text-slate-900 tracking-tight">
+              <h3 className="font-heading mt-8 text-lg font-bold tracking-tight text-slate-900">
                 Music &amp; Sonic Selections
               </h3>
-              <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                We offer a wide range of royalty-cleared music selections to
-                enhance your projects and create an unforgettable auditory
-                experience. Our extensive library features diverse genres, moods,
-                and regional instruments to suit any commercial campaign.
+              <p className="mt-3 text-xs leading-relaxed text-slate-600 sm:text-sm">
+                We offer a wide range of royalty-cleared music selections to enhance your
+                projects and create an unforgettable auditory experience. Our extensive
+                library features diverse genres, moods, and regional instruments to suit
+                any commercial campaign.
               </p>
             </motion.div>
           </div>
@@ -781,22 +810,22 @@ export default function SivagangaiDigitalMarketingLanding() {
           IMAGE 2: "Voiceover Samples" / Audio & Ad Campaign Samples
           6 Audio Player bars with Play/Pause, timestamps & waveform scrubbers
           ------------------------------------------------------------- */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           {/* Header Row with "Show more" button matching Image 2 */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
                 Voiceover Samples
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-slate-500 font-medium">
+              <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
                 Hear Our Artists in Action
               </p>
             </div>
 
             <button
               onClick={() => setShowMoreAudio(!showMoreAudio)}
-              className="text-xs sm:text-sm font-semibold text-slate-500 hover:text-[#8525e3] transition-colors self-start sm:self-auto cursor-pointer"
+              className="cursor-pointer self-start text-xs font-semibold text-slate-500 transition-colors hover:text-[#8525e3] sm:self-auto sm:text-sm"
             >
               {showMoreAudio ? "Show less" : "Show more"}
             </button>
@@ -819,22 +848,22 @@ export default function SivagangaiDigitalMarketingLanding() {
                     className="flex flex-col"
                   >
                     {/* Track Title */}
-                    <p className="text-xs font-semibold text-slate-800 tracking-tight truncate">
+                    <p className="truncate text-xs font-semibold tracking-tight text-slate-800">
                       {sample.title}
                     </p>
 
                     {/* Custom Audio Player Bar matching Image 2 */}
                     <div
-                      className={`mt-2.5 flex items-center gap-3 rounded-full px-4 py-2.5 transition-all duration-200 border ${
+                      className={`mt-2.5 flex items-center gap-3 rounded-full border px-4 py-2.5 transition-all duration-200 ${
                         isThisPlaying
-                          ? "bg-purple-50/70 border-purple-300 shadow-sm"
-                          : "bg-slate-100/80 border-slate-200 hover:border-slate-300"
+                          ? "border-purple-300 bg-purple-50/70 shadow-sm"
+                          : "border-slate-200 bg-slate-100/80 hover:border-slate-300"
                       }`}
                     >
                       {/* Play / Pause Toggle Button */}
                       <button
                         onClick={() => togglePlayTrack(sample.id)}
-                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors cursor-pointer ${
+                        className={`flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${
                           isThisPlaying
                             ? "bg-[#8525e3] text-white"
                             : "bg-slate-800 text-white hover:bg-slate-900"
@@ -844,22 +873,29 @@ export default function SivagangaiDigitalMarketingLanding() {
                         {isThisPlaying ? (
                           <Pause className="h-3 w-3 fill-current" />
                         ) : (
-                          <Play className="h-3 w-3 fill-current ml-0.5" />
+                          <Play className="ml-0.5 h-3 w-3 fill-current" />
                         )}
                       </button>
 
                       {/* Timestamp */}
-                      <span className="text-[11px] font-mono text-slate-600 shrink-0">
-                        0:{progress < 10 ? `0${Math.floor(progress)}` : Math.floor(progress)} / {sample.duration}
+                      <span className="shrink-0 font-mono text-[11px] text-slate-600">
+                        0:
+                        {progress < 10
+                          ? `0${Math.floor(progress)}`
+                          : Math.floor(progress)}{" "}
+                        / {sample.duration}
                       </span>
 
                       {/* Scrubber Progress Bar */}
                       <div
-                        className="relative flex-1 h-1.5 rounded-full bg-slate-300 overflow-hidden cursor-pointer"
+                        className="relative h-1.5 flex-1 cursor-pointer overflow-hidden rounded-full bg-slate-300"
                         onClick={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           const clickX = e.clientX - rect.left;
-                          const newProgress = Math.max(0, Math.min(100, (clickX / rect.width) * 100));
+                          const newProgress = Math.max(
+                            0,
+                            Math.min(100, (clickX / rect.width) * 100),
+                          );
                           setPlayProgress({ ...playProgress, [sample.id]: newProgress });
                           setActiveTrack(sample.id);
                           setIsPlaying(true);
@@ -874,12 +910,12 @@ export default function SivagangaiDigitalMarketingLanding() {
                       </div>
 
                       {/* Speaker Volume Icon */}
-                      <Volume2 className="h-4 w-4 text-slate-500 shrink-0" />
+                      <Volume2 className="h-4 w-4 shrink-0 text-slate-500" />
 
                       {/* 3-dots Menu */}
                       <button
                         onClick={() => handleOpenModal(`Audio Demo - ${sample.title}`)}
-                        className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                        className="cursor-pointer text-slate-400 transition-colors hover:text-slate-700"
                         title="Download sample or request custom voice"
                       >
                         <MoreVertical className="h-4 w-4" />
@@ -897,24 +933,27 @@ export default function SivagangaiDigitalMarketingLanding() {
           IMAGE 3: "Pricing And Packages"
           Toggle (Monthly / Yearly) + 4 Cards (Starter, Intermediate, Advanced [Most Popular Solid Purple], Custom)
           ------------------------------------------------------------- */}
-      <section id="pricing" className="py-24 sm:py-32 bg-[#faf9fc] border-t border-slate-100">
+      <section
+        id="pricing"
+        className="border-t border-slate-100 bg-[#faf9fc] py-24 sm:py-32"
+      >
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           {/* Header & Monthly/Yearly Toggle matching Image 3 */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
-              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
                 Pricing And Packages
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-slate-500 font-medium">
+              <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
                 Transparent and Affordable Options
               </p>
             </div>
 
             {/* Monthly / Yearly Pill Toggle Switcher matching Image 3 */}
-            <div className="inline-flex items-center rounded-full bg-slate-200/80 p-1 shadow-inner self-start sm:self-auto">
+            <div className="inline-flex items-center self-start rounded-full bg-slate-200/80 p-1 shadow-inner sm:self-auto">
               <button
                 onClick={() => setBillingCycle("monthly")}
-                className={`rounded-full px-5 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                className={`cursor-pointer rounded-full px-5 py-1.5 text-xs font-semibold transition-all ${
                   billingCycle === "monthly"
                     ? "bg-[#8525e3] text-white shadow-md"
                     : "text-slate-600 hover:text-slate-900"
@@ -924,7 +963,7 @@ export default function SivagangaiDigitalMarketingLanding() {
               </button>
               <button
                 onClick={() => setBillingCycle("yearly")}
-                className={`rounded-full px-5 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                className={`cursor-pointer rounded-full px-5 py-1.5 text-xs font-semibold transition-all ${
                   billingCycle === "yearly"
                     ? "bg-[#8525e3] text-white shadow-md"
                     : "text-slate-600 hover:text-slate-900"
@@ -936,7 +975,7 @@ export default function SivagangaiDigitalMarketingLanding() {
           </div>
 
           {/* 4 Pricing Cards matching Image 3 layout */}
-          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+          <div className="mt-14 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {pricingPlans.map((plan, index) => {
               const isPopular = plan.isPopular;
               const price =
@@ -950,16 +989,16 @@ export default function SivagangaiDigitalMarketingLanding() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -6 }}
-                  className={`relative flex flex-col justify-between rounded-2xl p-7 sm:p-8 transition-all duration-300 ${
+                  className={`relative flex flex-col justify-between rounded-2xl p-7 transition-all duration-300 sm:p-8 ${
                     isPopular
                       ? "bg-gradient-to-b from-[#8a2be2] via-[#8525e3] to-[#6b21a8] text-white shadow-2xl shadow-purple-900/30 lg:-translate-y-2"
-                      : "bg-white text-slate-900 shadow-sm border border-slate-100 hover:shadow-xl hover:border-purple-200"
+                      : "border border-slate-100 bg-white text-slate-900 shadow-sm hover:border-purple-200 hover:shadow-xl"
                   }`}
                 >
                   {/* "Most Popular" Top Magenta Pill Badge matching Image 3 */}
                   {isPopular && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                      <span className="rounded-md bg-[#ff007a] px-3.5 py-1 text-[11px] font-bold text-white uppercase tracking-wider shadow-md">
+                      <span className="rounded-md bg-[#ff007a] px-3.5 py-1 text-[11px] font-bold tracking-wider text-white uppercase shadow-md">
                         Most Popular
                       </span>
                     </div>
@@ -968,7 +1007,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                   <div>
                     {/* Plan Name */}
                     <h3
-                      className={`text-sm sm:text-base font-semibold tracking-tight ${
+                      className={`text-sm font-semibold tracking-tight sm:text-base ${
                         isPopular ? "text-purple-100" : "text-slate-600"
                       }`}
                     >
@@ -977,7 +1016,7 @@ export default function SivagangaiDigitalMarketingLanding() {
 
                     {/* Price matching Image 3 format */}
                     <div className="mt-3 flex items-baseline gap-1.5">
-                      <span className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
+                      <span className="font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
                         {price}
                       </span>
                       {price !== "Custom" && (
@@ -1007,13 +1046,13 @@ export default function SivagangaiDigitalMarketingLanding() {
                           <CheckCircle2
                             className={`h-4 w-4 shrink-0 ${
                               isPopular
-                                ? "text-purple-200 fill-white/20"
+                                ? "fill-white/20 text-purple-200"
                                 : "text-[#8525e3]"
                             }`}
                           />
                           <span
                             className={
-                              isPopular ? "text-white" : "text-slate-700 font-medium"
+                              isPopular ? "text-white" : "font-medium text-slate-700"
                             }
                           >
                             {feat}
@@ -1028,21 +1067,21 @@ export default function SivagangaiDigitalMarketingLanding() {
                     {plan.buttonVariant === "solid-white" ? (
                       <button
                         onClick={() => handleOpenModal(`Pricing Plan: ${plan.name}`)}
-                        className="w-full rounded-xl bg-white py-3 text-xs font-bold text-[#8525e3] shadow-md hover:bg-slate-100 transition-all cursor-pointer"
+                        className="w-full cursor-pointer rounded-xl bg-white py-3 text-xs font-bold text-[#8525e3] shadow-md transition-all hover:bg-slate-100"
                       >
                         {plan.buttonLabel}
                       </button>
                     ) : plan.buttonVariant === "solid-purple" ? (
                       <button
                         onClick={() => handleOpenModal(`Pricing Plan: ${plan.name}`)}
-                        className="w-full rounded-xl bg-[#8525e3] py-3 text-xs font-bold text-white shadow-md hover:bg-[#731ec4] transition-all cursor-pointer"
+                        className="w-full cursor-pointer rounded-xl bg-[#8525e3] py-3 text-xs font-bold text-white shadow-md transition-all hover:bg-[#731ec4]"
                       >
                         {plan.buttonLabel}
                       </button>
                     ) : (
                       <button
                         onClick={() => handleOpenModal(`Pricing Plan: ${plan.name}`)}
-                        className="w-full rounded-xl bg-slate-100 hover:bg-slate-200 py-3 text-xs font-semibold text-slate-800 transition-all cursor-pointer border border-slate-200"
+                        className="w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-100 py-3 text-xs font-semibold text-slate-800 transition-all hover:bg-slate-200"
                       >
                         {plan.buttonLabel}
                       </button>
@@ -1059,7 +1098,7 @@ export default function SivagangaiDigitalMarketingLanding() {
           IMAGE 3: "What Clients Are Saying" & Dotted Map Graphic
           2-Column: Left Testimonials + Star Ratings + Arrows | Right Dotted Regional Map
           ------------------------------------------------------------- */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
             {/* Left Column: Testimonials matching Image 3 */}
@@ -1070,10 +1109,10 @@ export default function SivagangaiDigitalMarketingLanding() {
               transition={{ duration: 0.6 }}
               className="lg:col-span-6"
             >
-              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
                 What Clients Are Saying
               </h2>
-              <p className="mt-1 text-xs sm:text-sm text-slate-500 font-medium">
+              <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
                 We are always dedicated to client happiness and revenue results.
               </p>
 
@@ -1094,10 +1133,8 @@ export default function SivagangaiDigitalMarketingLanding() {
                         />
                       </div>
                       <div>
-                        <h4 className="font-bold text-sm text-slate-900">
-                          {t.name}
-                        </h4>
-                        <div className="flex items-center gap-1 text-amber-400 mt-0.5">
+                        <h4 className="text-sm font-bold text-slate-900">{t.name}</h4>
+                        <div className="mt-0.5 flex items-center gap-1 text-amber-400">
                           {[...Array(t.rating)].map((_, i) => (
                             <Star
                               key={i}
@@ -1107,7 +1144,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                         </div>
                       </div>
                     </div>
-                    <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    <p className="mt-3 text-xs leading-relaxed font-normal text-slate-600 sm:text-sm">
                       {t.quote}
                     </p>
                   </div>
@@ -1119,10 +1156,10 @@ export default function SivagangaiDigitalMarketingLanding() {
                 <button
                   onClick={() =>
                     setTestiIndex((prev) =>
-                      prev === 0 ? testimonials.length - 1 : prev - 1
+                      prev === 0 ? testimonials.length - 1 : prev - 1,
                     )
                   }
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+                  className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -1132,7 +1169,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                   onClick={() =>
                     setTestiIndex((prev) => (prev + 1) % testimonials.length)
                   }
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#8525e3] hover:bg-[#731ec4] text-white transition-all shadow-md cursor-pointer"
+                  className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#8525e3] text-white shadow-md transition-all hover:bg-[#731ec4]"
                   aria-label="Next testimonial"
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -1146,11 +1183,11 @@ export default function SivagangaiDigitalMarketingLanding() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="lg:col-span-6 flex justify-center"
+              className="flex justify-center lg:col-span-6"
             >
-              <div className="relative w-full max-w-lg aspect-[4/3] rounded-3xl bg-gradient-to-br from-purple-50/40 via-white to-slate-50 p-6 sm:p-8 border border-purple-100/60 shadow-lg flex items-center justify-center overflow-hidden">
+              <div className="relative flex aspect-[4/3] w-full max-w-lg items-center justify-center overflow-hidden rounded-3xl border border-purple-100/60 bg-gradient-to-br from-purple-50/40 via-white to-slate-50 p-6 shadow-lg sm:p-8">
                 {/* Stylized Dotted Map Grid SVG matching Image 3 */}
-                <div className="absolute inset-0 p-8 flex items-center justify-center opacity-85">
+                <div className="absolute inset-0 flex items-center justify-center p-8 opacity-85">
                   <svg
                     viewBox="0 0 400 300"
                     className="h-full w-full fill-[#8525e3]/20"
@@ -1170,10 +1207,10 @@ export default function SivagangaiDigitalMarketingLanding() {
                             cx={c * 16 + 10}
                             cy={r * 16 + 10}
                             r={3}
-                            className="fill-[#a855f7]/40 hover:fill-[#8525e3] transition-colors"
+                            className="fill-[#a855f7]/40 transition-colors hover:fill-[#8525e3]"
                           />
                         );
-                      })
+                      }),
                     )}
                   </svg>
                 </div>
@@ -1182,20 +1219,20 @@ export default function SivagangaiDigitalMarketingLanding() {
                 {regionalPins.map((pin, pIdx) => (
                   <div
                     key={pin.city}
-                    className="absolute z-10 group cursor-pointer"
+                    className="group absolute z-10 cursor-pointer"
                     style={{ left: pin.x, top: pin.y }}
                   >
                     {/* Ripple animation */}
-                    <div className="absolute -inset-2 rounded-full bg-[#8525e3]/30 animate-ping opacity-60" />
+                    <div className="absolute -inset-2 animate-ping rounded-full bg-[#8525e3]/30 opacity-60" />
                     {/* The Purple Pin */}
-                    <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-[#8525e3] text-white shadow-xl shadow-purple-900/40 border-2 border-white group-hover:scale-125 transition-transform">
+                    <div className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#8525e3] text-white shadow-xl shadow-purple-900/40 transition-transform group-hover:scale-125">
                       <MapPin className="h-4 w-4 fill-white" />
                     </div>
 
                     {/* Hover Tooltip */}
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-[11px] text-white shadow-xl z-20 pointer-events-none">
+                    <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 flex-col items-center rounded-lg bg-slate-900 px-3 py-1.5 text-[11px] whitespace-nowrap text-white shadow-xl group-hover:flex">
                       <span className="font-bold">{pin.city}</span>
-                      <span className="text-purple-300 text-[10px]">
+                      <span className="text-[10px] text-purple-300">
                         {pin.clients} • {pin.label}
                       </span>
                     </div>
@@ -1203,7 +1240,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                 ))}
 
                 {/* Bottom Map Badge */}
-                <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-[10px] font-semibold text-slate-700 border border-slate-200 shadow-sm">
+                <div className="absolute right-4 bottom-4 flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur-md">
                   <Globe className="h-3 w-3 text-[#8525e3]" />
                   <span>Tamil Nadu Active Client Network</span>
                 </div>
@@ -1216,12 +1253,12 @@ export default function SivagangaiDigitalMarketingLanding() {
       {/* -------------------------------------------------------------
           BOTTOM CLIENT TICKER: "We Have Worked With"
           ------------------------------------------------------------- */}
-      <section className="py-16 bg-[#faf9fc] border-t border-slate-100">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8 text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+      <section className="border-t border-slate-100 bg-[#faf9fc] py-16">
+        <div className="mx-auto max-w-7xl px-6 text-center sm:px-8">
+          <p className="text-xs font-bold tracking-widest text-slate-400 uppercase">
             We Have Scaled Revenue For
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-8 sm:gap-14 opacity-75 grayscale hover:grayscale-0 transition-all">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-8 opacity-75 grayscale transition-all hover:grayscale-0 sm:gap-14">
             <span className="font-heading text-lg font-bold tracking-wider text-slate-700">
               CHETTINAD HERITAGE
             </span>
@@ -1255,7 +1292,7 @@ export default function SivagangaiDigitalMarketingLanding() {
           ------------------------------------------------------------- */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex [scrollbar-width:none] items-center justify-center overflow-y-auto p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -1271,12 +1308,12 @@ export default function SivagangaiDigitalMarketingLanding() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white p-6 sm:p-8 text-slate-900 shadow-2xl border border-slate-200 z-10"
+              className="relative z-10 max-h-[calc(100dvh-2rem)] w-full max-w-2xl [scrollbar-width:none] overflow-y-auto rounded-[22px] border border-slate-200 bg-white p-6 text-slate-900 shadow-2xl sm:p-10 [&::-webkit-scrollbar]:hidden"
             >
               {/* Close Button */}
               <button
                 onClick={handleCloseModal}
-                className="absolute top-5 right-5 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+                className="absolute top-5 right-5 cursor-pointer rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
                 aria-label="Close modal"
               >
                 <X className="h-5 w-5" />
@@ -1287,7 +1324,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
-                  <h3 className="mt-4 font-heading text-2xl font-bold">
+                  <h3 className="font-heading mt-4 text-2xl font-bold">
                     Audit Request Received!
                   </h3>
                   <p className="mt-2 text-sm text-slate-600">
@@ -1299,12 +1336,12 @@ export default function SivagangaiDigitalMarketingLanding() {
                     <span className="font-semibold text-[#8525e3]">
                       {maskDisplayPhone(formData.phone)}
                     </span>{" "}
-                    within 2 business hours with your personalized competitive
-                    audit report.
+                    within 2 business hours with your personalized competitive audit
+                    report.
                   </p>
                   <button
                     onClick={handleCloseModal}
-                    className="mt-6 inline-flex rounded-full bg-[#8525e3] px-6 py-2.5 text-xs font-semibold text-white shadow-md hover:bg-[#731ec4] cursor-pointer"
+                    className="mt-6 inline-flex cursor-pointer rounded-full bg-[#8525e3] px-6 py-2.5 text-xs font-semibold text-white shadow-md hover:bg-[#731ec4]"
                   >
                     Done
                   </button>
@@ -1316,23 +1353,23 @@ export default function SivagangaiDigitalMarketingLanding() {
                       <Sparkles className="h-3.5 w-3.5" />
                       <span>{modalPlan}</span>
                     </div>
-                    <h3 className="mt-3 font-heading text-xl sm:text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading mt-3 text-3xl font-medium text-slate-900 sm:text-4xl">
                       Accelerate Your Customer Growth
                     </h3>
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-3 max-w-xl text-sm leading-5 text-slate-500">
                       Fill out your details below and we&apos;ll prepare a customized
                       revenue growth roadmap for your business.
                     </p>
                   </div>
 
                   {submitError && (
-                    <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 p-3 text-xs text-red-700 border border-red-200">
+                    <div className="mt-4 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
                       <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
                       <span>{submitError}</span>
                     </div>
                   )}
 
-                  <form onSubmit={handleFormSubmit} className="mt-6 space-y-4 text-left">
+                  <form onSubmit={handleFormSubmit} className="mt-7 space-y-4 text-left">
                     {/* Honeypot anti-spam field */}
                     <input
                       type="text"
@@ -1359,11 +1396,13 @@ export default function SivagangaiDigitalMarketingLanding() {
                         }
                         placeholder="e.g. Saffron Grand Hotel"
                         className={`mt-1.5 w-full rounded-xl border ${
-                          fieldErrors.businessName ? "border-red-400 bg-red-50/20" : "border-slate-300 bg-white"
-                        } px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-[#8525e3]`}
+                          fieldErrors.businessName
+                            ? "border-red-400 bg-red-50/20"
+                            : "border-slate-300 bg-white"
+                        } px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#8525e3]`}
                       />
                       {fieldErrors.businessName && (
-                        <p className="mt-1 text-[11px] text-red-600 font-medium">
+                        <p className="mt-1 text-[11px] font-medium text-red-600">
                           {fieldErrors.businessName}
                         </p>
                       )}
@@ -1383,11 +1422,13 @@ export default function SivagangaiDigitalMarketingLanding() {
                           }
                           placeholder="+91 98765 43210"
                           className={`mt-1.5 w-full rounded-xl border ${
-                            fieldErrors.phone ? "border-red-400 bg-red-50/20" : "border-slate-300 bg-white"
-                          } px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-[#8525e3]`}
+                            fieldErrors.phone
+                              ? "border-red-400 bg-red-50/20"
+                              : "border-slate-300 bg-white"
+                          } px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#8525e3]`}
                         />
                         {fieldErrors.phone && (
-                          <p className="mt-1 text-[11px] text-red-600 font-medium">
+                          <p className="mt-1 text-[11px] font-medium text-red-600">
                             {fieldErrors.phone}
                           </p>
                         )}
@@ -1395,7 +1436,8 @@ export default function SivagangaiDigitalMarketingLanding() {
 
                       <div>
                         <label className="block text-xs font-semibold text-slate-700">
-                          Email Address
+                          Email Address{" "}
+                          <span className="font-normal text-slate-400">(optional)</span>
                         </label>
                         <input
                           type="email"
@@ -1405,11 +1447,13 @@ export default function SivagangaiDigitalMarketingLanding() {
                           }
                           placeholder="growth@company.com"
                           className={`mt-1.5 w-full rounded-xl border ${
-                            fieldErrors.email ? "border-red-400 bg-red-50/20" : "border-slate-300 bg-white"
-                          } px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-[#8525e3]`}
+                            fieldErrors.email
+                              ? "border-red-400 bg-red-50/20"
+                              : "border-slate-300 bg-white"
+                          } px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#8525e3]`}
                         />
                         {fieldErrors.email && (
-                          <p className="mt-1 text-[11px] text-red-600 font-medium">
+                          <p className="mt-1 text-[11px] font-medium text-red-600">
                             {fieldErrors.email}
                           </p>
                         )}
@@ -1429,7 +1473,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                               serviceInterested: e.target.value,
                             })
                           }
-                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-[#8525e3]"
+                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#8525e3]"
                         >
                           <option>Meta &amp; Google Paid Ads</option>
                           <option>Viral Reels &amp; Scriptwriting</option>
@@ -1448,7 +1492,7 @@ export default function SivagangaiDigitalMarketingLanding() {
                           onChange={(e) =>
                             setFormData({ ...formData, budget: e.target.value })
                           }
-                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-[#8525e3]"
+                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#8525e3]"
                         >
                           <option>₹15,000 - ₹30,000 / mo</option>
                           <option>₹30,000 - ₹60,000 / mo</option>
@@ -1460,7 +1504,8 @@ export default function SivagangaiDigitalMarketingLanding() {
 
                     <div>
                       <label className="block text-xs font-semibold text-slate-700">
-                        Website or Instagram Page URL (Optional)
+                        Website or Instagram Page URL{" "}
+                        <span className="font-normal text-slate-400">(optional)</span>
                       </label>
                       <input
                         type="text"
@@ -1470,21 +1515,40 @@ export default function SivagangaiDigitalMarketingLanding() {
                         }
                         placeholder="e.g. instagram.com/yourbrand or yourwebsite.com"
                         className={`mt-1.5 w-full rounded-xl border ${
-                          fieldErrors.websiteUrl ? "border-red-400 bg-red-50/20" : "border-slate-300 bg-white"
-                        } px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-[#8525e3]`}
+                          fieldErrors.websiteUrl
+                            ? "border-red-400 bg-red-50/20"
+                            : "border-slate-300 bg-white"
+                        } px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#8525e3]`}
                       />
                       {fieldErrors.websiteUrl && (
-                        <p className="mt-1 text-[11px] text-red-600 font-medium">
+                        <p className="mt-1 text-[11px] font-medium text-red-600">
                           {fieldErrors.websiteUrl}
                         </p>
                       )}
                     </div>
 
-                    <div className="pt-2">
+                    <div className="rounded-xl border border-purple-100 bg-purple-50/70 px-4 py-3">
+                      <div className="flex flex-col gap-2 text-[11px] text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5 text-[#8525e3]" /> Competitive
+                          audit report
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5 text-[#8525e3]" /> Revenue growth
+                          roadmap
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5 text-[#8525e3]" /> Reply within 2
+                          business hours
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-1">
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#8525e3] py-3 text-xs font-bold text-white shadow-md hover:bg-[#731ec4] disabled:opacity-60 transition-all cursor-pointer"
+                        className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#8525e3] py-3.5 text-sm font-bold text-white shadow-lg shadow-purple-200 transition-all hover:bg-[#731ec4] disabled:opacity-60"
                       >
                         {isSubmitting ? (
                           <>
@@ -1499,7 +1563,8 @@ export default function SivagangaiDigitalMarketingLanding() {
                         )}
                       </button>
                       <p className="mt-2 text-center text-[10px] text-slate-400">
-                        🔒 100% confidential. Customer phone numbers encrypted with AES-256-GCM.
+                        🔒 100% confidential. Customer phone numbers encrypted with
+                        AES-256-GCM.
                       </p>
                     </div>
                   </form>

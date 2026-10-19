@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
+  Check,
   CheckCircle2,
   Globe,
   ShieldCheck,
@@ -107,7 +108,8 @@ const extendedShowcaseItems: ShowcaseItem[] = [
     image: SIGNBOARD_ASSETS.storefrontCommercial,
     location: "Sivagangai District Center",
     category: "exterior",
-    specs: "Dual-Sided Backlit Polycarbonate • Heavy GI Frame • Lightning Surge Protection",
+    specs:
+      "Dual-Sided Backlit Polycarbonate • Heavy GI Frame • Lightning Surge Protection",
   },
   {
     id: "velavan-silks",
@@ -140,7 +142,9 @@ export default function SivagangaiSignBoardLanding() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors<SignboardBookingFormData>>({});
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<SignboardBookingFormData>>(
+    {},
+  );
 
   const maskDisplayPhone = (raw: string) => {
     const digits = raw.replace(/\D/g, "");
@@ -190,7 +194,9 @@ export default function SivagangaiSignBoardLanding() {
         setSubmitError(response.message || "Failed to submit request. Please try again.");
       }
     } catch {
-      setSubmitError("Unable to submit request. Please check your internet connection and try again.");
+      setSubmitError(
+        "Unable to submit request. Please check your internet connection and try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -202,7 +208,7 @@ export default function SivagangaiSignBoardLanding() {
 
   return (
     <div
-      className={`min-h-screen bg-white text-slate-800 antialiased selection:bg-[#0062ff] selection:text-white transition-colors duration-500 ${
+      className={`min-h-screen bg-white text-slate-800 antialiased transition-colors duration-500 selection:bg-[#0062ff] selection:text-white ${
         nightModeGlow ? "bg-[#0b0f17] text-slate-100" : "bg-white"
       }`}
     >
@@ -212,26 +218,26 @@ export default function SivagangaiSignBoardLanding() {
       <header
         className={`sticky top-0 z-40 border-b backdrop-blur-md transition-colors ${
           nightModeGlow
-            ? "bg-[#0b0f17]/90 border-slate-800 text-white"
-            : "bg-white/95 border-slate-200 text-slate-900"
+            ? "border-slate-800 bg-[#0b0f17]/90 text-white"
+            : "border-slate-200 bg-white/95 text-slate-900"
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 sm:px-8">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="group inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="group inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-slate-900 dark:hover:text-white"
             >
               <span>←</span>
               <span>All Brands</span>
             </Link>
             <span className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-[#0062ff] animate-pulse" />
-              <span className="font-heading text-sm sm:text-base font-semibold tracking-tight">
+              <span className="flex h-2 w-2 animate-pulse rounded-full bg-[#0062ff]" />
+              <span className="font-heading text-sm font-semibold tracking-tight sm:text-base">
                 Sivagangai Sign Board
               </span>
-              <span className="hidden sm:inline-block rounded-full bg-[#0062ff]/10 px-2 py-0.5 text-[10px] font-medium text-[#0062ff]">
+              <span className="hidden rounded-full bg-[#0062ff]/10 px-2 py-0.5 text-[10px] font-medium text-[#0062ff] sm:inline-block">
                 Division of Sivagangai Group
               </span>
             </div>
@@ -243,7 +249,7 @@ export default function SivagangaiSignBoardLanding() {
               onClick={() => setNightModeGlow(!nightModeGlow)}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                 nightModeGlow
-                  ? "bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-sm"
+                  ? "border border-amber-400/40 bg-amber-400/20 text-amber-300 shadow-sm"
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
               title="Toggle Night Illuminated Signboard Glow"
@@ -263,7 +269,7 @@ export default function SivagangaiSignBoardLanding() {
 
             <button
               onClick={() => setIsQuoteOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#0062ff] px-4 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-[#0052d9] transition-all cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-[#0062ff] px-4 py-1.5 text-xs font-medium text-white shadow-sm transition-all hover:bg-[#0052d9]"
             >
               <Zap className="h-3.5 w-3.5" />
               <span>Get a Quote</span>
@@ -278,7 +284,7 @@ export default function SivagangaiSignBoardLanding() {
           ------------------------------------------------------------- */}
       <section
         id="create"
-        className={`pt-20 pb-24 sm:pt-28 sm:pb-32 transition-colors ${
+        className={`pt-20 pb-24 transition-colors sm:pt-28 sm:pb-32 ${
           nightModeGlow ? "bg-[#0e141f]" : "bg-white"
         }`}
       >
@@ -289,23 +295,23 @@ export default function SivagangaiSignBoardLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
+            className="mx-auto max-w-3xl text-center"
           >
             <h1
-              className={`text-3xl sm:text-4xl md:text-5xl font-light tracking-tight ${
+              className={`text-3xl font-light tracking-tight sm:text-4xl md:text-5xl ${
                 nightModeGlow ? "text-white" : "text-slate-900"
               }`}
             >
               What do you want to create?
             </h1>
             <p
-              className={`mt-4 text-sm sm:text-base md:text-lg leading-relaxed ${
+              className={`mt-4 text-sm leading-relaxed sm:text-base md:text-lg ${
                 nightModeGlow ? "text-slate-300" : "text-slate-600"
               }`}
             >
-              Whether you want to showcase your business with an illuminated,
-              high-impact commercial storefront, or create sleek interior
-              architectural wayfinding signage, we’ve got you covered.
+              Whether you want to showcase your business with an illuminated, high-impact
+              commercial storefront, or create sleek interior architectural wayfinding
+              signage, we’ve got you covered.
             </p>
           </motion.div>
 
@@ -320,17 +326,17 @@ export default function SivagangaiSignBoardLanding() {
               whileHover={{ y: -6 }}
               className={`group flex flex-col overflow-hidden rounded-2xl transition-all duration-300 ${
                 nightModeGlow
-                  ? "bg-[#141b29] border border-slate-800 shadow-2xl shadow-blue-950/30"
-                  : "bg-[#f4f6f8] border border-slate-200/80 shadow-sm hover:shadow-xl"
+                  ? "border border-slate-800 bg-[#141b29] shadow-2xl shadow-blue-950/30"
+                  : "border border-slate-200/80 bg-[#f4f6f8] shadow-sm hover:shadow-xl"
               }`}
             >
               {/* Top Visual Area (Multi-element visual showcase) */}
               <div
-                className={`relative h-72 sm:h-80 md:h-96 w-full overflow-hidden p-6 sm:p-8 flex items-center justify-center ${
+                className={`relative flex h-72 w-full items-center justify-center overflow-hidden p-6 sm:h-80 sm:p-8 md:h-96 ${
                   nightModeGlow ? "bg-[#111723]" : "bg-[#eaedf2]"
                 }`}
               >
-                <div className="relative h-full w-full overflow-hidden rounded-xl shadow-lg group-hover:scale-[1.02] transition-transform duration-500">
+                <div className="relative h-full w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-[1.02]">
                   <Image
                     src={SIGNBOARD_ASSETS.storefrontCommercial}
                     alt="Sivagangai Sign Board - Exterior Storefront & Facades"
@@ -347,45 +353,45 @@ export default function SivagangaiSignBoardLanding() {
                     <span>Commercial Storefronts</span>
                   </div>
                   {nightModeGlow && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 via-transparent to-transparent pointer-events-none" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-blue-600/20 via-transparent to-transparent" />
                   )}
                 </div>
               </div>
 
               {/* Bottom Text Area matching Image 1 */}
-              <div className="flex flex-1 flex-col justify-between p-8 sm:p-10 text-center">
+              <div className="flex flex-1 flex-col justify-between p-8 text-center sm:p-10">
                 <div>
                   <h2
-                    className={`text-xl sm:text-2xl font-semibold tracking-tight ${
+                    className={`text-xl font-semibold tracking-tight sm:text-2xl ${
                       nightModeGlow ? "text-white" : "text-slate-900"
                     }`}
                   >
                     Collection of Commercial Work
                   </h2>
                   <p
-                    className={`mt-4 text-xs sm:text-sm leading-relaxed ${
+                    className={`mt-4 text-xs leading-relaxed sm:text-sm ${
                       nightModeGlow ? "text-slate-300" : "text-slate-600"
                     }`}
                   >
-                    Create a commanding, fully weatherproof outdoor presence for
-                    your commercial outlet. Your project includes high-lumen 3D
-                    acrylic LED channel letters, architectural ACP sheet
-                    facades, and roadside monolith pylons. From there, you can
-                    customize dimensions and lighting as desired.
+                    Create a commanding, fully weatherproof outdoor presence for your
+                    commercial outlet. Your project includes high-lumen 3D acrylic LED
+                    channel letters, architectural ACP sheet facades, and roadside
+                    monolith pylons. From there, you can customize dimensions and lighting
+                    as desired.
                   </p>
                 </div>
 
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     3D LED Letters
                   </span>
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     ACP Cladding
                   </span>
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     Pylon Signs
                   </span>
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     Glow Sign Boxes
                   </span>
                 </div>
@@ -401,17 +407,17 @@ export default function SivagangaiSignBoardLanding() {
               whileHover={{ y: -6 }}
               className={`group flex flex-col overflow-hidden rounded-2xl transition-all duration-300 ${
                 nightModeGlow
-                  ? "bg-[#141b29] border border-slate-800 shadow-2xl shadow-blue-950/30"
-                  : "bg-[#f4f6f8] border border-slate-200/80 shadow-sm hover:shadow-xl"
+                  ? "border border-slate-800 bg-[#141b29] shadow-2xl shadow-blue-950/30"
+                  : "border border-slate-200/80 bg-[#f4f6f8] shadow-sm hover:shadow-xl"
               }`}
             >
               {/* Top Visual Area (Clean single wide image preview) */}
               <div
-                className={`relative h-72 sm:h-80 md:h-96 w-full overflow-hidden p-6 sm:p-8 flex items-center justify-center ${
+                className={`relative flex h-72 w-full items-center justify-center overflow-hidden p-6 sm:h-80 sm:p-8 md:h-96 ${
                   nightModeGlow ? "bg-[#111723]" : "bg-[#eaedf2]"
                 }`}
               >
-                <div className="relative h-full w-full overflow-hidden rounded-xl shadow-lg group-hover:scale-[1.02] transition-transform duration-500">
+                <div className="relative h-full w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-[1.02]">
                   <Image
                     src={SIGNBOARD_ASSETS.corporateInterior}
                     alt="Sivagangai Sign Board - Interior Reception & Wayfinding"
@@ -427,45 +433,45 @@ export default function SivagangaiSignBoardLanding() {
                     <span>Interior & Reception Displays</span>
                   </div>
                   {nightModeGlow && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-amber-500/20 via-transparent to-transparent pointer-events-none" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-amber-500/20 via-transparent to-transparent" />
                   )}
                 </div>
               </div>
 
               {/* Bottom Text Area matching Image 1 */}
-              <div className="flex flex-1 flex-col justify-between p-8 sm:p-10 text-center">
+              <div className="flex flex-1 flex-col justify-between p-8 text-center sm:p-10">
                 <div>
                   <h2
-                    className={`text-xl sm:text-2xl font-semibold tracking-tight ${
+                    className={`text-xl font-semibold tracking-tight sm:text-2xl ${
                       nightModeGlow ? "text-white" : "text-slate-900"
                     }`}
                   >
                     Interior & Office Wayfinding
                   </h2>
                   <p
-                    className={`mt-4 text-xs sm:text-sm leading-relaxed ${
+                    className={`mt-4 text-xs leading-relaxed sm:text-sm ${
                       nightModeGlow ? "text-slate-300" : "text-slate-600"
                     }`}
                   >
                     Create a pristine, understated luxury statement for corporate
-                    reception lobbies, executive suites, and clinics. Ideal for
-                    solid brushed brass logos, frosted acrylic panels, and
-                    directional floor directories. You can always add additional
-                    department nameplates and room indicators if desired.
+                    reception lobbies, executive suites, and clinics. Ideal for solid
+                    brushed brass logos, frosted acrylic panels, and directional floor
+                    directories. You can always add additional department nameplates and
+                    room indicators if desired.
                   </p>
                 </div>
 
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     Solid Brass Letters
                   </span>
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     Reception Logos
                   </span>
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     Floor Wayfinding
                   </span>
-                  <span className="rounded-full bg-white/80 dark:bg-slate-800 px-3 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[11px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     Laser Engraved Plates
                   </span>
                 </div>
@@ -482,10 +488,8 @@ export default function SivagangaiSignBoardLanding() {
           ------------------------------------------------------------- */}
       <section
         id="examples"
-        className={`py-24 sm:py-32 border-t transition-colors ${
-          nightModeGlow
-            ? "bg-[#0b0f17] border-slate-800"
-            : "bg-white border-slate-100"
+        className={`border-t py-24 transition-colors sm:py-32 ${
+          nightModeGlow ? "border-slate-800 bg-[#0b0f17]" : "border-slate-100 bg-white"
         }`}
       >
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
@@ -495,30 +499,30 @@ export default function SivagangaiSignBoardLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
+            className="mx-auto max-w-3xl text-center"
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-light tracking-tight ${
+              className={`text-3xl font-light tracking-tight sm:text-4xl md:text-5xl ${
                 nightModeGlow ? "text-white" : "text-slate-900"
               }`}
             >
               See what’s possible
             </h2>
             <p
-              className={`mt-4 text-sm sm:text-base md:text-lg leading-relaxed ${
+              className={`mt-4 text-sm leading-relaxed sm:text-base md:text-lg ${
                 nightModeGlow ? "text-slate-300" : "text-slate-600"
               }`}
             >
-              Retail outlets, hospitals, corporate towers, and boutique cafes
-              across Sivagangai & Tamil Nadu trust us to illuminate their brand.
-              See some examples below.
+              Retail outlets, hospitals, corporate towers, and boutique cafes across
+              Sivagangai & Tamil Nadu trust us to illuminate their brand. See some
+              examples below.
             </p>
 
             {/* Centered Buttons matching the exact style of Image 2 */}
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <button
                 onClick={() => setIsQuoteOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full bg-[#0062ff] px-8 py-3.5 text-sm font-medium text-white shadow-md hover:bg-[#0052d9] hover:shadow-lg transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-[#0062ff] px-8 py-3.5 text-sm font-medium text-white shadow-md transition-all duration-200 hover:scale-[1.02] hover:bg-[#0052d9] hover:shadow-lg"
               >
                 <span>Get Started</span>
                 <span className="font-sans">→</span>
@@ -526,10 +530,10 @@ export default function SivagangaiSignBoardLanding() {
 
               <button
                 onClick={() => setShowExtended(!showExtended)}
-                className={`inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-sm font-medium border transition-all duration-200 hover:scale-[1.02] cursor-pointer ${
+                className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-8 py-3.5 text-sm font-medium transition-all duration-200 hover:scale-[1.02] ${
                   nightModeGlow
-                    ? "bg-slate-800 text-white border-slate-700 hover:bg-slate-700"
-                    : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50 hover:border-slate-400"
+                    ? "border-slate-700 bg-slate-800 text-white hover:bg-slate-700"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
                 }`}
               >
                 <span>{showExtended ? "Show Less" : "View More Examples"}</span>
@@ -560,7 +564,7 @@ export default function SivagangaiSignBoardLanding() {
                     className={`relative aspect-[16/10] w-full overflow-hidden rounded-xl border transition-all duration-300 ${
                       nightModeGlow
                         ? "border-slate-800 bg-slate-900 shadow-xl shadow-blue-950/20 group-hover:border-[#0062ff]"
-                        : "border-slate-200 bg-slate-100 shadow-sm group-hover:shadow-xl group-hover:border-slate-300"
+                        : "border-slate-200 bg-slate-100 shadow-sm group-hover:border-slate-300 group-hover:shadow-xl"
                     }`}
                   >
                     <Image
@@ -581,27 +585,27 @@ export default function SivagangaiSignBoardLanding() {
 
                     {/* Night mode realistic illumination glow filter */}
                     {nightModeGlow && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-blue-500/25 via-transparent to-transparent pointer-events-none" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-blue-500/25 via-transparent to-transparent" />
                     )}
                   </div>
 
                   {/* Clean Typography below Image matching Image 2 */}
                   <div className="mt-4 text-left">
                     <h3
-                      className={`font-semibold text-base sm:text-lg tracking-tight group-hover:text-[#0062ff] transition-colors ${
+                      className={`text-base font-semibold tracking-tight transition-colors group-hover:text-[#0062ff] sm:text-lg ${
                         nightModeGlow ? "text-white" : "text-slate-900"
                       }`}
                     >
                       {item.title}
                     </h3>
                     <p
-                      className={`mt-1 text-xs sm:text-sm font-normal ${
+                      className={`mt-1 text-xs font-normal sm:text-sm ${
                         nightModeGlow ? "text-slate-400" : "text-slate-500"
                       }`}
                     >
                       {item.theme}
                     </p>
-                    <p className="mt-1 text-[11px] text-slate-400 dark:text-slate-500 font-mono">
+                    <p className="mt-1 font-mono text-[11px] text-slate-400 dark:text-slate-500">
                       {item.specs}
                     </p>
                   </div>
@@ -618,10 +622,8 @@ export default function SivagangaiSignBoardLanding() {
           ------------------------------------------------------------- */}
       <section
         id="features"
-        className={`py-24 sm:py-32 border-t transition-colors ${
-          nightModeGlow
-            ? "bg-[#0e141f] border-slate-800"
-            : "bg-white border-slate-100"
+        className={`border-t py-24 transition-colors sm:py-32 ${
+          nightModeGlow ? "border-slate-800 bg-[#0e141f]" : "border-slate-100 bg-white"
         }`}
       >
         <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
@@ -631,40 +633,40 @@ export default function SivagangaiSignBoardLanding() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
+            className="mx-auto max-w-3xl text-center"
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-light tracking-tight ${
+              className={`text-3xl font-light tracking-tight sm:text-4xl md:text-5xl ${
                 nightModeGlow ? "text-white" : "text-slate-900"
               }`}
             >
               Engineered for decades of brilliance
             </h2>
             <p
-              className={`mt-4 text-sm sm:text-base md:text-lg leading-relaxed ${
+              className={`mt-4 text-sm leading-relaxed sm:text-base md:text-lg ${
                 nightModeGlow ? "text-slate-300" : "text-slate-600"
               }`}
             >
-              Don’t know sheet gauges or lumens? No problem. With Sivagangai Sign
-              Board, our precision-manufactured systems are the most reliable,
-              striking way to present your brand to the street.
+              Don’t know sheet gauges or lumens? No problem. With Sivagangai Sign Board,
+              our precision-manufactured systems are the most reliable, striking way to
+              present your brand to the street.
             </p>
           </motion.div>
 
           {/* 6-Grid Feature Matrix matching Image 3 layout */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:gap-x-8 md:gap-y-12">
+          <div className="mt-16 grid grid-cols-1 divide-y md:grid-cols-2 md:gap-x-8 md:gap-y-12 md:divide-y-0 lg:grid-cols-3">
             {/* Feature 1: CNC Laser (Behance sync style) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="flex flex-col items-center text-center p-6 sm:p-8"
+              className="flex flex-col items-center p-6 text-center sm:p-8"
             >
               {/* Blue Outline Illustration Icon matching Adobe Portfolio */}
               <div className="flex h-24 w-28 items-center justify-center">
                 <div className="relative flex items-center justify-center">
-                  <div className="h-16 w-16 rounded-xl border-2 border-[#0062ff]/40 bg-blue-50/50 dark:bg-blue-950/20 flex flex-col p-1.5 justify-between">
+                  <div className="flex h-16 w-16 flex-col justify-between rounded-xl border-2 border-[#0062ff]/40 bg-blue-50/50 p-1.5 dark:bg-blue-950/20">
                     <div className="flex gap-1">
                       <div className="h-1.5 w-1.5 rounded-full bg-[#0062ff]" />
                       <div className="h-1.5 w-1.5 rounded-full bg-[#0062ff]/40" />
@@ -674,27 +676,27 @@ export default function SivagangaiSignBoardLanding() {
                       <div className="h-4 rounded bg-[#0062ff]/30" />
                     </div>
                   </div>
-                  <div className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#0062ff] text-white shadow-md text-[11px] font-bold">
+                  <div className="absolute -right-2 -bottom-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#0062ff] text-[11px] font-bold text-white shadow-md">
                     CNC
                   </div>
                 </div>
               </div>
 
               <h3
-                className={`mt-6 text-base sm:text-lg font-semibold tracking-tight ${
+                className={`mt-6 text-base font-semibold tracking-tight sm:text-lg ${
                   nightModeGlow ? "text-white" : "text-slate-900"
                 }`}
               >
                 CNC Laser &amp; Router Precision
               </h3>
               <p
-                className={`mt-2.5 text-xs sm:text-sm leading-relaxed max-w-xs ${
+                className={`mt-2.5 max-w-xs text-xs leading-relaxed sm:text-sm ${
                   nightModeGlow ? "text-slate-400" : "text-slate-600"
                 }`}
               >
-                High-precision 0.1mm micro-tolerance laser cutting across cast
-                acrylic, solid brass, copper, and composite panels for razor-sharp
-                typography and intricate logos.
+                High-precision 0.1mm micro-tolerance laser cutting across cast acrylic,
+                solid brass, copper, and composite panels for razor-sharp typography and
+                intricate logos.
               </p>
             </motion.div>
 
@@ -704,42 +706,42 @@ export default function SivagangaiSignBoardLanding() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-col items-center text-center p-6 sm:p-8"
+              className="flex flex-col items-center p-6 text-center sm:p-8"
             >
               <div className="flex h-24 w-28 items-center justify-center">
                 <div className="relative flex items-end justify-center gap-1.5">
                   {/* Monitor frame */}
-                  <div className="h-16 w-20 rounded-lg border-2 border-[#0062ff]/50 bg-blue-50/30 dark:bg-blue-950/20 p-1 flex flex-col">
-                    <div className="h-2 w-full rounded-sm bg-[#0062ff]/20 mb-1" />
-                    <div className="grid grid-cols-2 gap-1 flex-1">
+                  <div className="flex h-16 w-20 flex-col rounded-lg border-2 border-[#0062ff]/50 bg-blue-50/30 p-1 dark:bg-blue-950/20">
+                    <div className="mb-1 h-2 w-full rounded-sm bg-[#0062ff]/20" />
+                    <div className="grid flex-1 grid-cols-2 gap-1">
                       <div className="rounded bg-[#0062ff]/10" />
                       <div className="rounded bg-[#0062ff]/15" />
                     </div>
                   </div>
                   {/* Small device frame */}
-                  <div className="h-10 w-6 rounded border-2 border-[#0062ff] bg-white dark:bg-slate-900 p-0.5 flex flex-col justify-between shadow-sm">
-                    <div className="h-1 w-2 rounded-full bg-[#0062ff] mx-auto" />
+                  <div className="flex h-10 w-6 flex-col justify-between rounded border-2 border-[#0062ff] bg-white p-0.5 shadow-sm dark:bg-slate-900">
+                    <div className="mx-auto h-1 w-2 rounded-full bg-[#0062ff]" />
                     <div className="h-4 rounded bg-[#0062ff]/20" />
-                    <div className="h-1 w-1 rounded-full bg-[#0062ff] mx-auto" />
+                    <div className="mx-auto h-1 w-1 rounded-full bg-[#0062ff]" />
                   </div>
                 </div>
               </div>
 
               <h3
-                className={`mt-6 text-base sm:text-lg font-semibold tracking-tight ${
+                className={`mt-6 text-base font-semibold tracking-tight sm:text-lg ${
                   nightModeGlow ? "text-white" : "text-slate-900"
                 }`}
               >
                 IP67 Weatherproof &amp; Sealed
               </h3>
               <p
-                className={`mt-2.5 text-xs sm:text-sm leading-relaxed max-w-xs ${
+                className={`mt-2.5 max-w-xs text-xs leading-relaxed sm:text-sm ${
                   nightModeGlow ? "text-slate-400" : "text-slate-600"
                 }`}
               >
-                Dual-layer silicone perimeter seals, concealed moisture drain
-                channels, and UV-stabilized clear coats engineered to endure
-                scorching Tamil Nadu heat and monsoons.
+                Dual-layer silicone perimeter seals, concealed moisture drain channels,
+                and UV-stabilized clear coats engineered to endure scorching Tamil Nadu
+                heat and monsoons.
               </p>
             </motion.div>
 
@@ -749,12 +751,12 @@ export default function SivagangaiSignBoardLanding() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col items-center text-center p-6 sm:p-8"
+              className="flex flex-col items-center p-6 text-center sm:p-8"
             >
               <div className="flex h-24 w-28 items-center justify-center">
                 <div className="relative flex flex-col items-center justify-center">
-                  <div className="h-14 w-22 rounded-lg border-2 border-[#0062ff]/40 bg-blue-50/40 dark:bg-blue-950/20 p-2 flex items-center justify-center">
-                    <div className="flex items-center gap-1 text-[#0062ff] font-semibold text-xs tracking-wider">
+                  <div className="flex h-14 w-22 items-center justify-center rounded-lg border-2 border-[#0062ff]/40 bg-blue-50/40 p-2 dark:bg-blue-950/20">
+                    <div className="flex items-center gap-1 text-xs font-semibold tracking-wider text-[#0062ff]">
                       <CheckCircle2 className="h-4 w-4 fill-[#0062ff] text-white" />
                       <span>LED.</span>
                     </div>
@@ -763,20 +765,20 @@ export default function SivagangaiSignBoardLanding() {
               </div>
 
               <h3
-                className={`mt-6 text-base sm:text-lg font-semibold tracking-tight ${
+                className={`mt-6 text-base font-semibold tracking-tight sm:text-lg ${
                   nightModeGlow ? "text-white" : "text-slate-900"
                 }`}
               >
                 High-Lumen Korean LED Modules
               </h3>
               <p
-                className={`mt-2.5 text-xs sm:text-sm leading-relaxed max-w-xs ${
+                className={`mt-2.5 max-w-xs text-xs leading-relaxed sm:text-sm ${
                   nightModeGlow ? "text-slate-400" : "text-slate-600"
                 }`}
               >
-                Equipped with certified Samsung/LG tier-1 LED chips providing
-                50,000+ hours of continuous, flicker-free lumens with uniform light
-                diffusion and zero dark patches.
+                Equipped with certified Samsung/LG tier-1 LED chips providing 50,000+
+                hours of continuous, flicker-free lumens with uniform light diffusion and
+                zero dark patches.
               </p>
             </motion.div>
 
@@ -786,35 +788,31 @@ export default function SivagangaiSignBoardLanding() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-col items-center text-center p-6 sm:p-8"
+              className="flex flex-col items-center p-6 text-center sm:p-8"
             >
               <div className="flex h-24 w-28 items-center justify-center">
                 <div className="flex flex-col items-start justify-center text-left font-serif leading-none">
                   <span className="text-xl font-bold text-[#0062ff]">AaBb</span>
-                  <span className="text-base font-medium text-[#0062ff]/60">
-                    AaBb
-                  </span>
-                  <span className="text-xs font-normal text-[#0062ff]/40">
-                    AaBb
-                  </span>
+                  <span className="text-base font-medium text-[#0062ff]/60">AaBb</span>
+                  <span className="text-xs font-normal text-[#0062ff]/40">AaBb</span>
                 </div>
               </div>
 
               <h3
-                className={`mt-6 text-base sm:text-lg font-semibold tracking-tight ${
+                className={`mt-6 text-base font-semibold tracking-tight sm:text-lg ${
                   nightModeGlow ? "text-white" : "text-slate-900"
                 }`}
               >
                 Architectural Grade Materials
               </h3>
               <p
-                className={`mt-2.5 text-xs sm:text-sm leading-relaxed max-w-xs ${
+                className={`mt-2.5 max-w-xs text-xs leading-relaxed sm:text-sm ${
                   nightModeGlow ? "text-slate-400" : "text-slate-600"
                 }`}
               >
-                Heavy-duty 3mm/4mm virgin exterior ACP sheets, 100% cast virgin
-                acrylic that never yellows or cracks, and rust-proof SS 304 alloy
-                for enduring aesthetic superiority.
+                Heavy-duty 3mm/4mm virgin exterior ACP sheets, 100% cast virgin acrylic
+                that never yellows or cracks, and rust-proof SS 304 alloy for enduring
+                aesthetic superiority.
               </p>
             </motion.div>
 
@@ -824,28 +822,28 @@ export default function SivagangaiSignBoardLanding() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="flex flex-col items-center text-center p-6 sm:p-8"
+              className="flex flex-col items-center p-6 text-center sm:p-8"
             >
               <div className="flex h-24 w-28 items-center justify-center">
                 <div className="relative flex items-center justify-center">
-                  <div className="h-16 w-20 rounded-xl border-2 border-[#0062ff]/40 bg-blue-50/40 dark:bg-blue-950/20 flex items-center justify-center p-2">
+                  <div className="flex h-16 w-20 items-center justify-center rounded-xl border-2 border-[#0062ff]/40 bg-blue-50/40 p-2 dark:bg-blue-950/20">
                     <Zap className="h-8 w-8 text-[#0062ff]/70" />
                   </div>
-                  <div className="absolute -bottom-2 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#0062ff] text-white shadow-md text-[10px] font-bold">
+                  <div className="absolute -right-1 -bottom-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#0062ff] text-[10px] font-bold text-white shadow-md">
                     SMPS
                   </div>
                 </div>
               </div>
 
               <h3
-                className={`mt-6 text-base sm:text-lg font-semibold tracking-tight ${
+                className={`mt-6 text-base font-semibold tracking-tight sm:text-lg ${
                   nightModeGlow ? "text-white" : "text-slate-900"
                 }`}
               >
                 MeanWell SMPS Power Systems
               </h3>
               <p
-                className={`mt-2.5 text-xs sm:text-sm leading-relaxed max-w-xs ${
+                className={`mt-2.5 max-w-xs text-xs leading-relaxed sm:text-sm ${
                   nightModeGlow ? "text-slate-400" : "text-slate-600"
                 }`}
               >
@@ -861,32 +859,32 @@ export default function SivagangaiSignBoardLanding() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="flex flex-col items-center text-center p-6 sm:p-8"
+              className="flex flex-col items-center p-6 text-center sm:p-8"
             >
               <div className="flex h-24 w-28 items-center justify-center">
                 <div className="flex items-center justify-center">
-                  <div className="flex items-center gap-1 rounded-lg bg-[#0062ff] px-4 py-2 text-white shadow-md text-xs font-mono font-bold tracking-widest">
+                  <div className="flex items-center gap-1 rounded-lg bg-[#0062ff] px-4 py-2 font-mono text-xs font-bold tracking-widest text-white shadow-md">
                     <span>****</span>
-                    <span className="h-3 w-0.5 bg-white animate-pulse" />
+                    <span className="h-3 w-0.5 animate-pulse bg-white" />
                   </div>
                 </div>
               </div>
 
               <h3
-                className={`mt-6 text-base sm:text-lg font-semibold tracking-tight ${
+                className={`mt-6 text-base font-semibold tracking-tight sm:text-lg ${
                   nightModeGlow ? "text-white" : "text-slate-900"
                 }`}
               >
                 3-Year Comprehensive Warranty
               </h3>
               <p
-                className={`mt-2.5 text-xs sm:text-sm leading-relaxed max-w-xs ${
+                className={`mt-2.5 max-w-xs text-xs leading-relaxed sm:text-sm ${
                   nightModeGlow ? "text-slate-400" : "text-slate-600"
                 }`}
               >
                 Total peace of mind with prompt on-site replacement coverage on LED
-                modules, power adapters, and mounting structural frames across
-                Sivagangai &amp; Madurai districts.
+                modules, power adapters, and mounting structural frames across Sivagangai
+                &amp; Madurai districts.
               </p>
             </motion.div>
           </div>
@@ -899,13 +897,11 @@ export default function SivagangaiSignBoardLanding() {
           ------------------------------------------------------------- */}
       <section
         id="cta"
-        className={`py-24 sm:py-32 border-t transition-colors ${
-          nightModeGlow
-            ? "bg-[#0b0f17] border-slate-800"
-            : "bg-white border-slate-100"
+        className={`border-t py-24 transition-colors sm:py-32 ${
+          nightModeGlow ? "border-slate-800 bg-[#0b0f17]" : "border-slate-100 bg-white"
         }`}
       >
-        <div className="mx-auto max-w-4xl px-6 sm:px-8 text-center">
+        <div className="mx-auto max-w-4xl px-6 text-center sm:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -913,26 +909,26 @@ export default function SivagangaiSignBoardLanding() {
             transition={{ duration: 0.6 }}
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-light tracking-tight ${
+              className={`text-3xl font-light tracking-tight sm:text-4xl md:text-5xl ${
                 nightModeGlow ? "text-white" : "text-slate-900"
               }`}
             >
               Ready to elevate your storefront visibility?
             </h2>
             <p
-              className={`mt-5 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto ${
+              className={`mx-auto mt-5 max-w-2xl text-sm leading-relaxed sm:text-base md:text-lg ${
                 nightModeGlow ? "text-slate-300" : "text-slate-600"
               }`}
             >
-              Every project begins with a free on-site physical measurement, 3D
-              daylight and night-glow preview render, and transparent itemized
-              quotation delivered within 24 hours.
+              Every project begins with a free on-site physical measurement, 3D daylight
+              and night-glow preview render, and transparent itemized quotation delivered
+              within 24 hours.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <button
                 onClick={() => setIsQuoteOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full bg-[#0062ff] px-9 py-3.5 text-sm font-medium text-white shadow-md hover:bg-[#0052d9] hover:shadow-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-[#0062ff] px-9 py-3.5 text-sm font-medium text-white shadow-md transition-all duration-200 hover:scale-[1.02] hover:bg-[#0052d9] hover:shadow-xl"
               >
                 <span>Get Started</span>
                 <span className="font-sans">→</span>
@@ -951,13 +947,12 @@ export default function SivagangaiSignBoardLanding() {
         tagline="SIGN BOARDS, 3D LED ACRYLIC & ARCHITECTURAL DISPLAYS STUDIO"
       />
 
-
       {/* -------------------------------------------------------------
           INTERACTIVE GET A QUOTE / MEASUREMENT MODAL
           ------------------------------------------------------------- */}
       <AnimatePresence>
         {isQuoteOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex [scrollbar-width:none] items-center justify-center overflow-y-auto p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -973,12 +968,12 @@ export default function SivagangaiSignBoardLanding() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-6 sm:p-8 text-slate-900 dark:text-white shadow-2xl border border-slate-200 dark:border-slate-800 z-10"
+              className="relative z-10 max-h-[calc(100dvh-2rem)] w-full max-w-xl [scrollbar-width:none] overflow-y-auto rounded-[22px] border border-slate-200 bg-white p-6 text-slate-900 shadow-2xl sm:p-8 [&::-webkit-scrollbar]:hidden"
             >
               {/* Close Button */}
               <button
                 onClick={handleCloseModal}
-                className="absolute top-5 right-5 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-white transition-colors"
+                className="absolute top-5 right-5 rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
                 aria-label="Close modal"
               >
                 <X className="h-5 w-5" />
@@ -986,10 +981,10 @@ export default function SivagangaiSignBoardLanding() {
 
               {formSubmitted ? (
                 <div className="py-8 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
-                  <h3 className="mt-4 font-heading text-2xl font-semibold">
+                  <h3 className="font-heading mt-4 text-2xl font-semibold">
                     Measurement Request Received!
                   </h3>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
@@ -1001,8 +996,8 @@ export default function SivagangaiSignBoardLanding() {
                     <span className="font-semibold text-[#0062ff]">
                       {maskDisplayPhone(formData.phone)}
                     </span>{" "}
-                    within 2 hours to confirm your free on-site measurement and 3D
-                    mockup render.
+                    within 2 hours to confirm your free on-site measurement and 3D mockup
+                    render.
                   </p>
                   <button
                     onClick={handleCloseModal}
@@ -1018,23 +1013,23 @@ export default function SivagangaiSignBoardLanding() {
                       <Sparkles className="h-3.5 w-3.5" />
                       <span>Free Site Measurement &amp; 3D Render</span>
                     </div>
-                    <h3 className="mt-3 font-heading text-xl sm:text-2xl font-semibold">
+                    <h3 className="font-heading mt-3 text-3xl font-medium text-slate-900 sm:text-4xl">
                       Request Signboard Estimate
                     </h3>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                      Fill out your requirement below for a transparent cost estimate
-                      and lighting spec.
+                    <p className="mt-3 max-w-xl text-sm leading-5 text-slate-500">
+                      Fill out your requirement below for a transparent cost estimate and
+                      lighting spec.
                     </p>
                   </div>
 
                   {submitError && (
-                    <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950/30 p-3 text-xs text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/40">
+                    <div className="mt-4 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-300">
                       <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
                       <span>{submitError}</span>
                     </div>
                   )}
 
-                  <form onSubmit={handleFormSubmit} className="mt-6 space-y-4 text-left">
+                  <form onSubmit={handleFormSubmit} className="mt-7 space-y-4 text-left">
                     {/* Honeypot anti-spam field */}
                     <input
                       type="text"
@@ -1063,11 +1058,11 @@ export default function SivagangaiSignBoardLanding() {
                         className={`mt-1.5 w-full rounded-xl border ${
                           fieldErrors.businessName
                             ? "border-red-400 bg-red-50/20"
-                            : "border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
-                        } px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]`}
+                            : "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900"
+                        } px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#0062ff]`}
                       />
                       {fieldErrors.businessName && (
-                        <p className="mt-1 text-[11px] text-red-600 font-medium">
+                        <p className="mt-1 text-[11px] font-medium text-red-600">
                           {fieldErrors.businessName}
                         </p>
                       )}
@@ -1089,11 +1084,11 @@ export default function SivagangaiSignBoardLanding() {
                           className={`mt-1.5 w-full rounded-xl border ${
                             fieldErrors.phone
                               ? "border-red-400 bg-red-50/20"
-                              : "border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
-                          } px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]`}
+                              : "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900"
+                          } px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#0062ff]`}
                         />
                         {fieldErrors.phone && (
-                          <p className="mt-1 text-[11px] text-red-600 font-medium">
+                          <p className="mt-1 text-[11px] font-medium text-red-600">
                             {fieldErrors.phone}
                           </p>
                         )}
@@ -1108,7 +1103,7 @@ export default function SivagangaiSignBoardLanding() {
                           onChange={(e) =>
                             setFormData({ ...formData, city: e.target.value })
                           }
-                          className="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]"
+                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#0062ff]"
                         >
                           <option>Sivagangai</option>
                           <option>Karaikudi</option>
@@ -1130,7 +1125,7 @@ export default function SivagangaiSignBoardLanding() {
                           onChange={(e) =>
                             setFormData({ ...formData, signType: e.target.value })
                           }
-                          className="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]"
+                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#0062ff]"
                         >
                           <option>3D LED Acrylic Letters</option>
                           <option>Exterior ACP Facade Cladding</option>
@@ -1153,14 +1148,15 @@ export default function SivagangaiSignBoardLanding() {
                             setFormData({ ...formData, dimensions: e.target.value })
                           }
                           placeholder="e.g. 12 ft x 4 ft"
-                          className="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]"
+                          className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#0062ff]"
                         />
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
-                        Specific Details (Optional)
+                        Specific Details{" "}
+                        <span className="font-normal text-slate-400">(optional)</span>
                       </label>
                       <textarea
                         rows={2}
@@ -1169,15 +1165,32 @@ export default function SivagangaiSignBoardLanding() {
                           setFormData({ ...formData, notes: e.target.value })
                         }
                         placeholder="e.g. Need warm white illumination on dark grey ACP facade, 2nd floor height."
-                        className="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-[#0062ff]"
+                        className="mt-1.5 w-full resize-y rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none focus:border-[#0062ff]"
                       />
                     </div>
 
-                    <div className="pt-2">
+                    <div className="rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3">
+                      <div className="flex flex-col gap-2 text-[11px] text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5 text-[#0062ff]" /> Free on-site
+                          measurement
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5 text-[#0062ff]" /> 3D mockup
+                          render
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5 text-[#0062ff]" /> Transparent
+                          cost estimate
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-1">
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#0062ff] py-3 text-xs font-medium text-white shadow-md hover:bg-[#0052d9] disabled:opacity-60 transition-all cursor-pointer"
+                        className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0062ff] py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-[#0052d9] disabled:opacity-60"
                       >
                         {isSubmitting ? (
                           <>
@@ -1192,7 +1205,8 @@ export default function SivagangaiSignBoardLanding() {
                         )}
                       </button>
                       <p className="mt-2 text-center text-[10px] text-slate-400">
-                        🔒 No obligation. Customer phone numbers encrypted with AES-256-GCM.
+                        🔒 No obligation. Customer phone numbers encrypted with
+                        AES-256-GCM.
                       </p>
                     </div>
                   </form>
