@@ -5,25 +5,26 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import FadeIn from "@/components/ui/FadeIn";
 import { siteConfig } from "@/data/site";
-import { placeholderImage } from "@/lib/utils";
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden">
-      {/* TODO: replace with your best photo (put it in /public/images and use "/images/hero.jpg"). */}
+    <section className="relative flex min-h-[90vh] items-center overflow-hidden">
       <Image
-        src={placeholderImage("hero-photo", 1600, 1000)}
-        alt="Placeholder hero photo: a photographer's best work goes here"
+        src="/images/hero.jpg"
+        alt="Sivagangai Stories - Wedding, portrait, and event photography"
         fill
-        preload
+        priority
         sizes="100vw"
-        className="object-cover"
+        className="object-cover object-[center_30%]"
       />
       {/* Dark overlay so the white text is easy to read */}
-      <div className="bg-scrim absolute inset-0" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-black/45 md:bg-gradient-to-r md:from-black/75 md:via-black/45 md:to-black/30"
+        aria-hidden="true"
+      />
 
       <Container className="text-on-image relative py-24">
-        <FadeIn className="max-w-2xl">
+        <FadeIn className="max-w-2xl ">
           <p className="mb-4 text-xs font-medium tracking-[0.3em] uppercase">
             {siteConfig.tagline}
           </p>

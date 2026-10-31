@@ -8,6 +8,7 @@
 // 4. Strict isolation: Admin-only sections (Users, Messages, full studio management) are NEVER shown.
 
 import React, { useState, useTransition } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -100,10 +101,16 @@ export default function StaffSidebar({
             className="flex items-center gap-3 transition-opacity hover:opacity-90"
           >
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-lg shadow-sm shrink-0"
+              className="flex h-10 w-10 items-center justify-center rounded-lg shadow-sm shrink-0 p-1"
               style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
             >
-              <ShieldCheck className="h-5 w-5 text-white" />
+              <Image
+                src="/images/logo-icon.png"
+                alt={siteConfig.name}
+                width={32}
+                height={32}
+                className="h-7 w-7 object-contain drop-shadow-xs"
+              />
             </div>
             <div>
               <span

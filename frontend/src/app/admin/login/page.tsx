@@ -5,6 +5,7 @@
 // rate limiting feedback, loading states, and attacker-safe error messages.
 
 import React, { Suspense, useEffect, useRef, useState, useTransition } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, Lock, Mail, ShieldAlert, ShieldCheck } from "lucide-react";
@@ -113,10 +114,16 @@ function AdminLoginForm() {
         {/* Brand and Title Header */}
         <div className="text-center">
           <div
-            className="mx-auto flex h-13 w-13 items-center justify-center rounded-2xl shadow-lg"
+            className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl p-2 shadow-lg"
             style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
           >
-            <ShieldCheck className="h-7 w-7 text-white" />
+            <Image
+              src="/images/logo-icon.png"
+              alt={siteConfig.name}
+              width={48}
+              height={48}
+              className="h-10 w-10 object-contain drop-shadow"
+            />
           </div>
           <h1
             className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl"

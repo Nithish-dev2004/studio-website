@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, ShieldCheck } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
@@ -68,8 +69,17 @@ export default function AdminShell({
             </button>
 
             <Link href="/admin" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-accent-foreground">
-                <ShieldCheck className="h-4 w-4" />
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-md p-1"
+                style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
+              >
+                <Image
+                  src="/images/logo-icon.png"
+                  alt={siteConfig.name}
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 object-contain"
+                />
               </div>
               <span className="font-heading text-base font-bold tracking-tight text-card-foreground">
                 {siteConfig.name}

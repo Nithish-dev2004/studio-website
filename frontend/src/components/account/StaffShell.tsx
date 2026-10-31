@@ -8,6 +8,7 @@
 // 4. Session toast loading logic.
 
 import React, { useEffect, useRef, useState, useTransition } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowLeft, LogOut, Menu, ShieldCheck, User } from "lucide-react";
@@ -114,10 +115,16 @@ export default function StaffShell({
 
             <Link href="/account" className="flex items-center gap-2">
               <div
-                className="flex h-7 w-7 items-center justify-center rounded-md"
+                className="flex h-8 w-8 items-center justify-center rounded-md p-1"
                 style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
               >
-                <ShieldCheck className="h-4 w-4 text-white" />
+                <Image
+                  src="/images/logo-icon.png"
+                  alt={siteConfig.name}
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 object-contain"
+                />
               </div>
               <span className="text-sm font-bold tracking-tight text-white">
                 {siteConfig.name}

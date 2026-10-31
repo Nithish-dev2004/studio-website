@@ -28,6 +28,15 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`, // pages only set their own short title
   },
   description: siteConfig.description,
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", type: "image/png", sizes: "180x180" },
+    ],
+  },
   openGraph: {
     siteName: siteConfig.name,
     type: "website",
