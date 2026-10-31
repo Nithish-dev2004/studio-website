@@ -97,7 +97,7 @@ export default function BookingDetailModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="booking-detail-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
     >
       {/* Backdrop */}
       <div
@@ -106,15 +106,14 @@ export default function BookingDetailModal({
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative z-10 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[#ede5d8] bg-white p-6 shadow-2xl">
+      <div className="relative z-10 max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-2xl text-card-foreground transition-colors">
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-[#f2ece2] pb-4">
+        <div className="flex items-start justify-between border-b border-border pb-4">
           <div>
             <div className="flex flex-wrap items-center gap-2.5">
               <h2
                 id="booking-detail-title"
-                className="text-xl font-bold text-[#1a1714]"
-                style={{ fontFamily: "var(--font-heading)" }}
+                className="text-lg sm:text-xl font-bold font-heading text-foreground"
               >
                 Booking Details
               </h2>
@@ -123,35 +122,35 @@ export default function BookingDetailModal({
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-semibold capitalize ${
                   booking.status === "confirmed"
-                    ? "bg-[#e8f5ec] border border-[#c4e5ce] text-[#1e7e45]"
+                    ? "bg-success/15 border border-success/30 text-success"
                     : booking.status === "completed"
-                    ? "bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8]"
+                    ? "bg-blue-500/15 border border-blue-500/30 text-blue-500"
                     : booking.status === "cancelled"
-                    ? "bg-[#fdeeee] border border-[#f0c8c8] text-[#c53030]"
-                    : "bg-[#faeed6] border border-[#f5d9a8] text-[#b45309]"
+                    ? "bg-destructive/15 border border-destructive/30 text-destructive"
+                    : "bg-accent/15 border border-accent/30 text-accent"
                 }`}
               >
                 <span
                   className={`h-1.5 w-1.5 rounded-full ${
                     booking.status === "confirmed"
-                      ? "bg-[#1e7e45]"
+                      ? "bg-success"
                       : booking.status === "completed"
-                      ? "bg-[#1a73e8]"
+                      ? "bg-blue-500"
                       : booking.status === "cancelled"
-                      ? "bg-[#c53030]"
-                      : "bg-[#b45309]"
+                      ? "bg-destructive"
+                      : "bg-accent"
                   }`}
                 />
                 <span>{booking.status}</span>
               </span>
 
               {hasConflict && (
-                <span className="rounded-full bg-red-100 border border-red-200 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-700">
+                <span className="rounded-full bg-destructive/15 border border-destructive/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-destructive">
                   Double Confirmed!
                 </span>
               )}
             </div>
-            <p className="mt-1 text-xs text-[#7c756c] font-mono">
+            <p className="mt-1 text-xs text-muted-foreground font-mono">
               ID: {booking.id}
             </p>
           </div>
@@ -159,33 +158,33 @@ export default function BookingDetailModal({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="rounded-lg p-1.5 text-[#8c8478] hover:bg-[#f5ede0] hover:text-[#1a1714] cursor-pointer transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Client & Service Info */}
-        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {/* Client Information */}
-          <div className="rounded-xl border border-[#ede5d8] bg-[#fcfaf7] p-4 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#8c8478] flex items-center gap-2">
-              <User className="h-3.5 w-3.5 text-[#a87f32]" />
+          <div className="rounded-xl border border-border bg-muted/40 p-4 space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <User className="h-3.5 w-3.5 text-accent" />
               Client Information
             </h3>
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0e8db] text-xs font-bold text-[#6b522d]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent">
                 {getInitial(booking.name)}
               </div>
               <div>
-                <p className="text-sm font-bold text-[#1f1b16] leading-tight">{booking.name}</p>
-                <p className="text-xs text-[#8c8478] mt-0.5 font-mono">{booking.phone}</p>
+                <p className="text-sm font-bold text-foreground leading-tight">{booking.name}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 font-mono">{booking.phone}</p>
               </div>
             </div>
-            <div className="space-y-1.5 text-xs text-[#5c5449] pt-1">
+            <div className="space-y-1.5 text-xs text-muted-foreground pt-1">
               <div className="flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5 text-[#8c734b]" />
-                <a href={`mailto:${booking.email}`} className="text-[#1f1b16] hover:underline">
+                <Mail className="h-3.5 w-3.5 text-accent" />
+                <a href={`mailto:${booking.email}`} className="text-foreground hover:underline break-all">
                   {booking.email}
                 </a>
               </div>
@@ -193,31 +192,31 @@ export default function BookingDetailModal({
           </div>
 
           {/* Session Information */}
-          <div className="rounded-xl border border-[#ede5d8] bg-[#fcfaf7] p-4 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#8c8478] flex items-center gap-2">
-              <Calendar className="h-3.5 w-3.5 text-[#a87f32]" />
+          <div className="rounded-xl border border-border bg-muted/40 p-4 space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <Calendar className="h-3.5 w-3.5 text-accent" />
               Session Information
             </h3>
             <div>
-              <p className="text-sm font-bold text-[#1f1b16]">{booking.serviceTitle}</p>
+              <p className="text-sm font-bold text-foreground">{booking.serviceTitle}</p>
             </div>
-            <div className="space-y-1.5 text-xs text-[#5c5449]">
+            <div className="space-y-1.5 text-xs text-muted-foreground">
               <div className="flex items-start gap-2">
-                <Clock className="h-3.5 w-3.5 text-[#8c734b] shrink-0 mt-0.5" />
+                <Clock className="h-3.5 w-3.5 text-accent shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-[#1f1b16]">
+                  <span className="font-semibold text-foreground">
                     {formatModalDate(booking.event_date)}
                   </span>
                   {relativeText && (
-                    <span className="block text-[11px] font-semibold text-[#b45309]">
+                    <span className="block text-[11px] font-semibold text-accent">
                       {relativeText}
                     </span>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 text-[#8c734b] shrink-0" />
-                <span className="text-[#1f1b16]">
+                <MapPin className="h-3.5 w-3.5 text-accent shrink-0" />
+                <span className="text-foreground">
                   {booking.location || "Studio / TBA"}
                 </span>
               </div>
@@ -226,33 +225,33 @@ export default function BookingDetailModal({
         </div>
 
         {/* Message / Notes */}
-        <div className="mt-5 rounded-xl border border-[#ede5d8] bg-[#fcfaf7] p-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#8c8478] flex items-center gap-2">
-            <MessageSquare className="h-3.5 w-3.5 text-[#a87f32]" />
+        <div className="mt-4 rounded-xl border border-border bg-muted/40 p-4">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+            <MessageSquare className="h-3.5 w-3.5 text-accent" />
             Client Message / Request Notes
           </h3>
-          <p className="mt-2 text-sm text-[#2d271f] whitespace-pre-wrap leading-relaxed">
+          <p className="mt-2 text-sm text-foreground whitespace-pre-wrap leading-relaxed">
             {booking.message || "No special requests or message provided by client."}
           </p>
         </div>
 
         {/* Timestamps */}
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs text-[#8c8478]">
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground">
           <span>Submitted: {new Date(booking.created_at).toLocaleString()}</span>
           <span>Last Updated: {new Date(booking.updated_at).toLocaleString()}</span>
         </div>
 
         {/* Quick Action Buttons & Status Selector */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#f2ece2] pt-4">
+        <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-border pt-4">
           {/* Contact Links */}
           <div className="flex flex-wrap items-center gap-2">
             {booking.phone !== "Not provided" && (
               <>
                 <a
                   href={formatTelLink(booking.phone)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#e8dfcf] bg-white px-3 py-2 text-xs font-medium text-[#2d271f] hover:bg-[#f5ede0] hover:border-[#dbcbb4] transition-colors"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:bg-muted transition-colors cursor-pointer"
                 >
-                  <Phone className="h-3.5 w-3.5 text-[#8c734b]" />
+                  <Phone className="h-3.5 w-3.5 text-accent" />
                   <span>Call</span>
                 </a>
                 <a
@@ -262,7 +261,7 @@ export default function BookingDetailModal({
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#c4e5ce] bg-[#e8f5ec] px-3 py-2 text-xs font-bold text-[#1e7e45] hover:bg-[#d8eedf] transition-colors"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-success/30 bg-success/15 px-3 py-2 text-xs font-bold text-success hover:bg-success/25 transition-colors cursor-pointer"
                 >
                   <span>WhatsApp</span>
                 </a>
@@ -272,9 +271,9 @@ export default function BookingDetailModal({
               href={`mailto:${booking.email}?subject=${encodeURIComponent(
                 `Your ${booking.serviceTitle} session with Sivagangai Stories`,
               )}`}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#e8dfcf] bg-white px-3 py-2 text-xs font-medium text-[#2d271f] hover:bg-[#f5ede0] hover:border-[#dbcbb4] transition-colors"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:bg-muted transition-colors cursor-pointer"
             >
-              <Mail className="h-3.5 w-3.5 text-[#8c734b]" />
+              <Mail className="h-3.5 w-3.5 text-accent" />
               <span>Email</span>
             </a>
           </div>
@@ -285,41 +284,23 @@ export default function BookingDetailModal({
               <select
                 value={booking.status}
                 onChange={(e) => onStatusChangeClick(booking, e.target.value)}
-                className={`appearance-none rounded-xl border px-3 py-1.5 pr-7 text-xs font-semibold capitalize cursor-pointer focus:outline-hidden transition-all ${
-                  booking.status === "confirmed"
-                    ? "bg-[#e8f5ec] border-[#c4e5ce] text-[#1e7e45]"
-                    : booking.status === "completed"
-                    ? "bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8]"
-                    : booking.status === "cancelled"
-                    ? "bg-[#fdeeee] border-[#f0c8c8] text-[#c53030]"
-                    : "bg-[#faeed6] border-[#f5d9a8] text-[#b45309]"
-                }`}
+                className="appearance-none rounded-xl border border-border bg-card px-3 py-2 pr-7 text-xs font-semibold capitalize text-foreground cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-accent transition-all min-h-[40px]"
               >
-                <option value="pending" className="bg-white text-[#a0521e]">Pending</option>
-                <option value="confirmed" className="bg-white text-[#1e7e45]">Confirmed</option>
-                <option value="completed" className="bg-white text-[#1a73e8]">Completed</option>
-                <option value="cancelled" className="bg-white text-[#c53030]">Cancelled</option>
+                <option value="pending" className="bg-card text-foreground">Pending</option>
+                <option value="confirmed" className="bg-card text-foreground">Confirmed</option>
+                <option value="completed" className="bg-card text-foreground">Completed</option>
+                <option value="cancelled" className="bg-card text-foreground">Cancelled</option>
               </select>
-              <ChevronDown
-                className={`pointer-events-none absolute right-2 h-3.5 w-3.5 shrink-0 ${
-                  booking.status === "confirmed"
-                    ? "text-[#1e7e45]"
-                    : booking.status === "completed"
-                    ? "text-[#1a73e8]"
-                    : booking.status === "cancelled"
-                    ? "text-[#c53030]"
-                    : "text-[#a0521e]"
-                }`}
-              />
+              <ChevronDown className="pointer-events-none absolute right-2 h-3.5 w-3.5 text-muted-foreground shrink-0" />
             </div>
 
             <Button
               type="button"
               variant="outline"
               onClick={() => onDeleteClick(booking)}
-              className="flex items-center gap-1.5 text-xs text-[#dc2626] border-[#fcd8d8] bg-white hover:bg-[#fdeeee] hover:border-[#fca5a5] cursor-pointer"
+              className="flex min-h-[40px] items-center gap-1.5 text-xs text-destructive border-destructive/30 bg-destructive/10 hover:bg-destructive/20 cursor-pointer"
             >
-              <Trash2 className="h-3.5 w-3.5 text-[#dc2626]" />
+              <Trash2 className="h-3.5 w-3.5" />
               <span>Delete</span>
             </Button>
           </div>

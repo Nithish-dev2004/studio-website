@@ -414,4 +414,104 @@ create table if not exists public.feedback (
 
 The home page **Testimonials** section dynamically queries the 3 latest approved reviews with a rating of 4 or 5 stars from the database. If no reviews are in the database yet, it automatically falls back to the default curated studio testimonials without breaking the page.
 
+---
+
+## 15. Responsive Layout, Dark Mode & Image Guidelines
+
+The website follows a mobile-first, zero-layout-shift, high-performance architecture across all screen sizes (320px mobile to 1920px widescreen).
+
+### 15.1 How Theme Tokens Work (Light & Dark)
+
+Theme colors are defined centrally as CSS variables in [`frontend/src/app/globals.css`](file:///c:/Users/nithish/Documents/studio-website/studio-website/frontend/src/app/globals.css) and connected to Tailwind CSS v4 via `@theme inline`:
+
+- **Light Mode (`:root`)**: Warm neutral and cream background (`#fbfaf8`), dark slate text (`#1a1a1a`), crisp white cards (`#ffffff`), soft panel borders (`#e4e0d8`), and signature gold accent (`#b8923a`).
+- **Dark Mode (`.dark`)**: Deep midnight background (`#0e0e0e`), warm off-white text (`#f3f1ed`), rich charcoal cards (`#171716`), muted graphite borders (`#2a2825`), and luminous warm gold accent (`#d4af5a`). Native form controls automatically match via `color-scheme: light / dark`.
+
+#### Theme Modes & Zero-Flash Pre-Paint Script
+1. **Three Theme Modes**: `light`, `dark`, or `system` (follows user's OS preference via `prefers-color-scheme`).
+2. **Persistence**: Saved to `localStorage` under key `studio_theme` (wrapped in `try/catch` to safely support private browsing).
+3. **No Flash of Wrong Theme (FOUC)**: An inline script (`themeInitScript`) executes synchronously in `<head>` before first paint in [`frontend/src/app/layout.tsx`](file:///c:/Users/nithish/Documents/studio-website/studio-website/frontend/src/app/layout.tsx).
+4. **Scope & Theme Toggle**:
+   - **Public Website Only**: Dark and light mode switching is applied strictly to public website pages.
+   - **Admin, Login & Staff Isolation**: The `/admin` console, `/admin/login` page, and `/account` staff portal use dedicated, standardized styling and do not toggle between light and dark modes.
+   - **Toggle Placement**: The accessible theme toggle component [`ThemeToggle.tsx`](file:///c:/Users/nithish/Documents/studio-website/studio-website/frontend/src/components/theme/ThemeToggle.tsx) is provided in the public Navbar (both desktop header and mobile slide-out drawer).
+
+### 15.2 How to Add a New Color Token
+
+To introduce a new theme color across the website:
+
+1. **Define the CSS variables in [`frontend/src/app/globals.css`](file:///c:/Users/nithish/Documents/studio-website/studio-website/frontend/src/app/globals.css)**:
+   ```css
+   :root {
+     --brand-badge: #d4a843;
+     --brand-badge-foreground: #ffffff;
+   }
+
+   .dark {
+     --brand-badge: #c49558;
+     --brand-badge-foreground: #0e0e0e;
+   }
+   ```
+
+2. **Register the token in the `@theme inline` block in `globals.css`**:
+   ```css
+   @theme inline {
+     --color-brand-badge: var(--brand-badge);
+     --color-brand-badge-foreground: var(--brand-badge-foreground);
+   }
+   ```
+
+3. **Use the new class anywhere in your components**:
+   ```tsx
+   <span className="bg-brand-badge text-brand-badge-foreground rounded-full px-3 py-1">
+     Featured
+   </span>
+   ```
+   Both light and dark modes will update automatically without needing conditional logic.
+
+### 15.3 Image Optimization Guidelines
+
+Every photo displayed on the site must adhere to modern web performance standards:
+
+1. **Use `next/image` Exclusively**: Never use plain `<img>` tags or CSS background images for content photos.
+2. **Accurate `sizes` Attribute**: Always specify responsive `sizes` so mobile devices download appropriately sized variants rather than desktop files:
+   - Full-width hero: `sizes="100vw"`
+   - 2-column on tablet / 4-column on desktop: `sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"`
+   - 3-column galleries: `sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"`
+3. **Prevent Layout Shift (CLS)**: Always specify `width` and `height`, or use `fill` within a parent container having an explicit `aspect-ratio` or fixed dimensions.
+4. **Priority vs. Lazy Loading**:
+   - Above-the-fold Hero photos: `priority` prop enabled.
+   - All other photos (galleries, testimonials, cards): Lazy-loaded automatically by Next.js.
+5. **Modern Formats & Quality**:
+   - `next.config.ts` automatically delivers modern `AVIF` and `WebP` formats with progressive compression.
+   - For image galleries and portfolios, use `quality={75}` to strike the optimal balance between visual fidelity and small payload weight.
+6. **Local Image Compression**:
+   - Keep images in `public/images/` compressed. Use the provided compression script:
+     ```bash
+     node frontend/scripts/compress-images.mjs
+     ```
+
+### 15.4 Remote Image Hosts Configuration
+
+If loading remote images (e.g. from Supabase Storage, Cloudinary, Unsplash, or CDN), they must be explicitly whitelisted in [`frontend/next.config.ts`](file:///c:/Users/nithish/Documents/studio-website/studio-website/frontend/next.config.ts) under `images.remotePatterns`:
+
+```typescript
+const nextConfig: NextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "picsum.photos" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "*.supabase.co" },
+      // Add your new CDN or media host here:
+      // { protocol: "https", hostname: "your-bucket.storage.googleapis.com" },
+    ],
+  },
+};
+```
+Never use wildcards (`hostname: "**"`) as this creates open image proxy security vulnerabilities.
+
+---
+
+
 

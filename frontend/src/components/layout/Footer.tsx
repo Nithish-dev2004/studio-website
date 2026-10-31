@@ -11,8 +11,6 @@ import Container from "@/components/ui/Container";
 import { navItems, siteConfig, socialLinks } from "@/data/site";
 import type { SocialPlatform } from "@/types";
 
-// lucide-react has no brand logos, so each platform uses a simple stand-in icon.
-// TODO: swap these for real brand icons later (e.g. the "react-icons" package).
 const socialIcons: Record<SocialPlatform, LucideIcon> = {
   instagram: Camera,
   facebook: Globe,
@@ -32,14 +30,14 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-muted border-border border-t">
-      <Container className="grid gap-10 py-12 md:grid-cols-3">
-        <div>
-          <p className="font-heading text-2xl">{siteConfig.name}</p>
-          <p className="text-muted-foreground mt-3 max-w-xs text-sm">
+    <footer className="bg-muted border-border border-t pb-[max(1rem,env(safe-area-inset-bottom))] transition-colors">
+      <Container className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 md:grid-cols-3 sm:py-12 lg:gap-10">
+        <div className="space-y-3 sm:col-span-2 md:col-span-1">
+          <p className="font-heading text-2xl text-foreground">{siteConfig.name}</p>
+          <p className="text-muted-foreground max-w-sm text-sm leading-relaxed">
             {siteConfig.description}
           </p>
-          <ul className="mt-5 flex gap-3">
+          <ul className="flex flex-wrap gap-2.5 pt-2">
             {socialLinks.map((social) => {
               const Icon = socialIcons[social.platform];
               return (
@@ -49,7 +47,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="border-border hover:text-accent hover:border-accent inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors"
+                    className="border-border hover:text-accent hover:border-accent inline-flex h-11 w-11 items-center justify-center rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </a>
@@ -59,21 +57,26 @@ export default function Footer() {
           </ul>
         </div>
 
-        <nav aria-label="Footer">
-          <p className="mb-4 text-sm font-medium tracking-widest uppercase">Explore</p>
+        <nav aria-label="Footer Navigation">
+          <p className="mb-3 text-xs font-semibold tracking-widest uppercase text-foreground">
+            Explore
+          </p>
           <ul className="space-y-2 text-sm">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-muted-foreground hover:text-accent"
+                  className="text-muted-foreground hover:text-accent transition-colors"
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href="/booking" className="text-muted-foreground hover:text-accent">
+              <Link
+                href="/booking"
+                className="text-muted-foreground hover:text-accent transition-colors"
+              >
                 Book a Session
               </Link>
             </li>
@@ -81,24 +84,26 @@ export default function Footer() {
         </nav>
 
         <div>
-          <p className="mb-4 text-sm font-medium tracking-widest uppercase">Contact</p>
+          <p className="mb-3 text-xs font-semibold tracking-widest uppercase text-foreground">
+            Contact
+          </p>
           <address className="text-muted-foreground space-y-3 text-sm not-italic">
-            <p className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              {siteConfig.address}
+            <p className="flex items-start gap-2.5">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+              <span>{siteConfig.address}</span>
             </p>
-            <p className="flex items-center gap-2">
-              <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <p className="flex items-center gap-2.5">
+              <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
               <a
                 href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="hover:text-accent"
+                className="hover:text-accent transition-colors"
               >
                 {siteConfig.phone}
               </a>
             </p>
-            <p className="flex items-center gap-2">
-              <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <a href={`mailto:${siteConfig.email}`} className="hover:text-accent">
+            <p className="flex items-center gap-2.5">
+              <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+              <a href={`mailto:${siteConfig.email}`} className="hover:text-accent transition-colors">
                 {siteConfig.email}
               </a>
             </p>
@@ -106,23 +111,34 @@ export default function Footer() {
         </div>
       </Container>
 
-      <div className="border-border border-t py-5">
+      <div className="border-border border-t py-4">
         <Container>
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-1.5 text-center text-xs sm:flex-row sm:gap-2">
+          <div className="text-muted-foreground flex flex-col items-center justify-between gap-2 text-center text-xs sm:flex-row">
             <span>
               &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
             </span>
-            <span aria-hidden="true" className="hidden select-none sm:inline">
-              |
-            </span>
-            <Link
-              href="/admin/login"
-              prefetch={false}
-              aria-label="Staff and admin login"
-              className="text-muted-foreground hover:text-accent py-0.5 transition-colors"
-            >
-              Login
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/privacy"
+                className="text-muted-foreground hover:text-accent transition-colors py-1"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-muted-foreground hover:text-accent transition-colors py-1"
+              >
+                Terms
+              </Link>
+              <Link
+                href="/admin/login"
+                prefetch={false}
+                aria-label="Staff and admin login"
+                className="text-muted-foreground hover:text-accent transition-colors py-1"
+              >
+                Staff Login
+              </Link>
+            </div>
           </div>
         </Container>
       </div>

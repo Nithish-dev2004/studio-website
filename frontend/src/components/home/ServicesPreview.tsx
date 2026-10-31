@@ -15,16 +15,16 @@ export default function ServicesPreview() {
       title="Our Services"
       subtitle="From intimate portraits to full-day weddings, we have you covered."
     >
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">
         {services.map((service, index) => {
           const Icon = service.icon;
           return (
             <li key={service.slug}>
               <FadeIn delay={(index % 3) * 0.08} className="h-full">
-                <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:border-[#C5923A]/40 hover:shadow-md">
+                <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md">
                   <Icon className="text-accent mb-4 h-7 w-7 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
-                  <h3 className="text-2xl">{service.title}</h3>
-                  <p className="text-muted-foreground mt-2 text-sm">
+                  <h3 className="text-2xl font-normal">{service.title}</h3>
+                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                     {service.shortDescription}
                   </p>
                 </Card>
@@ -33,13 +33,13 @@ export default function ServicesPreview() {
           );
         })}
       </ul>
-      <div className="mt-10 text-center">
+      <div className="mt-8 sm:mt-10 text-center">
         <Link
           href="/services"
-          className="group inline-flex items-center gap-3 rounded-full border border-[#17120D]/20 bg-white px-7 py-3.5 text-sm font-semibold tracking-wide text-[#17120D] shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#17120D] hover:bg-[#17120D] hover:text-[#F4EDE2] hover:shadow-xl hover:shadow-[#17120D]/12 active:translate-y-0 active:scale-95 cursor-pointer"
+          className="group inline-flex items-center gap-3 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-semibold tracking-wide text-foreground shadow-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:border-foreground hover:bg-foreground hover:text-background hover:shadow-lg active:translate-y-0 active:scale-95 cursor-pointer"
         >
           <span>Explore Services</span>
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#17120D]/5 transition-all duration-300 ease-out group-hover:bg-[#C5923A] group-hover:text-white">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted transition-all duration-300 ease-out group-hover:bg-accent group-hover:text-accent-foreground">
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 ease-out group-hover:translate-x-0.5" />
           </span>
         </Link>

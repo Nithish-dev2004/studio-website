@@ -1,6 +1,6 @@
 "use client";
 
-// Sticky top navigation. Desktop: inline links. Mobile: hamburger menu.
+// Sticky top navigation. Desktop: inline links. Mobile & Tablet: hamburger menu.
 // Links come from data/site.ts. The current page's link is highlighted.
 
 import { useEffect, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import Container from "@/components/ui/Container";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import { navItems, subBrands } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +34,7 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
-  // Close the desktop menu when a visitor clicks elsewhere or presses Escape.
+  // Close the desktop brands menu when a visitor clicks elsewhere or presses Escape.
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
       if (!brandsMenuRef.current?.contains(event.target as Node)) setBrandsOpen(false);
@@ -62,21 +63,21 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#261e17] bg-[#17120D] transition-colors">
-      <Container className="flex h-18 items-center justify-between">
+      <Container className="flex h-16 sm:h-18 items-center justify-between">
         {/* Official Brand Logo */}
-        <Link href="/" className="group flex items-center py-1 select-none">
+        <Link href="/" className="group flex items-center py-1 select-none shrink-0">
           <Image
             src="/images/logo.png"
             alt="Sivagangai Stories - Capture • Create • Share"
             width={220}
             height={44}
             priority
-            className="h-10 w-auto sm:h-11 md:h-12 object-contain transition-transform duration-300 group-hover:scale-105"
+            className="h-8 w-auto sm:h-9 md:h-10 lg:h-9 xl:h-11 object-contain transition-transform duration-300 group-hover:scale-105"
           />
         </Link>
 
-        {/* Desktop menu */}
-        <nav aria-label="Main" className="hidden items-center gap-7 lg:gap-8 md:flex">
+        {/* Desktop menu (Visible only on lg and up: 1024px+) */}
+        <nav aria-label="Main" className="hidden items-center gap-3.5 xl:gap-7 lg:flex">
           {navItems.map((item) => {
             const active = isActive(item.href);
             return (
@@ -84,7 +85,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className="group relative py-2 text-sm font-medium transition-colors duration-200"
+                className="group relative py-2 text-xs xl:text-sm font-medium transition-colors duration-200"
               >
                 <span
                   className={cn(
@@ -116,7 +117,7 @@ export default function Navbar() {
                 href="/brands"
                 aria-current={isActive("/brands") ? "page" : undefined}
                 onClick={() => setBrandsOpen(false)}
-                className="relative py-2 text-sm font-medium transition-colors duration-200"
+                className="relative py-2 text-xs xl:text-sm font-medium transition-colors duration-200"
               >
                 <span
                   className={cn(
@@ -202,36 +203,51 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          {/* Book Now Button with Hover color from Image 2 */}
+          {/* Theme Toggle Button in Desktop Navbar */}
+          <div className="border-l border-white/10 pl-3">
+            <ThemeToggle className="border-white/15 bg-white/5 text-[#f4ede2] hover:bg-white/10 hover:text-white" />
+          </div>
+
+          {/* Book Now Button */}
           <Link
             href="/booking"
-            className="group inline-flex items-center gap-2 rounded-2xl bg-[#F4EDE2] px-6 py-2.5 text-sm font-bold text-[#17120D] shadow-xs transition-all duration-300 ease-in-out hover:bg-[#B9852F] hover:text-white active:scale-95 cursor-pointer ml-2"
+            className="group inline-flex items-center gap-2 rounded-2xl bg-[#F4EDE2] px-3.5 xl:px-6 py-2 xl:py-2.5 text-xs xl:text-sm font-bold text-[#17120D] shadow-xs transition-all duration-300 ease-in-out hover:bg-[#B9852F] hover:text-white active:scale-95 cursor-pointer ml-1"
           >
             <span>Book Now</span>
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </nav>
 
-        {/* Mobile hamburger button */}
-        <button
-          type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-[#f4ede2] hover:bg-white/5 hover:text-[#C5923A] transition-colors md:hidden cursor-pointer -mr-2"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          onClick={() => setOpenOnPath(menuOpen ? null : pathname)}
-        >
-          {menuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
-        </button>
+        {/* Mobile / Tablet controls (Visible on screens < 1024px) */}
+        <div className="flex items-center gap-2 lg:hidden">
+          {/* Quick theme toggle on mobile/tablet bar */}
+          <ThemeToggle className="border-white/15 bg-white/5 text-[#f4ede2] hover:bg-white/10 hover:text-white" />
+
+          {/* Mobile hamburger button */}
+          <button
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-[#f4ede2] hover:bg-white/5 hover:text-[#C5923A] transition-colors cursor-pointer"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setOpenOnPath(menuOpen ? null : pathname)}
+          >
+            {menuOpen ? (
+              <X className="h-6 w-6" aria-hidden="true" />
+            ) : (
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            )}
+          </button>
+        </div>
       </Container>
 
-      {/* Mobile menu panel */}
+      {/* Mobile & Tablet menu panel with safe height and internal scroll */}
       <AnimatePresence>
         {menuOpen && (
           <motion.nav
             id="mobile-menu"
-            aria-label="Mobile"
-            className="overflow-hidden border-t border-[#261e17] bg-[#17120D] md:hidden shadow-2xl"
+            aria-label="Mobile and tablet navigation"
+            className="max-h-[calc(100svh-4.5rem)] overflow-y-auto border-t border-[#261e17] bg-[#17120D] lg:hidden shadow-2xl"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -247,7 +263,7 @@ export default function Navbar() {
                     aria-current={active ? "page" : undefined}
                     onClick={() => setOpenOnPath(null)}
                     className={cn(
-                      "flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium transition-colors",
+                      "flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium transition-colors min-h-[44px]",
                       active
                         ? "bg-[#C5923A]/15 text-[#C5923A] font-semibold"
                         : "text-[#a89f91] hover:bg-white/5 hover:text-white",
@@ -270,7 +286,7 @@ export default function Navbar() {
                     key={brand.id}
                     href={`/brands/${brand.slug}`}
                     onClick={() => setOpenOnPath(null)}
-                    className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
+                    className="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-colors hover:bg-white/5 min-h-[44px]"
                   >
                     <span className="flex items-center gap-2.5 font-medium text-white">
                       <Image
@@ -287,11 +303,17 @@ export default function Navbar() {
                 ))}
               </div>
 
+              {/* Theme Selector inside Mobile Menu */}
+              <div className="mt-3 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                <span className="text-sm font-medium text-white/80">Appearance</span>
+                <ThemeToggle showLabel className="border-white/20 bg-black/40 text-white" />
+              </div>
+
               <div className="mt-4 pt-2">
                 <Link
                   href="/booking"
                   onClick={() => setOpenOnPath(null)}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#F4EDE2] px-6 py-3.5 text-sm font-bold text-[#17120D] shadow-sm transition-all duration-300 hover:bg-[#B9852F] hover:text-white"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#F4EDE2] px-6 py-3.5 text-sm font-bold text-[#17120D] shadow-sm transition-all duration-300 hover:bg-[#B9852F] hover:text-white min-h-[44px]"
                 >
                   <span>Book Now</span>
                   <ArrowRight className="h-4 w-4" />

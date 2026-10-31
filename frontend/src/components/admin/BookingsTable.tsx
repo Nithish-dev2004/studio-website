@@ -297,12 +297,12 @@ export default function BookingsTable({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1
-            className="text-2xl font-bold tracking-tight text-[#1a1714] sm:text-3xl"
+            className="text-2xl font-bold tracking-tight text-[#1a1714] dark:text-foreground sm:text-3xl"
             style={{ fontFamily: "var(--font-heading)" }}
           >
             Studio Bookings
           </h1>
-          <p className="mt-1 text-xs sm:text-sm text-[#7c756c]">
+          <p className="mt-1 text-xs sm:text-sm text-[#7c756c] dark:text-muted-foreground">
             View, schedule, contact, and manage client bookings across all photography services.
           </p>
         </div>
@@ -312,20 +312,20 @@ export default function BookingsTable({
             type="button"
             variant="outline"
             onClick={handleExportCSV}
-            className="flex items-center gap-2 text-xs border-[#e8dfcf] bg-white text-[#2d271f] hover:bg-[#f5ede0] hover:border-[#dbcbb4] transition-all cursor-pointer shadow-2xs"
+            className="flex items-center gap-2 text-xs border-[#e8dfcf] dark:border-border bg-white dark:bg-card text-[#2d271f] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted hover:border-[#dbcbb4] transition-all cursor-pointer shadow-2xs"
           >
-            <Download className="h-3.5 w-3.5 text-[#a87f32]" />
+            <Download className="h-3.5 w-3.5 text-[#a87f32] dark:text-accent" />
             <span>Export CSV</span>
           </Button>
         </div>
       </div>
 
       {/* Filter and Search Bar Card */}
-      <div className="rounded-2xl border border-[#ede5d8] bg-white p-4 shadow-xs sm:p-5 space-y-4">
+      <div className="rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card p-4 shadow-xs sm:p-5 space-y-4">
         {/* Top row: search & reset */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8c8478]" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8c8478] dark:text-muted-foreground" />
             <input
               type="text"
               placeholder="Search by client name, email, phone, location..."
@@ -334,7 +334,7 @@ export default function BookingsTable({
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] py-2.5 pl-10 pr-9 text-xs text-[#1a1714] placeholder:text-[#9e968b] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-muted/30 py-2.5 pl-10 pr-9 text-xs text-[#1a1714] dark:text-foreground placeholder:text-[#9e968b] dark:placeholder:text-muted-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors"
             />
             {searchQuery && (
               <button
@@ -368,7 +368,7 @@ export default function BookingsTable({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 text-xs">
           {/* Status Filter */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] dark:text-muted-foreground mb-1 text-[10.5px]">
               Status
             </label>
             <select
@@ -377,7 +377,7 @@ export default function BookingsTable({
                 setSelectedStatus(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2.5 text-xs font-medium text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -389,7 +389,7 @@ export default function BookingsTable({
 
           {/* Service Filter */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] dark:text-muted-foreground mb-1 text-[10.5px]">
               Service
             </label>
             <select
@@ -398,7 +398,7 @@ export default function BookingsTable({
                 setSelectedService(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2.5 text-xs font-medium text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="all">All Services</option>
               {availableServices.map((s) => (
@@ -411,7 +411,7 @@ export default function BookingsTable({
 
           {/* Start Date */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] dark:text-muted-foreground mb-1 text-[10.5px]">
               From Event Date
             </label>
             <input
@@ -421,13 +421,13 @@ export default function BookingsTable({
                 setStartDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2 text-xs text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
 
           {/* End Date */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] dark:text-muted-foreground mb-1 text-[10.5px]">
               To Event Date
             </label>
             <input
@@ -437,13 +437,13 @@ export default function BookingsTable({
                 setEndDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2 text-xs text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
 
           {/* Sort By */}
           <div>
-            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] mb-1 text-[10.5px]">
+            <label className="block font-semibold uppercase tracking-wider text-[#8c8478] dark:text-muted-foreground mb-1 text-[10.5px]">
               Sort By
             </label>
             <select
@@ -454,7 +454,7 @@ export default function BookingsTable({
                 );
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2.5 text-xs font-medium text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="event_asc">Event Date (Earliest first)</option>
               <option value="event_desc">Event Date (Latest first)</option>
@@ -551,35 +551,35 @@ export default function BookingsTable({
       ) : (
         <>
           {/* DESKTOP TABLE VIEW (matching uploaded screenshot) */}
-          <div className="hidden md:block overflow-hidden rounded-2xl border border-[#ede5d8] bg-white shadow-xs">
+          <div className="hidden md:block overflow-hidden rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-[#e8dfcf] bg-[#f5ede0]">
+                <thead className="border-b border-[#e8dfcf] dark:border-border bg-[#f5ede0] dark:bg-muted">
                   <tr>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       CLIENT &amp; CONTACT
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       SERVICE
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       EVENT DATE
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       LOCATION
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       STATUS
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       QUICK ACTIONS
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] text-right">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground text-right">
                       DETAILS
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#f2ece2] bg-white">
+                <tbody className="divide-y divide-[#f2ece2] dark:divide-border bg-white dark:bg-card">
                   {paginatedBookings.map((b) => {
                     const conflictingList = b.event_date ? confirmedDateMap.get(b.event_date) || [] : [];
                     const hasConflict = b.status === "confirmed" && conflictingList.length > 1;
@@ -588,8 +588,8 @@ export default function BookingsTable({
                     return (
                       <tr
                         key={b.id}
-                        className={`transition-colors hover:bg-[#faf7f2]/90 ${
-                          hasConflict ? "bg-red-50/50" : ""
+                        className={`transition-colors hover:bg-[#faf7f2]/90 dark:hover:bg-muted/40 ${
+                          hasConflict ? "bg-red-50/50 dark:bg-red-950/20" : ""
                         }`}
                       >
                         {/* 1. Client & Contact */}
@@ -599,10 +599,10 @@ export default function BookingsTable({
                               {getInitial(b.name)}
                             </div>
                             <div>
-                              <div className="font-bold text-sm text-[#1f1b16] leading-tight">
+                              <div className="font-bold text-sm text-[#1f1b16] dark:text-foreground leading-tight">
                                 {b.name}
                               </div>
-                              <div className="text-xs text-[#8c8478] flex flex-col gap-0.5 mt-0.5">
+                              <div className="text-xs text-[#8c8478] dark:text-muted-foreground flex flex-col gap-0.5 mt-0.5">
                                 <span className="truncate max-w-[180px]">{b.email}</span>
                                 <span>{b.phone}</span>
                               </div>
@@ -611,22 +611,22 @@ export default function BookingsTable({
                         </td>
 
                         {/* 2. Service */}
-                        <td className="px-5 py-4 font-semibold text-sm text-[#2d271f]">
+                        <td className="px-5 py-4 font-semibold text-sm text-[#2d271f] dark:text-foreground">
                           {b.serviceTitle}
                         </td>
 
                         {/* 3. Event Date with Relative Label and Conflict Indicator */}
                         <td className="px-5 py-4">
-                          <div className="font-semibold text-sm text-[#1f1b16] leading-tight whitespace-nowrap">
+                          <div className="font-semibold text-sm text-[#1f1b16] dark:text-foreground leading-tight whitespace-nowrap">
                             {formatDisplayDate(b.event_date)}
                           </div>
                           {relativeText && (
-                            <div className="text-xs font-semibold text-[#b45309] mt-0.5">
+                            <div className="text-xs font-semibold text-[#b45309] dark:text-amber-400 mt-0.5">
                               {relativeText}
                             </div>
                           )}
                           {hasConflict && (
-                            <div className="mt-1 flex items-center gap-1 text-[11px] font-bold text-red-600">
+                            <div className="mt-1 flex items-center gap-1 text-[11px] font-bold text-red-600 dark:text-red-400">
                               <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                               <span>Double confirmed!</span>
                             </div>
@@ -634,13 +634,13 @@ export default function BookingsTable({
                         </td>
 
                         {/* 4. Location */}
-                        <td className="px-5 py-4 text-xs font-medium text-[#5c5449]">
+                        <td className="px-5 py-4 text-xs font-medium text-[#5c5449] dark:text-muted-foreground">
                           {b.location ? (
                             <span className="truncate max-w-[160px] block" title={b.location}>
                               {b.location}
                             </span>
                           ) : (
-                            <span className="text-[#9e968b]">Studio / TBA</span>
+                            <span className="text-[#9e968b] dark:text-muted-foreground/60">Studio / TBA</span>
                           )}
                         </td>
 
@@ -757,9 +757,9 @@ export default function BookingsTable({
                           <button
                             type="button"
                             onClick={() => setSelectedBooking(b)}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0] hover:border-[#c5b9a5] transition-colors shadow-2xs cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] dark:border-border bg-white dark:bg-muted px-3.5 py-1.5 text-xs font-semibold text-[#2d271f] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80 hover:border-[#c5b9a5] transition-colors shadow-2xs cursor-pointer"
                           >
-                            <Eye className="h-3.5 w-3.5 text-[#4a3f35]" />
+                            <Eye className="h-3.5 w-3.5 text-[#4a3f35] dark:text-muted-foreground" />
                             <span>View</span>
                           </button>
                         </td>
@@ -781,8 +781,8 @@ export default function BookingsTable({
               return (
                 <div
                   key={b.id}
-                  className={`rounded-2xl border border-[#ede5d8] bg-white p-5 shadow-xs space-y-4 ${
-                    hasConflict ? "border-red-300 bg-red-50/30" : ""
+                  className={`rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card p-5 shadow-xs space-y-4 ${
+                    hasConflict ? "border-red-300 dark:border-red-900 bg-red-50/30 dark:bg-red-950/20" : ""
                   }`}
                 >
                   {/* Top: Name, Avatar, Service */}
@@ -792,41 +792,41 @@ export default function BookingsTable({
                         {getInitial(b.name)}
                       </div>
                       <div>
-                        <h3 className="font-bold text-[#1f1b16] text-base leading-tight">{b.name}</h3>
-                        <p className="text-xs font-semibold text-[#a87f32] mt-0.5">{b.serviceTitle}</p>
+                        <h3 className="font-bold text-[#1f1b16] dark:text-foreground text-base leading-tight">{b.name}</h3>
+                        <p className="text-xs font-semibold text-[#a87f32] dark:text-accent mt-0.5">{b.serviceTitle}</p>
                       </div>
                     </div>
                     {hasConflict && (
-                      <span className="rounded-full bg-red-100 border border-red-200 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700">
+                      <span className="rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700 dark:text-red-400">
                         Double Booked
                       </span>
                     )}
                   </div>
 
                   {/* Details grid */}
-                  <div className="grid grid-cols-2 gap-2 text-xs text-[#5c5449] border-y border-[#f2ece2] py-3">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-[#5c5449] dark:text-muted-foreground border-y border-[#f2ece2] dark:border-border py-3">
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478] dark:text-muted-foreground">
                         Event Date
                       </span>
-                      <span className="font-semibold text-[#1f1b16]">{formatDisplayDate(b.event_date)}</span>
+                      <span className="font-semibold text-[#1f1b16] dark:text-foreground">{formatDisplayDate(b.event_date)}</span>
                       {relativeText && (
-                        <span className="block text-[11px] font-semibold text-[#b45309]">
+                        <span className="block text-[11px] font-semibold text-[#b45309] dark:text-amber-400">
                           {relativeText}
                         </span>
                       )}
                     </div>
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478] dark:text-muted-foreground">
                         Location
                       </span>
-                      <span className="text-[#1f1b16] truncate block">{b.location || "Studio / TBA"}</span>
+                      <span className="text-[#1f1b16] dark:text-foreground truncate block">{b.location || "Studio / TBA"}</span>
                     </div>
                     <div className="col-span-2 mt-1">
-                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478] dark:text-muted-foreground">
                         Phone &amp; Email
                       </span>
-                      <span className="text-[#1f1b16]">{b.phone} &bull; {b.email}</span>
+                      <span className="text-[#1f1b16] dark:text-foreground">{b.phone} &bull; {b.email}</span>
                     </div>
                   </div>
 
@@ -874,10 +874,10 @@ export default function BookingsTable({
                         <>
                           <a
                             href={formatTelLink(b.phone)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#735b38] hover:bg-[#f5ede0]"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] dark:border-border bg-white dark:bg-muted text-[#735b38] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80"
                             title="Call"
                           >
-                            <Phone className="h-3.5 w-3.5 text-[#8c734b]" />
+                            <Phone className="h-3.5 w-3.5 text-[#8c734b] dark:text-accent" />
                           </a>
                           <a
                             href={formatWhatsAppLink(
@@ -886,7 +886,7 @@ export default function BookingsTable({
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex h-8 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] px-2.5 text-xs font-bold text-[#1e7e45] hover:bg-[#d8eedf]"
+                            className="flex h-8 items-center justify-center rounded-lg border border-[#c4e5ce] dark:border-emerald-800/40 bg-[#e8f5ec] dark:bg-emerald-950/40 px-2.5 text-xs font-bold text-[#1e7e45] dark:text-emerald-300 hover:bg-[#d8eedf] dark:hover:bg-emerald-900/40"
                           >
                             WA
                           </a>
@@ -894,25 +894,25 @@ export default function BookingsTable({
                       )}
                       <a
                         href={`mailto:${b.email}`}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#735b38] hover:bg-[#f5ede0]"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] dark:border-border bg-white dark:bg-muted text-[#735b38] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80"
                         title="Email"
                       >
-                        <Mail className="h-3.5 w-3.5 text-[#8c734b]" />
+                        <Mail className="h-3.5 w-3.5 text-[#8c734b] dark:text-accent" />
                       </a>
                       <button
                         type="button"
                         onClick={() => setDeleteTarget(b)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#fcd8d8] bg-white text-[#dc2626] hover:bg-[#fdeeee]"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#fcd8d8] dark:border-red-900/40 bg-white dark:bg-muted text-[#dc2626] dark:text-red-400 hover:bg-[#fdeeee] dark:hover:bg-red-950/40"
                         title="Delete"
                       >
-                        <Trash2 className="h-3.5 w-3.5 text-[#dc2626]" />
+                        <Trash2 className="h-3.5 w-3.5 text-[#dc2626] dark:text-red-400" />
                       </button>
                       <button
                         type="button"
                         onClick={() => setSelectedBooking(b)}
-                        className="inline-flex items-center gap-1 rounded-full border border-[#dcd3c4] bg-white px-3 py-1.5 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0]"
+                        className="inline-flex items-center gap-1 rounded-full border border-[#dcd3c4] dark:border-border bg-white dark:bg-muted px-3 py-1.5 text-xs font-semibold text-[#2d271f] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80"
                       >
-                        <Eye className="h-3.5 w-3.5 text-[#4a3f35]" />
+                        <Eye className="h-3.5 w-3.5 text-[#4a3f35] dark:text-muted-foreground" />
                         <span>View</span>
                       </button>
                     </div>
@@ -924,7 +924,7 @@ export default function BookingsTable({
 
           {/* Pagination Controls */}
           {filteredBookings.length > 0 && (
-            <div className="overflow-hidden rounded-2xl border border-[#ede5d8] bg-white shadow-xs">
+            <div className="overflow-hidden rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card shadow-xs">
               <TablePagination
                 currentPage={currentPage}
                 totalPages={totalPages}

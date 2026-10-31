@@ -208,7 +208,7 @@ export default function SivagangaiSignBoardLanding() {
 
   return (
     <div
-      className={`min-h-screen bg-white text-slate-800 antialiased transition-colors duration-500 selection:bg-[#0062ff] selection:text-white ${
+      className={`min-h-screen bg-white dark:bg-[#0b0f17] text-slate-800 dark:text-slate-100 antialiased transition-colors duration-500 selection:bg-[#0062ff] selection:text-white ${
         nightModeGlow ? "bg-[#0b0f17] text-slate-100" : "bg-white"
       }`}
     >
@@ -219,7 +219,7 @@ export default function SivagangaiSignBoardLanding() {
         className={`sticky top-0 z-40 border-b backdrop-blur-md transition-colors ${
           nightModeGlow
             ? "border-slate-800 bg-[#0b0f17]/90 text-white"
-            : "border-slate-200 bg-white/95 text-slate-900"
+            : "border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0b0f17]/95 text-slate-900 dark:text-slate-100"
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 sm:px-8">

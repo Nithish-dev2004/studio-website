@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, LogOut, Menu, ShieldCheck, User } from "lucide-react";
+import { ArrowLeft, LogOut, Menu, User } from "lucide-react";
 import StaffSidebar from "./StaffSidebar";
 import ConfirmationModal from "@/components/admin/ConfirmationModal";
 import { useAdminToast } from "@/components/admin/AdminToastContext";
@@ -94,9 +94,9 @@ export default function StaffShell({
 
       {/* Main Area */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Mobile Header (Screens < 768px) */}
+        {/* Mobile & Tablet Header (Screens < 1024px) */}
         <header
-          className="sticky top-0 z-30 flex h-16 items-center justify-between px-4 backdrop-blur-md md:hidden"
+          className="sticky top-0 z-30 flex h-16 items-center justify-between px-4 backdrop-blur-md lg:hidden"
           style={{
             background: "rgba(30,22,12,0.92)",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
@@ -107,7 +107,7 @@ export default function StaffShell({
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
-              className="rounded-lg p-2 cursor-pointer"
+              className="flex h-10 w-10 items-center justify-center rounded-lg cursor-pointer"
               style={{ border: "1px solid rgba(255,255,255,0.1)", color: "#9a8c78" }}
             >
               <Menu className="h-5 w-5" />
@@ -144,9 +144,9 @@ export default function StaffShell({
           </span>
         </header>
 
-        {/* Desktop Topbar (Screens >= 768px) */}
+        {/* Desktop Topbar (Screens >= 1024px) */}
         <header
-          className="sticky top-0 z-30 hidden md:flex h-16 items-center justify-between px-6 lg:px-8 backdrop-blur-md"
+          className="sticky top-0 z-30 hidden lg:flex h-16 items-center justify-between px-6 lg:px-8 backdrop-blur-md"
           style={{
             background: "rgba(26,18,8,0.88)",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
