@@ -26,7 +26,7 @@ const requiredPhoneField = z
     "Please enter a valid phone number.",
   );
 
-export const digitalBookingSchema = z.object({
+const digitalBookingSchema = z.object({
   businessName: z
     .string()
     .trim()

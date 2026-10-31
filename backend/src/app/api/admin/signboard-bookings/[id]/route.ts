@@ -12,6 +12,21 @@ import { verifyAdminAuth } from "@/lib/auth/admin";
 import { decryptPhone, maskPhone } from "@/lib/crypto/phone";
 import { createSupabaseAdmin } from "@/lib/supabase/server";
 
+interface SignboardBookingRecord {
+  id: string;
+  business_name: string;
+  phone?: string | null;
+  phone_encrypted?: string | null;
+  phone_hash?: string | null;
+  city?: string | null;
+  sign_type?: string | null;
+  dimensions?: string | null;
+  notes?: string | null;
+  status: string;
+  created_at: string;
+  updated_at?: string | null;
+}
+
 export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> },
@@ -47,7 +62,7 @@ export async function GET(
       );
     }
 
-    const b = booking as { phone_encrypted?: string | null; phone?: string | null };
+    const b = booking as unknown as SignboardBookingRecord;
     let decryptedPhone: string | null = null;
     let maskedPhone: string | null = null;
 

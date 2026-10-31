@@ -27,7 +27,7 @@ const requiredPhoneField = z
     "Please enter a valid phone number.",
   );
 
-export const eventConsultationSchema = z.object({
+const eventConsultationSchema = z.object({
   name: z
     .string()
     .trim()
