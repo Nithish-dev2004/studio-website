@@ -15,7 +15,7 @@ import { validateBooking } from "@/lib/validation";
 import type { BookingFormData, FieldErrors } from "@/types";
 
 const bookingInputClass =
-  "bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent w-full rounded-md border px-3 py-2.5 text-sm aria-[invalid=true]:border-destructive";
+  "bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent w-full min-h-[44px] rounded-lg border px-3 py-2.5 text-base sm:text-sm transition-colors aria-[invalid=true]:border-destructive";
 
 const emptyForm: BookingFormData = {
   name: "",
@@ -76,26 +76,26 @@ export default function BookingForm() {
     return (
       <div
         role="status"
-        className="border-border bg-card  rounded-xl border px-6 py-10 text-center shadow-[0_16px_40px_rgb(26_26_26/0.08)] sm:px-10 sm:py-12"
+        className="border-border bg-card rounded-2xl border px-6 py-10 text-center shadow-md sm:px-10 sm:py-12 transition-colors"
       >
-        <span className="bg-muted text-accent mx-auto flex h-10 w-10 items-center justify-center rounded-full">
-          <Check className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+        <span className="bg-muted text-accent mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+          <Check className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
         </span>
-        <p className="text-accent mt-5 text-[9px] font-semibold tracking-[0.24em] uppercase">
-          Thank you 
+        <p className="text-accent mt-5 text-[10px] font-semibold tracking-[0.24em] uppercase">
+          Thank you
         </p>
-        <h2 className="mt-3 text-3xl sm:text-4xl">Request received</h2>
-        <p className="text-muted-foreground mx-auto mt-4 max-w-xs text-sm leading-5">
+        <h2 className="mt-3 text-2xl sm:text-3xl font-heading text-foreground">Request received</h2>
+        <p className="text-muted-foreground mx-auto mt-3 max-w-sm text-sm leading-relaxed">
           {successMessage}
         </p>
-        <div className="bg-accent mx-auto mt-5 h-px w-8" />
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
-          <Button size="md" onClick={() => setSuccessMessage("")}>
+        <div className="bg-accent/40 mx-auto mt-5 h-px w-10" />
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Button size="md" className="w-full sm:w-auto" onClick={() => setSuccessMessage("")}>
             Make another request
           </Button>
           <Link
             href="/"
-            className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4 transition-colors"
+            className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4 transition-colors py-2"
           >
             Back to home
           </Link>
@@ -109,16 +109,16 @@ export default function BookingForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="border-border bg-card rounded-xl border p-5 shadow-[0_12px_36px_rgb(26_26_26/0.04)] sm:p-7"
+      className="border-border bg-card rounded-2xl border p-5 sm:p-7 shadow-xs transition-colors"
     >
       <section aria-labelledby="booking-about-heading">
         <p className="text-accent text-[10px] font-semibold tracking-[0.18em] uppercase">
           01
         </p>
-        <h2 id="booking-about-heading" className="mt-1 text-2xl">
+        <h2 id="booking-about-heading" className="mt-1 text-2xl font-heading text-foreground">
           About you
         </h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField id="booking-name" label="Your name" error={errors.name}>
             <input
               id="booking-name"
@@ -172,10 +172,10 @@ export default function BookingForm() {
         <p className="text-accent text-[10px] font-semibold tracking-[0.18em] uppercase">
           02
         </p>
-        <h2 id="booking-session-heading" className="mt-1 text-2xl">
+        <h2 id="booking-session-heading" className="mt-1 text-2xl font-heading text-foreground">
           Your session
         </h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField id="booking-service" label="Service" error={errors.service}>
             <select
               id="booking-service"
@@ -206,12 +206,11 @@ export default function BookingForm() {
               aria-invalid={Boolean(errors.date)}
               aria-describedby={errors.date ? "booking-date-error" : undefined}
               className={bookingInputClass}
-              // "today" can differ slightly between server and browser (timezones), which is harmless.
               suppressHydrationWarning
             />
           </FormField>
         </div>
-        <p className="text-muted-foreground mt-2 text-[11px] sm:pl-[calc(50%+0.5rem)]">
+        <p className="text-muted-foreground mt-2 text-xs">
           We will confirm availability for this date.
         </p>
       </section>
@@ -223,13 +222,13 @@ export default function BookingForm() {
         <p className="text-accent text-[10px] font-semibold tracking-[0.18em] uppercase">
           03
         </p>
-        <h2 id="booking-details-heading" className="mt-1 text-2xl">
-          The details
+        <h2 id="booking-details-heading" className="mt-1 text-2xl font-heading text-foreground">
+          Details
         </h2>
         <div className="mt-5 space-y-4">
           <FormField
             id="booking-location"
-            label="Event location"
+            label="Location or venue"
             optional
             error={errors.location}
           >
@@ -237,7 +236,7 @@ export default function BookingForm() {
               id="booking-location"
               name="location"
               type="text"
-              autoComplete="off"
+              placeholder="e.g. Karaikudi, Chennai, or in-studio"
               value={values.location}
               onChange={(event) => handleChange("location", event.target.value)}
               aria-invalid={Boolean(errors.location)}
@@ -248,7 +247,7 @@ export default function BookingForm() {
 
           <FormField
             id="booking-message"
-            label="Tell us more"
+            label="Tell us about your plans"
             optional
             error={errors.message}
           >
@@ -256,11 +255,12 @@ export default function BookingForm() {
               id="booking-message"
               name="message"
               rows={4}
+              placeholder="The vibe, guest count, approximate timings, or anything special..."
               value={values.message}
               onChange={(event) => handleChange("message", event.target.value)}
               aria-invalid={Boolean(errors.message)}
               aria-describedby={errors.message ? "booking-message-error" : undefined}
-              className={bookingInputClass}
+              className="bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent aria-[invalid=true]:border-destructive min-h-24 w-full resize-y rounded-lg border px-3 py-2.5 text-base sm:text-sm transition-colors"
             />
           </FormField>
         </div>
@@ -272,15 +272,13 @@ export default function BookingForm() {
         onChange={(value) => handleChange("website", value)}
       />
 
-      {/* Error message from the server (or the network) */}
-      <div className="border-border mt-6 flex flex-col gap-3 border-t pt-5 sm:flex-row sm:items-center">
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
         {formError && (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-destructive text-sm font-medium">
             {formError}
           </p>
         )}
 
-        {/* Loading state: the button is disabled and shows "Sending..." while we wait. */}
         <Button
           type="submit"
           size="lg"
@@ -288,11 +286,10 @@ export default function BookingForm() {
           aria-busy={submitting}
           className="w-full sm:w-auto sm:shrink-0"
         >
-          {submitting ? "Sending..." : "Request Booking"}
+          {submitting ? "Sending request..." : "Request Booking"}
         </Button>
-        <p className="text-muted-foreground text-[11px] leading-4 sm:order-first sm:flex-1">
-          This is a request, not a confirmed booking. We will reply within one working
-          day.
+        <p className="text-muted-foreground text-xs leading-relaxed sm:order-first sm:flex-1">
+          No payment is taken now. We will contact you to confirm details and pricing.
         </p>
       </div>
     </form>

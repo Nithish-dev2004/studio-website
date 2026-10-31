@@ -3,11 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, ShieldCheck } from "lucide-react";
+import { Menu } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
 import { useAdminToast } from "./AdminToastContext";
 import { siteConfig } from "@/data/site";
-
 import type { StaffRole } from "@/types/staff";
 
 interface AdminShellProps {
@@ -43,8 +42,8 @@ export default function AdminShell({
   }, [showToast]);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      {/* Sidebar for Desktop & Mobile Drawer */}
+    <div className="flex min-h-screen bg-background text-foreground transition-colors">
+      {/* Sidebar for Desktop (1024px+) & Mobile/Tablet Drawer (< 1024px) */}
       <AdminSidebar
         userEmail={userEmail}
         userRole={userRole}
@@ -53,17 +52,16 @@ export default function AdminShell({
         onClose={() => setMobileMenuOpen(false)}
       />
 
-
       {/* Main Area */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Mobile Header (Hidden on md and up) */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/90 px-4 backdrop-blur-md md:hidden">
+        {/* Mobile & Tablet Header (Screens < 1024px) */}
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/90 px-4 backdrop-blur-md lg:hidden">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
-              className="rounded-lg border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="flex h-10 w-10 items-center justify-center rounded-lg border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer"
             >
               <Menu className="h-5 w-5" />
             </button>
@@ -81,7 +79,7 @@ export default function AdminShell({
                   className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="font-heading text-base font-bold tracking-tight text-card-foreground">
+              <span className="font-heading text-base font-bold tracking-tight text-foreground">
                 {siteConfig.name}
               </span>
             </Link>
@@ -92,8 +90,28 @@ export default function AdminShell({
           </span>
         </header>
 
+        {/* Desktop Topbar (Screens >= 1024px) */}
+        <header className="sticky top-0 z-30 hidden lg:flex h-16 items-center justify-between border-b border-border bg-card/85 px-6 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <h1 className="font-heading text-lg font-bold tracking-tight text-foreground">
+              Studio Admin Console
+            </h1>
+            <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent border border-accent/30">
+              {userRole || "Administrator"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {userEmail && (
+              <span className="text-xs text-muted-foreground font-mono">
+                {userEmail}
+              </span>
+            )}
+          </div>
+        </header>
+
         {/* Content Container */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
       </div>
     </div>
   );

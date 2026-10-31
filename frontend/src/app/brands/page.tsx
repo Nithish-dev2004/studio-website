@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Camera, CalendarDays, Megaphone, Store } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
 import Container from "@/components/ui/Container";
 import { subBrands } from "@/data/site";
@@ -12,8 +12,6 @@ export const metadata = createMetadata({
     "Discover the photography, event management, digital marketing and sign board brands in the Sivagangai group.",
   path: "/brands",
 });
-
-const brandIcons = [Camera, CalendarDays, Megaphone, Store];
 
 export default function BrandsPage() {
   return (
@@ -34,7 +32,6 @@ export default function BrandsPage() {
 
         <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
           {subBrands.map((brand, index) => {
-            const Icon = brandIcons[index];
             return (
               <FadeIn key={brand.id} delay={index * 0.08}>
                 <Link

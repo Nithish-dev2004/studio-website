@@ -12,7 +12,6 @@ import {
   LogOut,
   Mail,
   MessageSquareHeart,
-  ShieldCheck,
   Sparkles,
   TrendingUp,
   User,
@@ -166,7 +165,7 @@ export default function AdminSidebar({
               type="button"
               onClick={onClose}
               aria-label="Close sidebar"
-              className="rounded-md p-1.5 md:hidden"
+              className="rounded-md p-1.5 lg:hidden cursor-pointer"
               style={{ color: "#9a8c78" }}
             >
               <X className="h-5 w-5" />
@@ -318,14 +317,14 @@ export default function AdminSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar (persistent) */}
-      <aside className="hidden h-dvh w-64 shrink-0 md:sticky md:top-0 md:flex md:flex-col overflow-hidden">
+      {/* Desktop Sidebar (persistent on lg screens: 1024px+) */}
+      <aside className="hidden h-dvh w-64 shrink-0 lg:sticky lg:top-0 lg:flex lg:flex-col overflow-hidden">
         {navContent}
       </aside>
 
-      {/* Mobile Drawer (overlay) */}
+      {/* Mobile & Tablet Drawer (overlay on screens < 1024px) */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
           <div
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={onClose}

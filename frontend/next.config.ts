@@ -11,12 +11,22 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    // Allow next/image to load the placeholder photos from picsum.photos.
-    // TODO: when you switch to your real photos (or Supabase Storage), add that hostname here.
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Only allow authorized remote image hosts
     remotePatterns: [
       {
         protocol: "https",
         hostname: "picsum.photos",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
       },
     ],
   },
