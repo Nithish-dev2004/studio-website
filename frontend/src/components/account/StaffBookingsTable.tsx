@@ -224,11 +224,11 @@ export default function StaffBookingsTable({
       </div>
 
       {/* 2. Search & Filter Bar */}
-      <div className="rounded-2xl border border-[#ede5d8] bg-white p-4 sm:p-5 shadow-xs space-y-3.5">
+      <div className="rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card p-4 sm:p-5 shadow-xs space-y-3.5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {/* Search Input */}
           <div className="relative sm:col-span-2">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9e968b]" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9e968b] dark:text-muted-foreground" />
             <input
               type="text"
               value={searchQuery}
@@ -237,14 +237,14 @@ export default function StaffBookingsTable({
                 setCurrentPage(1);
               }}
               placeholder="Search by client name, phone, location..."
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] py-2.5 pl-10 pr-9 text-xs text-[#1a1714] placeholder:text-[#9e968b] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-muted/30 py-2.5 pl-10 pr-9 text-xs text-[#1a1714] dark:text-foreground placeholder:text-[#9e968b] dark:placeholder:text-muted-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9e968b] hover:text-[#1a1714]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9e968b] hover:text-[#1a1714] dark:hover:text-foreground"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -259,7 +259,7 @@ export default function StaffBookingsTable({
                 setSelectedService(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs font-medium text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2.5 text-xs font-medium text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             >
               <option value="all">All Services</option>
               {availableServices.map((s) => (
@@ -280,7 +280,7 @@ export default function StaffBookingsTable({
                 setCurrentPage(1);
               }}
               aria-label="Start date"
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2.5 text-xs text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
 
@@ -294,19 +294,19 @@ export default function StaffBookingsTable({
                 setCurrentPage(1);
               }}
               aria-label="End date"
-              className="w-full rounded-xl border border-[#e8dfcf] bg-[#fcfaf7] px-3.5 py-2.5 text-xs text-[#1a1714] focus:border-[#a87f32] focus:bg-white focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
+              className="w-full rounded-xl border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-3.5 py-2.5 text-xs text-[#1a1714] dark:text-foreground focus:border-[#a87f32] focus:bg-white dark:focus:bg-card focus:ring-1 focus:ring-[#a87f32] focus:outline-hidden transition-colors cursor-pointer"
             />
           </div>
         </div>
 
         {/* Sort & Count Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#f2ece2] pt-3 text-xs text-[#8c8478]">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#f2ece2] dark:border-border pt-3 text-xs text-[#8c8478] dark:text-muted-foreground">
           <div className="flex items-center gap-2">
             <span>Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "event_asc" | "event_desc" | "created_desc")}
-              className="rounded-lg border border-[#e8dfcf] bg-[#fcfaf7] px-2.5 py-1 text-xs font-semibold text-[#2d271f] focus:border-[#a87f32] focus:outline-hidden cursor-pointer"
+              className="rounded-lg border border-[#e8dfcf] dark:border-border bg-[#fcfaf7] dark:bg-card px-2.5 py-1 text-xs font-semibold text-[#2d271f] dark:text-foreground focus:border-[#a87f32] focus:outline-hidden cursor-pointer"
             >
               <option value="event_asc">Event Date (Upcoming First)</option>
               <option value="event_desc">Event Date (Furthest First)</option>
@@ -317,27 +317,27 @@ export default function StaffBookingsTable({
               <button
                 type="button"
                 onClick={handleFilterReset}
-                className="ml-2 text-xs font-semibold text-[#a87f32] hover:underline cursor-pointer"
+                className="ml-2 text-xs font-semibold text-[#a87f32] dark:text-accent hover:underline cursor-pointer"
               >
                 Reset all filters
               </button>
             )}
           </div>
 
-          <div className="text-xs text-[#8c8478] font-medium">
-            Showing <strong className="text-[#1a1714] font-semibold">{filteredBookings.length}</strong> {filteredBookings.length === 1 ? "booking" : "bookings"}
+          <div className="text-xs text-[#8c8478] dark:text-muted-foreground font-medium">
+            Showing <strong className="text-[#1a1714] dark:text-foreground font-semibold">{filteredBookings.length}</strong> {filteredBookings.length === 1 ? "booking" : "bookings"}
           </div>
         </div>
       </div>
 
       {/* 3. Table / Bookings List Card */}
       {filteredBookings.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#e8dfcf] bg-white p-12 text-center shadow-xs">
-          <Calendar className="mx-auto h-10 w-10 text-[#8c8478]/40" />
-          <h3 className="mt-3 text-base font-semibold text-[#1a1714]">
+        <div className="rounded-2xl border border-dashed border-[#e8dfcf] dark:border-border bg-white dark:bg-card p-12 text-center shadow-xs">
+          <Calendar className="mx-auto h-10 w-10 text-[#8c8478]/40 dark:text-muted-foreground/40" />
+          <h3 className="mt-3 text-base font-semibold text-[#1a1714] dark:text-foreground">
             No confirmed bookings yet
           </h3>
-          <p className="mt-1 text-xs text-[#7c756c] max-w-sm mx-auto">
+          <p className="mt-1 text-xs text-[#7c756c] dark:text-muted-foreground max-w-sm mx-auto">
             {bookings.length === 0
               ? "When the studio administrator sets booking status to 'confirmed', your assignments will appear here."
               : "No records match your active search terms or date filter."}
@@ -347,7 +347,7 @@ export default function StaffBookingsTable({
               type="button"
               variant="outline"
               onClick={handleFilterReset}
-              className="mt-4 text-xs cursor-pointer border-[#e8dfcf]"
+              className="mt-4 text-xs cursor-pointer border-[#e8dfcf] dark:border-border"
             >
               Clear filters
             </Button>
@@ -356,35 +356,35 @@ export default function StaffBookingsTable({
       ) : (
         <>
           {/* DESKTOP TABLE VIEW (Screens >= 768px) */}
-          <div className="hidden md:block overflow-hidden rounded-2xl border border-[#ede5d8] bg-white shadow-xs">
+          <div className="hidden md:block overflow-hidden rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-[#e8dfcf] bg-[#f5ede0]">
+                <thead className="border-b border-[#e8dfcf] dark:border-border bg-[#f5ede0] dark:bg-muted">
                   <tr>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       CLIENT &amp; CONTACT
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       SERVICE
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       EVENT DATE
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       LOCATION
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       STATUS
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38]">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground">
                       QUICK ACTIONS
                     </th>
-                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] text-right">
+                    <th scope="col" className="px-5 py-3.5 text-[10.5px] font-bold uppercase tracking-wider text-[#735b38] dark:text-foreground text-right">
                       DETAILS
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#f2ece2] bg-white">
+                <tbody className="divide-y divide-[#f2ece2] dark:divide-border bg-white dark:bg-card">
                   {paginatedBookings.map((b) => {
                     const mapsUrl = b.location
                       ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.location)}`
@@ -394,7 +394,7 @@ export default function StaffBookingsTable({
                     return (
                       <tr
                         key={b.id}
-                        className="transition-colors hover:bg-[#faf7f2]/90"
+                        className="transition-colors hover:bg-[#faf7f2]/90 dark:hover:bg-muted/40"
                       >
                         {/* 1. Client & Contact */}
                         <td className="px-5 py-4">
@@ -403,10 +403,10 @@ export default function StaffBookingsTable({
                               {getInitial(b.name)}
                             </div>
                             <div>
-                              <div className="font-bold text-sm text-[#1f1b16] leading-tight">
+                              <div className="font-bold text-sm text-[#1f1b16] dark:text-foreground leading-tight">
                                 {b.name}
                               </div>
-                              <div className="text-xs text-[#8c8478] font-mono mt-0.5">
+                              <div className="text-xs text-[#8c8478] dark:text-muted-foreground font-mono mt-0.5">
                                 {b.phone}
                               </div>
                             </div>
@@ -414,20 +414,20 @@ export default function StaffBookingsTable({
                         </td>
 
                         {/* 2. Service */}
-                        <td className="px-5 py-4 font-semibold text-sm text-[#2d271f]">
+                        <td className="px-5 py-4 font-semibold text-sm text-[#2d271f] dark:text-foreground">
                           {b.serviceTitle}
                         </td>
 
                         {/* 3. Event Date */}
                         <td className="px-5 py-4">
                           <div className="flex items-start gap-2">
-                            <Clock className="h-4 w-4 text-[#a87f32] shrink-0 mt-0.5" />
+                            <Clock className="h-4 w-4 text-[#a87f32] dark:text-accent shrink-0 mt-0.5" />
                             <div>
-                              <div className="font-bold text-sm text-[#1f1b16] leading-tight whitespace-nowrap">
+                              <div className="font-bold text-sm text-[#1f1b16] dark:text-foreground leading-tight whitespace-nowrap">
                                 {formatDisplayDate(b.event_date)}
                               </div>
                               {relativeText && (
-                                <div className="text-[11px] text-[#8c8478] mt-0.5">
+                                <div className="text-[11px] text-[#8c8478] dark:text-muted-foreground mt-0.5">
                                   {relativeText}
                                 </div>
                               )}
@@ -436,13 +436,13 @@ export default function StaffBookingsTable({
                         </td>
 
                         {/* 4. Location */}
-                        <td className="px-5 py-4 text-xs font-medium text-[#5c5449]">
+                        <td className="px-5 py-4 text-xs font-medium text-[#5c5449] dark:text-muted-foreground">
                           {b.location ? (
                             <span className="truncate max-w-[180px] block" title={b.location}>
                               {b.location}
                             </span>
                           ) : (
-                            <span className="text-[#9e968b]">Studio / TBA</span>
+                            <span className="text-[#9e968b] dark:text-muted-foreground/60">Studio / TBA</span>
                           )}
                         </td>
 
@@ -468,7 +468,7 @@ export default function StaffBookingsTable({
                               <>
                                 <a
                                   href={formatTelLink(b.phone)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0] hover:text-[#1a1714] transition-colors shadow-2xs"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] dark:border-border bg-white dark:bg-muted text-[#7c756c] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80 hover:text-[#1a1714] transition-colors shadow-2xs"
                                   title={`Call ${b.phone}`}
                                 >
                                   <Phone className="h-3.5 w-3.5" />
@@ -480,7 +480,7 @@ export default function StaffBookingsTable({
                                   )}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex h-8 px-2.5 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] text-[11px] font-bold text-[#1e7e45] hover:bg-[#d8eedf] transition-colors shadow-2xs"
+                                  className="inline-flex h-8 px-2.5 items-center justify-center rounded-lg border border-[#c4e5ce] dark:border-emerald-800/40 bg-[#e8f5ec] dark:bg-emerald-950/40 text-[11px] font-bold text-[#1e7e45] dark:text-emerald-300 hover:bg-[#d8eedf] dark:hover:bg-emerald-900/40 transition-colors shadow-2xs"
                                   title="WhatsApp Client"
                                 >
                                   <span>WA</span>
@@ -492,7 +492,7 @@ export default function StaffBookingsTable({
                                 href={mapsUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0] hover:text-[#1a1714] transition-colors shadow-2xs"
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#e8dfcf] dark:border-border bg-white dark:bg-muted text-[#7c756c] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80 hover:text-[#1a1714] transition-colors shadow-2xs"
                                 title="Open Location in Google Maps"
                               >
                                 <MapPin className="h-3.5 w-3.5" />
@@ -506,9 +506,9 @@ export default function StaffBookingsTable({
                           <button
                             type="button"
                             onClick={() => setSelectedBooking(b)}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0] transition-colors shadow-2xs cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] dark:border-border bg-white dark:bg-muted px-3.5 py-1.5 text-xs font-semibold text-[#2d271f] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80 transition-colors shadow-2xs cursor-pointer"
                           >
-                            <Eye className="h-3.5 w-3.5 text-[#7c756c]" />
+                            <Eye className="h-3.5 w-3.5 text-[#7c756c] dark:text-muted-foreground" />
                             <span>View</span>
                           </button>
                         </td>
@@ -531,7 +531,7 @@ export default function StaffBookingsTable({
               return (
                 <div
                   key={b.id}
-                  className="rounded-2xl border border-[#ede5d8] bg-white p-5 shadow-xs space-y-4"
+                  className="rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card p-5 shadow-xs space-y-4"
                 >
                   {/* Top: Avatar, Client Name, and Status */}
                   <div className="flex items-start justify-between gap-3">
@@ -540,22 +540,22 @@ export default function StaffBookingsTable({
                         {getInitial(b.name)}
                       </div>
                       <div>
-                        <h3 className="font-bold text-[#1f1b16] text-base leading-tight">
+                        <h3 className="font-bold text-[#1f1b16] dark:text-foreground text-base leading-tight">
                           {b.name}
                         </h3>
-                        <p className="text-xs text-[#8c8478] font-mono mt-0.5">
+                        <p className="text-xs text-[#8c8478] dark:text-muted-foreground font-mono mt-0.5">
                           {b.phone}
                         </p>
                       </div>
                     </div>
 
                     {b.status === "confirmed" ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c4e5ce] bg-[#e8f5ec] px-2.5 py-1 text-xs font-semibold text-[#1e7e45]">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c4e5ce] dark:border-emerald-800/40 bg-[#e8f5ec] dark:bg-emerald-950/40 px-2.5 py-1 text-xs font-semibold text-[#1e7e45] dark:text-emerald-300">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#1e7e45]" />
                         <span>Confirmed</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ded5f0] bg-[#f0edf7] px-2.5 py-1 text-xs font-semibold text-[#6b4da8]">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#ded5f0] dark:border-purple-800/40 bg-[#f0edf7] dark:bg-purple-950/40 px-2.5 py-1 text-xs font-semibold text-[#6b4da8] dark:text-purple-300">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#6b4da8]" />
                         <span>Completed</span>
                       </span>
@@ -563,36 +563,36 @@ export default function StaffBookingsTable({
                   </div>
 
                   {/* Details Grid */}
-                  <div className="grid grid-cols-2 gap-3 text-xs border-y border-[#f2ece2] py-3">
+                  <div className="grid grid-cols-2 gap-3 text-xs border-y border-[#f2ece2] dark:border-border py-3">
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478] dark:text-muted-foreground">
                         Service
                       </span>
-                      <span className="font-semibold text-[#1a1714] mt-0.5 block">
+                      <span className="font-semibold text-[#1a1714] dark:text-foreground mt-0.5 block">
                         {b.serviceTitle}
                       </span>
                     </div>
 
                     <div>
-                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478] dark:text-muted-foreground">
                         Event Date
                       </span>
-                      <div className="font-semibold text-[#1a1714] mt-0.5 flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-[#a87f32]" />
+                      <div className="font-semibold text-[#1a1714] dark:text-foreground mt-0.5 flex items-center gap-1">
+                        <Clock className="h-3 w-3 text-[#a87f32] dark:text-accent" />
                         <span>{formatDisplayDate(b.event_date)}</span>
                       </div>
                       {relativeText && (
-                        <span className="text-[10px] text-[#8c8478]">
+                        <span className="text-[10px] text-[#8c8478] dark:text-muted-foreground">
                           {relativeText}
                         </span>
                       )}
                     </div>
 
                     <div className="col-span-2">
-                      <span className="block text-[10px] uppercase font-bold text-[#8c8478]">
+                      <span className="block text-[10px] uppercase font-bold text-[#8c8478] dark:text-muted-foreground">
                         Location
                       </span>
-                      <span className="text-[#5c5449] truncate block mt-0.5">
+                      <span className="text-[#5c5449] dark:text-muted-foreground truncate block mt-0.5">
                         {b.location || "Studio / TBA"}
                       </span>
                     </div>
@@ -617,7 +617,7 @@ export default function StaffBookingsTable({
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex h-9 px-3 items-center justify-center rounded-lg border border-[#c4e5ce] bg-[#e8f5ec] text-xs font-bold text-[#1e7e45] hover:bg-[#d8eedf]"
+                            className="inline-flex h-9 px-3 items-center justify-center rounded-lg border border-[#c4e5ce] dark:border-emerald-800/40 bg-[#e8f5ec] dark:bg-emerald-950/40 text-xs font-bold text-[#1e7e45] dark:text-emerald-300 hover:bg-[#d8eedf] dark:hover:bg-emerald-900/40"
                           >
                             <span>WhatsApp</span>
                           </a>
@@ -628,7 +628,7 @@ export default function StaffBookingsTable({
                           href={mapsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e8dfcf] bg-white text-[#7c756c] hover:bg-[#f5ede0]"
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e8dfcf] dark:border-border bg-white dark:bg-muted text-[#7c756c] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80"
                           title="Open Location in Maps"
                         >
                           <MapPin className="h-4 w-4" />
@@ -639,9 +639,9 @@ export default function StaffBookingsTable({
                     <button
                       type="button"
                       onClick={() => setSelectedBooking(b)}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] bg-white px-4 py-2 text-xs font-semibold text-[#2d271f] hover:bg-[#f5ede0] shadow-2xs cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[#dcd3c4] dark:border-border bg-white dark:bg-muted px-4 py-2 text-xs font-semibold text-[#2d271f] dark:text-foreground hover:bg-[#f5ede0] dark:hover:bg-muted/80 shadow-2xs cursor-pointer"
                     >
-                      <Eye className="h-3.5 w-3.5 text-[#7c756c]" />
+                      <Eye className="h-3.5 w-3.5 text-[#7c756c] dark:text-muted-foreground" />
                       <span>View</span>
                     </button>
                   </div>
@@ -664,7 +664,7 @@ export default function StaffBookingsTable({
                 setPageSize(newSize);
                 setCurrentPage(1);
               }}
-              className="rounded-2xl border border-[#ede5d8] bg-white shadow-xs"
+              className="rounded-2xl border border-[#ede5d8] dark:border-border bg-white dark:bg-card shadow-xs"
             />
           )}
         </>

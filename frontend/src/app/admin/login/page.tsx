@@ -5,9 +5,10 @@
 // rate limiting feedback, loading states, and attacker-safe error messages.
 
 import React, { Suspense, useEffect, useRef, useState, useTransition } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Eye, EyeOff, Lock, Mail, ShieldAlert, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Lock, Mail, ShieldAlert } from "lucide-react";
 import { loginAction } from "@/app/admin/actions";
 import { useAdminToast } from "@/components/admin/AdminToastContext";
 import { siteConfig } from "@/data/site";
@@ -113,10 +114,16 @@ function AdminLoginForm() {
         {/* Brand and Title Header */}
         <div className="text-center">
           <div
-            className="mx-auto flex h-13 w-13 items-center justify-center rounded-2xl shadow-lg"
+            className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl p-2 shadow-lg"
             style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
           >
-            <ShieldCheck className="h-7 w-7 text-white" />
+            <Image
+              src="/images/logo-icon.png"
+              alt={siteConfig.name}
+              width={48}
+              height={48}
+              className="h-10 w-10 object-contain drop-shadow"
+            />
           </div>
           <h1
             className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl"
@@ -181,7 +188,7 @@ function AdminLoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@yourstudio.com"
                   disabled={isPending}
-                  className="block w-full rounded-lg py-2.5 pr-4 pl-10 text-sm transition-colors focus:outline-hidden disabled:opacity-60"
+                  className="block w-full min-h-[44px] rounded-lg py-2.5 pr-4 pl-10 text-base sm:text-sm transition-colors focus:outline-hidden disabled:opacity-60"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -217,7 +224,7 @@ function AdminLoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   disabled={isPending}
-                  className="block w-full rounded-lg py-2.5 pr-10 pl-10 text-sm transition-colors focus:outline-hidden disabled:opacity-60"
+                  className="block w-full min-h-[44px] rounded-lg py-2.5 pr-10 pl-10 text-base sm:text-sm transition-colors focus:outline-hidden disabled:opacity-60"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -228,7 +235,7 @@ function AdminLoginForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 min-w-[44px] justify-center cursor-pointer"
                   style={{ color: "#7a6e5e" }}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -244,7 +251,7 @@ function AdminLoginForm() {
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full flex items-center justify-center rounded-lg py-2.5 text-sm font-semibold transition-all cursor-pointer disabled:opacity-60"
+                className="w-full min-h-[44px] flex items-center justify-center rounded-lg py-2.5 text-sm font-semibold transition-all cursor-pointer disabled:opacity-60"
                 style={{
                   background: isPending
                     ? "rgba(201,168,76,0.5)"

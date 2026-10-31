@@ -468,11 +468,11 @@ export default function SivagangaiDigitalMarketingLanding() {
     : initialAudioSamples;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 antialiased selection:bg-[#8525e3] selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-[#0e0e0e] text-slate-900 dark:text-slate-100 antialiased selection:bg-[#8525e3] selection:text-white">
       {/* -------------------------------------------------------------
           TOP BRAND STRIP & BREADCRUMB
           ------------------------------------------------------------- */}
-      <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/95 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-slate-100 dark:border-white/10 bg-white/95 dark:bg-[#161616]/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 sm:px-8">
           <div className="flex items-center gap-4">
             <Link

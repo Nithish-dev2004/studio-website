@@ -33,7 +33,7 @@ export default function StarRating({
 
   const starSizes = {
     sm: "h-4 w-4",
-    md: "h-5 w-5",
+    md: "h-6 w-6 sm:h-5 sm:w-5",
     lg: "h-7 w-7",
   };
 
@@ -95,9 +95,7 @@ export default function StarRating({
                   onChange?.(Math.max(1, (value || 1) - 1));
                 }
               }}
-              className={cn(
-                "group relative rounded-sm p-1 transition-transform hover:scale-110 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent cursor-pointer",
-              )}
+              className="group relative flex h-11 w-11 items-center justify-center rounded-lg p-2 transition-transform hover:scale-110 active:scale-95 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent cursor-pointer"
             >
               <Star
                 className={cn(

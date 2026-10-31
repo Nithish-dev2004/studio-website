@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,7 +12,6 @@ import {
   LogOut,
   Mail,
   MessageSquareHeart,
-  ShieldCheck,
   Sparkles,
   TrendingUp,
   User,
@@ -133,10 +133,16 @@ export default function AdminSidebar({
             className="flex items-center gap-3 transition-opacity hover:opacity-90"
           >
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-lg shadow-sm shrink-0"
+              className="flex h-10 w-10 items-center justify-center rounded-lg shadow-sm shrink-0 p-1"
               style={{ background: "linear-gradient(135deg, #d4a843, #a8722a)" }}
             >
-              <ShieldCheck className="h-5 w-5 text-white" />
+              <Image
+                src="/images/logo-icon.png"
+                alt={siteConfig.name}
+                width={32}
+                height={32}
+                className="h-7 w-7 object-contain drop-shadow-xs"
+              />
             </div>
             <div>
               <span
@@ -159,7 +165,7 @@ export default function AdminSidebar({
               type="button"
               onClick={onClose}
               aria-label="Close sidebar"
-              className="rounded-md p-1.5 md:hidden"
+              className="rounded-md p-1.5 lg:hidden cursor-pointer"
               style={{ color: "#9a8c78" }}
             >
               <X className="h-5 w-5" />
@@ -311,14 +317,14 @@ export default function AdminSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar (persistent) */}
-      <aside className="hidden h-dvh w-64 shrink-0 md:sticky md:top-0 md:flex md:flex-col overflow-hidden">
+      {/* Desktop Sidebar (persistent on lg screens: 1024px+) */}
+      <aside className="hidden h-dvh w-64 shrink-0 lg:sticky lg:top-0 lg:flex lg:flex-col overflow-hidden">
         {navContent}
       </aside>
 
-      {/* Mobile Drawer (overlay) */}
+      {/* Mobile & Tablet Drawer (overlay on screens < 1024px) */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
           <div
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={onClose}

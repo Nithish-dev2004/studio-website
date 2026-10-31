@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Dark mode is ready: add class="dark" to <html> to switch. Light is the default. */
+/* Dark mode: add class="dark" to <html> to switch. Light is the default. */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* =========================================================================
@@ -29,20 +29,22 @@
   --scrim: rgb(0 0 0 / 0.45); /* dark overlay on photos so text stays readable */
   --whatsapp: #25d366;
 
-  /* Shape and spacing */
+  /* Shape and fluid spacing */
   --radius: 0.5rem;
-  --section-y: 4rem; /* vertical padding of every page section */
+  --section-y: clamp(3rem, 5vw, 6rem); /* fluid vertical padding across screens */
   --container-max: 72rem;
+
+  /* Safe area insets for notched mobile devices */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 
   /* Fonts (the actual font files are loaded in layout.tsx with next/font) */
   --font-heading: var(--font-heading-loaded), Georgia, serif;
   --font-body: var(--font-body-loaded), system-ui, sans-serif;
-}
 
-@media (min-width: 768px) {
-  :root {
-    --section-y: 6rem;
-  }
+  color-scheme: light;
 }
 
 .dark {
@@ -60,6 +62,11 @@
   --ring: #d4af5a;
   --destructive: #f2877f;
   --success: #6fcf97;
+  --on-image: #ffffff;
+  --scrim: rgb(0 0 0 / 0.65);
+  --whatsapp: #25d366;
+
+  color-scheme: dark;
 }
 
 /* Connects the tokens above to Tailwind, so classes like bg-card or text-muted-foreground work. */
@@ -103,6 +110,8 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   /* Elegant serif for all headings */
@@ -121,9 +130,23 @@
     outline-offset: 2px;
   }
 
+  /* Subtle comfortable dimming on images in dark mode */
+  .dark img:not([data-no-dim="true"]) {
+    filter: brightness(0.96);
+  }
+
+  /* Respect reduced motion preferences across all animations */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }
@@ -136,4 +159,5 @@
     width: 0%;
   }
 }
+
 

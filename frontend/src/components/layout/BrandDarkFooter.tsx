@@ -192,7 +192,7 @@ export default function BrandDarkFooter({
   };
 
   return (
-    <footer className="relative z-20 bg-[#1c2225] pt-20 pb-12 text-[#f3f1ed] border-t border-black/40">
+    <footer className="relative z-20 bg-[#1c2225] pt-20 pb-12 pb-[max(3rem,env(safe-area-inset-bottom))] text-[#f3f1ed] border-t border-black/40">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         {/* Centered Brand Title matching the exact image */}
         <div className="text-center">
@@ -331,7 +331,7 @@ export default function BrandDarkFooter({
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-4">
-                <div className="flex items-center rounded-xl bg-white p-1 shadow-inner">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 rounded-xl bg-white p-1 shadow-inner">
                   <input
                     type="email"
                     value={email}
@@ -339,11 +339,11 @@ export default function BrandDarkFooter({
                     placeholder="name@example.com"
                     required
                     aria-label="Newsletter email address"
-                    className="w-full bg-transparent px-3 py-1.5 text-xs text-[#1c2225] placeholder-[#8b958f] outline-none"
+                    className="w-full min-h-[44px] bg-transparent px-3 py-1.5 text-base sm:text-xs text-[#1c2225] placeholder-[#8b958f] outline-none"
                   />
                   <button
                     type="submit"
-                    className="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#2b3337] px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#1f2528] cursor-pointer"
+                    className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-lg bg-[#2b3337] px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#1f2528] cursor-pointer"
                   >
                     Submit
                   </button>

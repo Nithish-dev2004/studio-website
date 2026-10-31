@@ -1,7 +1,7 @@
 "use client";
 
 // Floating WhatsApp chat button, shown on public pages.
-// The number and the pre-filled message come from data/site.ts.
+// Accommodates mobile notches and safe areas (env(safe-area-inset-*))
 
 import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
@@ -14,15 +14,16 @@ export default function WhatsAppButton() {
   if (pathname?.startsWith("/admin") || pathname?.startsWith("/account")) {
     return null;
   }
+
   return (
     <a
       href={whatsappLink(siteConfig.whatsappNumber, siteConfig.whatsappMessage)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="bg-whatsapp text-on-image fixed right-4 bottom-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105 sm:right-6 sm:bottom-6"
+      className="bg-whatsapp text-white fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 inline-flex h-13 w-13 sm:h-14 sm:w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-white"
     >
-      <MessageCircle className="h-7 w-7" aria-hidden="true" />
+      <MessageCircle className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden="true" />
     </a>
   );
 }

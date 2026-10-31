@@ -1,5 +1,6 @@
-import { ArrowRight, Camera, CalendarDays, Megaphone, Store } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
 import Container from "@/components/ui/Container";
 import { subBrands } from "@/data/site";
@@ -11,8 +12,6 @@ export const metadata = createMetadata({
     "Discover the photography, event management, digital marketing and sign board brands in the Sivagangai group.",
   path: "/brands",
 });
-
-const brandIcons = [Camera, CalendarDays, Megaphone, Store];
 
 export default function BrandsPage() {
   return (
@@ -33,15 +32,20 @@ export default function BrandsPage() {
 
         <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
           {subBrands.map((brand, index) => {
-            const Icon = brandIcons[index];
             return (
               <FadeIn key={brand.id} delay={index * 0.08}>
                 <Link
                   href={`/brands/${brand.slug}`}
                   className="border-border bg-card hover:border-accent/40 group relative block min-h-34 rounded-lg border p-5 transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgb(26_26_26/0.06)] sm:p-6"
                 >
-                  <span className="bg-muted text-accent flex h-8 w-8 items-center justify-center rounded-full">
-                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  <span className="bg-muted text-accent flex h-9 w-9 items-center justify-center rounded-full overflow-hidden p-1">
+                    <Image
+                      src="/images/logo-icon.png"
+                      alt={brand.name}
+                      width={28}
+                      height={28}
+                      className="h-6 w-6 object-contain"
+                    />
                   </span>
                   <span className="text-accent absolute top-5 right-5 text-[9px] font-medium tracking-[0.18em] sm:top-6 sm:right-6">
                     {String(index + 1).padStart(2, "0")}

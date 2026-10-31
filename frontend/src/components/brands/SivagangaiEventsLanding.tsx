@@ -352,7 +352,7 @@ export default function SivagangaiEventsLanding() {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white font-sans text-[#111827] antialiased selection:bg-[#00ab80] selection:text-white">
+    <div className="min-h-screen overflow-x-hidden bg-white dark:bg-[#0e0e0e] font-sans text-[#111827] dark:text-[#f3f1ed] antialiased selection:bg-[#00ab80] selection:text-white">
       {/* =========================================================================
           SECTION 1: HERO SECTION (Exact layout of Image 1)
           - Centered top badge with teal icon

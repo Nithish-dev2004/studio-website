@@ -207,7 +207,7 @@ export default function SivagangaiCaptureLanding() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#faf8f5] text-[#1c2225] selection:bg-[#2d4d42] selection:text-white font-sans overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#faf8f5] dark:bg-[#0e0e0e] text-[#1c2225] dark:text-[#f3f1ed] selection:bg-[#2d4d42] selection:text-white font-sans overflow-x-hidden">
       {/* =========================================================================
           ATMOSPHERIC AMBIENT GLOW BLOBS (Exact visual tone of Image 1, 2, 3, 4)
           Soft warm peach on bottom left, forest green on top right, subtle coral

@@ -13,7 +13,7 @@ import { validateContact } from "@/lib/validation";
 import type { ContactFormData, FieldErrors } from "@/types";
 
 const contactInputClass =
-  "bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent w-full rounded-md border py-2.5 pr-3 pl-8 text-sm aria-[invalid=true]:border-destructive";
+  "bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent w-full min-h-[44px] rounded-lg border py-2.5 pr-3 pl-9 text-base sm:text-sm transition-colors aria-[invalid=true]:border-destructive";
 
 const emptyForm: ContactFormData = {
   name: "",
@@ -68,25 +68,30 @@ export default function ContactForm() {
     return (
       <div
         role="status"
-        className="border-border bg-card  rounded-xl border px-6 py-10 text-center shadow-[0_16px_40px_rgb(26_26_26/0.08)] sm:px-10 sm:py-12"
+        className="border-border bg-card rounded-2xl border px-6 py-10 text-center shadow-md sm:px-10 sm:py-12 transition-colors"
       >
-        <span className="bg-muted text-accent mx-auto flex h-10 w-10 items-center justify-center rounded-full">
-          <Check className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+        <span className="bg-muted text-accent mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+          <Check className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
         </span>
-        <p className="text-accent mt-5 text-[9px] font-semibold tracking-[0.24em] uppercase">
+        <p className="text-accent mt-5 text-[10px] font-semibold tracking-[0.24em] uppercase">
           Thank you
         </p>
-        <h2 className="mt-3 text-3xl sm:text-4xl">Message sent</h2>
-        <p className="text-muted-foreground mx-auto mt-4 max-w-xs text-sm leading-5">
+        <h2 className="mt-3 text-2xl sm:text-3xl font-heading text-foreground">Message sent</h2>
+        <p className="text-muted-foreground mx-auto mt-3 max-w-sm text-sm leading-relaxed">
           {successMessage}
         </p>
-        <div className="bg-accent mx-auto mt-5 h-px w-8" />
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
-          <Button variant="outline" size="md" onClick={() => setSuccessMessage("")}>
+        <div className="bg-accent/40 mx-auto mt-5 h-px w-10" />
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Button
+            variant="outline"
+            size="md"
+            className="w-full sm:w-auto"
+            onClick={() => setSuccessMessage("")}
+          >
             Send another message
           </Button>
-          <Button href="/booking" size="md">
-            Book a session →
+          <Button href="/booking" size="md" className="w-full sm:w-auto">
+            Book a session &rarr;
           </Button>
         </div>
       </div>
@@ -98,14 +103,14 @@ export default function ContactForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="border-border bg-card rounded-xl border p-5 shadow-[0_12px_36px_rgb(26_26_26/0.04)] sm:p-7"
+      className="border-border bg-card rounded-2xl border p-5 sm:p-7 shadow-xs transition-colors"
     >
-      <h2 className="text-2xl">Send us a message</h2>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+      <h2 className="text-2xl font-heading text-foreground">Send us a message</h2>
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField id="contact-name" label="Your name" error={errors.name}>
           <div className="relative">
             <UserRound
-              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2"
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
               aria-hidden="true"
             />
             <input
@@ -126,7 +131,7 @@ export default function ContactForm() {
         <FormField id="contact-email" label="Email" error={errors.email}>
           <div className="relative">
             <Mail
-              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2"
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
               aria-hidden="true"
             />
             <input
@@ -149,7 +154,7 @@ export default function ContactForm() {
         <FormField id="contact-phone" label="Phone" optional error={errors.phone}>
           <div className="relative">
             <Phone
-              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2"
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
               aria-hidden="true"
             />
             <input
@@ -179,7 +184,7 @@ export default function ContactForm() {
             aria-invalid={Boolean(errors.message)}
             aria-describedby={errors.message ? "contact-message-error" : undefined}
             placeholder="How can we help?"
-            className="bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent aria-[invalid=true]:border-destructive min-h-24 w-full resize-y rounded-md border px-3 py-2.5 text-sm"
+            className="bg-background text-foreground border-border placeholder:text-muted-foreground focus-visible:border-accent aria-[invalid=true]:border-destructive min-h-28 w-full resize-y rounded-lg border px-3 py-2.5 text-base sm:text-sm transition-colors"
           />
         </FormField>
       </div>
@@ -193,12 +198,11 @@ export default function ContactForm() {
       {/* Error message from the server (or the network) */}
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         {formError && (
-          <p role="alert" className="text-destructive text-sm">
+          <p role="alert" className="text-destructive text-sm font-medium">
             {formError}
           </p>
         )}
 
-        {/* Loading state: the button is disabled and shows "Sending..." while we wait. */}
         <Button
           type="submit"
           size="lg"
@@ -210,11 +214,11 @@ export default function ContactForm() {
             "Sending..."
           ) : (
             <>
-              Send Message <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              Send Message <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </>
           )}
         </Button>
-        <p className="text-muted-foreground text-[11px] leading-4 sm:order-first sm:flex-1">
+        <p className="text-muted-foreground text-xs leading-relaxed sm:order-first sm:flex-1">
           We read every message and reply as soon as we can.
         </p>
       </div>
